@@ -1,0 +1,151 @@
+<div class="cmh-chat-shell">
+  <!-- ── 모바일 사이드바 오버레이 ─────────────────── -->
+  <div v-if="showMobileSidebar" class="cmh-chat-shell__sidebar-overlay" @click="showMobileSidebar = false"></div>
+
+  <!-- ── 사이드바 (서브 컴포넌트) ─────────────────── -->
+  <cmh-chat-sidebar
+    :class="{ 'is--mobile-open': showMobileSidebar }"
+    :conversations="chatStore.conversations"
+    :current-conversation-id="chatStore.currentConversationId"
+    @new-conversation="onNewConversation"
+    @select-conversation="onMobileSelectConversation"
+    @delete-conversation="onDeleteConversation"
+    @rename-conversation="onRenameConversation"
+    @open-settings="showSettingsPanel = true"
+    @switch-to-admin="onSwitchToAdmin"
+  />
+
+  <!-- ── 메인 영역 ───────────────────────────────── -->
+  <main class="cmh-chat-shell__main" :class="{ 'is--artifact-open': showArtifactPanel }">
+    <!-- 상단 바: 햄버거 + 언어 선택 -->
+    <div class="cmh-chat-shell__main-topbar">
+      <button class="cmh-chat-shell__sidebar-toggle" @click="showMobileSidebar = !showMobileSidebar">
+        <iconify-icon icon="ph:list" />
+      </button>
+      <cmh-language-switch @change="onChangeLocale" />
+    </div>
+
+    <!-- 메시지 스크롤 영역 -->
+    <div class="cmh-chat-shell__messages" ref="messagesContainer">
+      <!-- 빈 상태 -->
+      <div v-if="currentMessages.length === 0" class="cmh-chat-shell__empty">
+        <div class="cmh-chat-shell__empty-logo">
+          <iconify-icon icon="ph:chats-thin" class="cmh-chat-shell__empty-icon" />
+        </div>
+        <p>{{ $t('cmh-global.labels.emptyChat') }}</p>
+      </div>
+
+      <!-- 메시지 루프 (서브 컴포넌트) -->
+      <div
+        v-for="msg in currentMessages"
+        :key="msg.id"
+        class="cmh-chat-shell__message"
+        :class="['is--' + msg.role]"
+      >
+        <!-- 시스템 메시지 -->
+        <cmh-system-message
+          v-if="msg.role === 'system'"
+          :text="msg.content"
+          :variant="msg.systemType || 'info'"
+          :closable="msg.systemType !== 'loading'"
+          @close="chatStore.removeSystemMessage(msg.id)"
+        />
+
+        <!-- 사용자/AI 메시지 (서브 컴포넌트) -->
+        <cmh-chat-message
+          v-else
+          :message="msg"
+          :is-speaking="ttsSpeakingMsgId === msg.id"
+          @remove-system-message="chatStore.removeSystemMessage($event)"
+          @action-button="onActionButton"
+          @rate-message="onRateMessage($event.messageId, $event.score)"
+          @speak-message="onSpeakMessage($event.messageId, $event.content)"
+          @resend-message="onResendMessage"
+          @edit-message="onEditMessage"
+          @open-artifact="onOpenArtifact"
+          @fork-from-message="onForkFromMessage"
+        />
+      </div>
+    </div>
+
+    <!-- ── 입력 영역 (서브 컴포넌트) ─────────────── -->
+    <div class="cmh-chat-shell__input-area">
+      <cmh-chat-input
+        :input-text="inputText"
+        :pending-attachments="chatStore.pendingAttachments"
+        :is-streaming="chatStore.isStreaming"
+        :can-send="canSend"
+        :selected-model-name="chatStore.selectedModel.name"
+        :models-by-provider="chatStore.modelsByProvider"
+        :selected-model-id="chatStore.selectedModelId"
+        :selectable-agents="selectableAgents"
+        :selected-agent-id="selectedAgentId"
+        :selected-agent-label="selectedAgentLabel"
+        :stt-status="sttStatus"
+        :stt-active="sttActive"
+        :tts-enabled="ttsEnabled"
+        @update:input-text="inputText = $event"
+        @send="onSendMessage"
+        @stop="onStopGeneration"
+        @remove-attachment="onRemoveAttachment"
+        @select-model="onSelectModel"
+        @select-agent="onSelectAgent"
+        @toggle-stt="onToggleSTT"
+        @toggle-tts="onToggleTTS"
+        @file-input-change="onFileInputChange"
+      />
+    </div>
+  </main>
+
+  <!-- ── #1 Artifact Panel (split-view 사이드 패널) ──── -->
+  <aside v-if="showArtifactPanel" class="cmh-chat-shell__artifact-panel">
+    <div class="cmh-chat-shell__artifact-header">
+      <span class="cmh-chat-shell__artifact-title">{{ activeArtifact?.title || $t('cmh-global.labels.artifact') }}</span>
+      <button class="cmh-chat-shell__icon-btn" @click="onCloseArtifactPanel">
+        <iconify-icon icon="ph:x" />
+      </button>
+    </div>
+    <div class="cmh-chat-shell__artifact-body">
+      <!-- 코드 아티팩트 -->
+      <pre v-if="activeArtifact?.type === 'code'" class="cmh-chat-shell__artifact-code"><code>{{ typeof activeArtifact.content === 'string' ? activeArtifact.content : JSON.stringify(activeArtifact.content, null, 2) }}</code></pre>
+      <!-- 이미지 아티팩트 -->
+      <img v-else-if="activeArtifact?.type === 'image'" :src="String(activeArtifact.content)" class="cmh-chat-shell__artifact-image" />
+      <!-- 마크다운/텍스트 아티팩트 -->
+      <div v-else-if="activeArtifact?.type === 'markdown'" class="cmh-chat-shell__artifact-markdown" v-html="String(activeArtifact.content)"></div>
+      <!-- data-grid 아티팩트 -->
+      <div v-else-if="activeArtifact?.type === 'data-grid'" class="cmh-chat-shell__artifact-grid">
+        <table v-if="activeArtifact.content && activeArtifact.content.columns">
+          <thead>
+            <tr>
+              <th v-for="col in activeArtifact.content.columns" :key="col.property">{{ col.label || col.property }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, ri) in (activeArtifact.content.rows || [])" :key="ri">
+              <td v-for="col in activeArtifact.content.columns" :key="col.property">{{ row[col.property] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 일반 텍스트 폴백 -->
+      <div v-else class="cmh-chat-shell__artifact-text">{{ typeof activeArtifact?.content === 'string' ? activeArtifact.content : JSON.stringify(activeArtifact?.content, null, 2) }}</div>
+    </div>
+  </aside>
+
+  <!-- ── 설정 패널 (서브 컴포넌트) ─────────────────── -->
+  <div v-if="showSettingsPanel" class="cmh-chat-shell__settings-overlay" @click="showSettingsPanel = false"></div>
+  <div v-if="showSettingsPanel" class="cmh-chat-shell__settings-panel">
+    <cmh-chat-settings
+      :font-tokens="fontTokens"
+      :font-levels="FONT_LEVELS"
+      :color-scheme-options="colorSchemeOptions"
+      :current-color-scheme="uiPreferencesStore.colorScheme"
+      :current-theme="uiPreferencesStore.theme"
+      @update-font-token="updateFontToken($event[0] || arguments[0], $event[1] || arguments[1], $event[2] || arguments[2])"
+      @reset-font-tokens="resetFontTokens"
+      @set-color-scheme="onSetColorScheme"
+      @set-theme="uiPreferencesStore.setTheme($event)"
+      @close="showSettingsPanel = false"
+    />
+  </div>
+</div>

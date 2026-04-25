@@ -1,0 +1,44 @@
+{
+  "cmh-media": {
+    "general": {
+      "pageTitle": "Medien",
+      "entityDescription": "Medienobjekte als Dateien"
+    },
+    "navigation": {
+      "label": "RAG"
+    },
+    "index": {
+      "rootFolderName": "Medienbibliothek",
+      "uploadButton": "Hochladen",
+      "uploadFromUrl": "Von URL hochladen",
+      "urlPlaceholder": "Datei-URL eingeben (https://...)",
+      "urlUploadSubmit": "Hochladen",
+      "createFolder": "Neuer Ordner",
+      "createFolderCreate": "Erstellen",
+      "folderNamePlaceholder": "Ordnername",
+      "emptyState": "Noch keine Mediendateien.",
+      "emptyStateDescription": "Dateien über die Schaltfläche hochladen.",
+      "presentationNormal": "Normal",
+      "presentationLarge": "Große Vorschau",
+      "presentationList": "Liste",
+      "sortNameAsc": "Name, A-Z",
+      "sortNameDesc": "Name, Z-A",
+      "sortSizeAsc": "Größe, kleinste",
+      "sortSizeDesc": "Größe, größte",
+      "sortDateAsc": "Datum, älteste",
+      "sortDateDesc": "Datum, neueste",
+      "folderType": "Ordner"
+    },
+    "sidebar": {
+      "actionEdit": "Bearbeiten",
+      "actionDelete": "Löschen",
+      "fileName": "Dateiname",
+      "fileSize": "Dateigröße",
+      "mimeType": "MIME-Typ",
+      "hash": "Hash",
+      "uploadedAt": "Hochgeladen am",
+      "title": "Titel",
+      "alt": "Alternativtext"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+﻿<div class="cmh-sales-channel-switch">
+  <cmh-discard-changes-modal
+    v-if="showUnsavedChangesModal"
+    @keep-editing="$emit('close-changes-modal')"
+    @discard-changes="$emit('revert-unsaved-changes')"
+  />
+
+  <mt-select
+    :model-value="salesChannelId"
+    :options="options"
+    :disabled="disabled"
+    value-property="id"
+    label-property="name"
+    :label="$t(label)"
+    :placeholder="$t(placeholder)"
+    @update:model-value="onChange"
+  />
+</div>

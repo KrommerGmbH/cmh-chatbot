@@ -1,0 +1,85 @@
+<cmh-page :show-search-bar="false">
+  <template #content>
+    <div class="cmh-provider-detail">
+      <div class="cmh-provider-detail__header">
+        <button class="cmh-provider-detail__back" @click="onCancel">
+          {{ $t('cmh-global.actions.back') }}
+        </button>
+        <h1 class="cmh-provider-detail__title">
+          {{ provider ? provider.name : $t('cmh-provider.detail.newProvider') }}
+        </h1>
+      </div>
+
+      <div v-if="isLoading" class="cmh-provider-detail__loading">
+        {{ $t('cmh-global.labels.loading') }}
+      </div>
+
+      <form v-else class="cmh-provider-detail__form" autocomplete="off" @submit.prevent="onSave">
+        <!-- 브라우저 비밀번호 자동완성 방지용 더미 필드 -->
+        <input type="text" name="fake-username" autocomplete="username" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" tabindex="-1" aria-hidden="true" />
+        <input type="password" name="fake-password" autocomplete="new-password" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" tabindex="-1" aria-hidden="true" />
+
+        <div class="cmh-provider-detail__field">
+          <label>{{ $t('cmh-provider.detail.name') }}</label>
+          <input v-model="form.name" type="text" name="provider-name" autocomplete="off" required />
+        </div>
+
+        <div class="cmh-provider-detail__field">
+          <label>{{ $t('cmh-provider.detail.description') }}</label>
+          <textarea v-model="form.description" rows="3"></textarea>
+        </div>
+
+        <div class="cmh-provider-detail__row">
+          <div class="cmh-provider-detail__field">
+            <label>{{ $t('cmh-provider.detail.type') }}</label>
+            <select v-model="form.type">
+              <option value="local-gguf">{{ $t('cmh-provider.detail.typeOptions.localGguf') }}</option>
+              <option value="cloud-api">{{ $t('cmh-provider.detail.typeOptions.cloudApi') }}</option>
+              <option value="self-hosted">{{ $t('cmh-provider.detail.typeOptions.selfHosted') }}</option>
+            </select>
+          </div>
+
+          <div class="cmh-provider-detail__field">
+            <label>{{ $t('cmh-provider.detail.priority') }}</label>
+            <input v-model.number="form.priority" type="number" min="1" max="100" />
+          </div>
+        </div>
+
+        <div class="cmh-provider-detail__field">
+          <label>{{ $t('cmh-provider.detail.baseUrl') }}</label>
+          <input v-model="form.baseUrl" type="url" :placeholder="$t('cmh-provider.detail.baseUrlPlaceholder')" />
+        </div>
+
+        <div class="cmh-provider-detail__field">
+          <label>{{ $t('cmh-provider.detail.apiKey') }}</label>
+          <input
+            v-model="form.apiKey"
+            type="password"
+            name="provider-api-key"
+            autocomplete="new-password"
+            :readonly="apiKeyReadonly"
+            @focus="onFocusApiKey"
+            :placeholder="$t('cmh-provider.detail.apiKeyPlaceholder')"
+          />
+        </div>
+
+        <div class="cmh-provider-detail__field is--toggle">
+          <label>{{ $t('cmh-provider.detail.isActive') }}</label>
+          <button type="button" class="cmh-provider-detail__toggle"
+            :class="{ 'is--on': form.isActive }" @click="form.isActive = !form.isActive">
+            <span class="cmh-provider-detail__toggle-knob"></span>
+          </button>
+        </div>
+
+        <div class="cmh-provider-detail__actions">
+          <button type="button" class="cmh-provider-detail__btn is--secondary" @click="onCancel">
+            {{ $t('cmh-global.actions.cancel') }}
+          </button>
+          <button type="submit" class="cmh-provider-detail__btn is--primary" :disabled="isSaving">
+            {{ $t('cmh-global.actions.save') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </template>
+</cmh-page>

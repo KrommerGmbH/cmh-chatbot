@@ -1,0 +1,84 @@
+﻿<!--
+  cmh-modal — 범용 모달 다이얼로그
+
+  Shopware sw-modal 패턴 마이그레이션.
+  - 좌/우 핸들로 너비 독립 드래그 조절 (F-2)
+  - 슬롯: default(content), header, footer
+  - ESC 키 / backdrop 클릭으로 닫기
+  - Teleport: #cmh-modals (body 직하)
+-->
+<teleport to="body">
+  <div
+    class="cmh-modal__backdrop"
+    :class="{ 'is--loading': isLoading }"
+    @mousedown.self="onBackdropClick"
+    @keydown.esc="onClose"
+    tabindex="-1"
+    role="dialog"
+    :aria-modal="true"
+    :aria-label="title || $t('cmh-global.modal.title')"
+  >
+    <div
+      ref="dialogEl"
+      class="cmh-modal__dialog"
+      :style="dialogStyle"
+      role="document"
+    >
+      <!-- 왼쪽 드래그 핸들 -->
+      <div
+        v-if="resizable"
+        class="cmh-modal__resize-handle cmh-modal__resize-handle--left"
+        @mousedown.prevent="onResizeStart($event, 'left')"
+      />
+
+      <!-- 오른쪽 드래그 핸들 -->
+      <div
+        v-if="resizable"
+        class="cmh-modal__resize-handle cmh-modal__resize-handle--right"
+        @mousedown.prevent="onResizeStart($event, 'right')"
+      />
+
+      <!-- ── 헤더 ─────────────────────────────────────────────── -->
+      <div class="cmh-modal__header">
+        <slot name="header">
+          <div class="cmh-modal__header-inner">
+            <mt-icon
+              v-if="icon"
+              :name="icon"
+              class="cmh-modal__header-icon"
+            />
+            <h3 class="cmh-modal__title">{{ title }}</h3>
+          </div>
+        </slot>
+        <button
+          v-if="showCloseButton"
+          type="button"
+          class="cmh-modal__close-btn"
+          :title="$t('cmh-global.actions.close')"
+          @click="onClose"
+        >
+          <mt-icon name="regular-times" size="16px" />
+        </button>
+      </div>
+
+      <!-- ── 바디 ─────────────────────────────────────────────── -->
+      <div class="cmh-modal__body">
+        <div
+          v-if="isLoading"
+          class="cmh-modal__loader"
+        >
+          <mt-icon name="regular-sync" class="cmh-modal__loader-icon" />
+        </div>
+        <slot />
+      </div>
+
+      <!-- ── 푸터 ─────────────────────────────────────────────── -->
+      <div
+        v-if="$slots.footer"
+        class="cmh-modal__footer"
+      >
+        <slot name="footer" />
+      </div>
+    </div>
+  </div>
+</teleport>

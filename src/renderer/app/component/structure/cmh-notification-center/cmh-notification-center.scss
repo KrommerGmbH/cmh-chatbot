@@ -1,0 +1,93 @@
+﻿.cmh-notification-center {
+  position: relative;
+
+  &__context-button {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: var(--border-radius-button, 10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color-icon-primary-default);
+
+    &.is--active,
+    &:hover {
+      background: var(--color-interaction-secondary-hover);
+    }
+
+    &:focus-visible {
+      outline: var(--scale-size-2, 2px) solid var(--color-border-brand-selected);
+      outline-offset: var(--scale-size-2, 2px);
+    }
+  }
+
+  &__context-button--new-available::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-interaction-critical-default);
+    position: absolute;
+    top: 6px;
+    right: 6px;
+  }
+
+  &__context-container {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 1300;
+  }
+
+  &__content {
+    width: 360px;
+    background: var(--color-elevation-surface-overlay);
+    border: 1px solid var(--color-border-primary-default);
+    border-radius: var(--border-radius-default, 12px);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 12%);
+    overflow: hidden;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--scale-size-20, 20px) var(--scale-size-24, 24px) var(--scale-size-16, 16px);
+    border-bottom: 1px solid var(--color-border-primary-default);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--font-size-m);
+    line-height: var(--font-line-height-m);
+    color: var(--color-text-primary-default);
+  }
+
+  &__notification-container {
+    overflow-y: auto;
+    max-height: 600px;
+  }
+
+  &__empty-text {
+    padding: 24px;
+    color: var(--color-text-secondary-default);
+    font-size: var(--font-size-xs);
+  }
+
+  &-fade-enter-active,
+  &-fade-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    transform-origin: top right;
+  }
+
+  &-fade-enter-from,
+  &-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}

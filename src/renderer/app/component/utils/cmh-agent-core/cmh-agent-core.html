@@ -1,0 +1,172 @@
+<div class="cmh-agent-core">
+  <!-- ═══ Left: Block Palette (Toggle on mobile) ═══ -->
+  <button type="button" class="cmh-agent-core__palette-toggle" @click="togglePalette">
+    {{ $t('cmh-agent.core.langchainBlocks') }} {{ showPalette ? '◀' : '▶' }}
+  </button>
+
+  <aside class="cmh-agent-core__palette" :class="{ 'is--open': showPalette }">
+    <h3 class="cmh-agent-core__palette-title">{{ $t('cmh-agent.core.langchainBlocks') }}</h3>
+    <div
+      v-for="block in blockPalette"
+      :key="block.id"
+      class="cmh-agent-core__palette-block"
+      draggable="true"
+      @dragstart="onPaletteDragStart(block.id, $event)"
+    >
+      <span class="cmh-agent-core__palette-icon">{{ block.icon }}</span>
+      <span class="cmh-agent-core__palette-label">{{ $t(block.label) }}</span>
+    </div>
+  </aside>
+
+  <!-- ═══ Main: Agent Configuration Form ═══ -->
+  <div class="cmh-agent-core__main">
+    <!-- Section 1: Basic Info (Collapsible) -->
+    <details class="cmh-agent-core__section" open>
+      <summary class="cmh-agent-core__section-header">
+        <span>{{ $t('cmh-agent.core.basicInfo') }}</span>
+      </summary>
+      <div class="cmh-agent-core__section-body">
+        <!-- Row 1: Type + Name -->
+        <div class="cmh-agent-core__row cmh-agent-core__row--two-col">
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.agentType') }}</label>
+            <select class="cmh-agent-core__select" :value="agent.agentTypeId" @change="onInput('agentTypeId', $event)">
+              <option v-for="at in agentTypes" :key="at.id" :value="at.id">{{ at.name }}</option>
+            </select>
+          </div>
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.agentName') }}</label>
+            <input type="text" class="cmh-agent-core__input" :value="agent.name" @input="onInput('name', $event)" />
+          </div>
+        </div>
+
+        <!-- Row 3: Main Model + Sub Model -->
+        <div class="cmh-agent-core__row cmh-agent-core__row--two-col">
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.mainModel') }}</label>
+            <select class="cmh-agent-core__select" :value="agent.modelId" @change="onInput('modelId', $event)">
+              <option value="">{{ $t('cmh-agent.core.selectModel') }}</option>
+              <option v-for="m in chatModels" :key="m.id" :value="m.id">{{ m.name }}</option>
+            </select>
+          </div>
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.subModel') }}</label>
+            <select class="cmh-agent-core__select" :value="agent.subModelId" @change="onInput('subModelId', $event)">
+              <option value="">{{ $t('cmh-agent.core.selectModel') }}</option>
+              <option v-for="m in chatModels" :key="m.id" :value="m.id">{{ m.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 4.5: Temperature + Max Tokens -->
+        <div class="cmh-agent-core__row cmh-agent-core__row--two-col">
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.temperature') }}</label>
+            <div class="cmh-agent-core__range-wrap">
+              <input
+                type="range"
+                class="cmh-agent-core__range"
+                min="0"
+                max="2"
+                step="0.1"
+                :value="temperatureValue"
+                @input="onTemperatureChange($event)"
+              />
+              <span class="cmh-agent-core__range-value">{{ temperatureValue }}</span>
+            </div>
+          </div>
+          <div class="cmh-agent-core__field">
+            <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.maxTokens') }}</label>
+            <input
+              type="number"
+              class="cmh-agent-core__input"
+              min="256"
+              max="131072"
+              step="256"
+              :value="maxTokensValue"
+              @input="onMaxTokensChange($event)"
+            />
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Section 2: Prompts (Collapsible) -->
+    <details class="cmh-agent-core__section" open>
+      <summary class="cmh-agent-core__section-header">
+        <span>{{ $t('cmh-agent.core.prompts') }}</span>
+      </summary>
+      <div class="cmh-agent-core__section-body">
+        <!-- Row 2: Role Prompt -->
+        <div class="cmh-agent-core__field">
+          <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.rolePrompt') }}</label>
+          <textarea
+            class="cmh-agent-core__textarea"
+            rows="4"
+            :value="agent.rolePrompt ?? ''"
+            @input="onInput('rolePrompt', $event)"
+            :placeholder="$t('cmh-agent.core.rolePromptPlaceholder')"
+          ></textarea>
+        </div>
+
+        <!-- Row 4: Mission Prompt -->
+        <div class="cmh-agent-core__field">
+          <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.missionPrompt') }}</label>
+          <textarea
+            class="cmh-agent-core__textarea"
+            rows="4"
+            :value="agent.missionPrompt ?? ''"
+            @input="onInput('missionPrompt', $event)"
+            :placeholder="$t('cmh-agent.core.missionPromptPlaceholder')"
+          ></textarea>
+        </div>
+
+        <!-- Row 5: User Prompt -->
+        <div class="cmh-agent-core__field">
+          <label class="cmh-agent-core__label">{{ $t('cmh-agent.core.userPrompt') }}</label>
+          <textarea
+            class="cmh-agent-core__textarea"
+            rows="3"
+            :value="agent.userPrompt ?? ''"
+            @input="onInput('userPrompt', $event)"
+            :placeholder="$t('cmh-agent.core.userPromptPlaceholder')"
+          ></textarea>
+        </div>
+      </div>
+    </details>
+
+    <!-- Section 3: LangChain Flow (Collapsible) -->
+    <details class="cmh-agent-core__section" open>
+      <summary class="cmh-agent-core__section-header">
+        <span>{{ $t('cmh-agent.core.langchainConfig') }}</span>
+      </summary>
+      <div class="cmh-agent-core__section-body">
+        <p class="cmh-agent-core__hint">{{ $t('cmh-agent.core.flowHint') }}</p>
+        <div
+          class="cmh-agent-core__flow-canvas"
+          @dragover="onCanvasDragOver"
+          @drop="onCanvasDrop"
+        >
+          <VueFlow
+            ref="flowRef"
+            :nodes="flowNodes"
+            :edges="flowEdges"
+            :node-types="nodeTypes"
+            :default-edge-options="{ animated: true }"
+            fit-view-on-init
+            @connect="onConnect"
+            @node-drag-stop="onNodeDragStop"
+            @node-double-click="onNodeDoubleClick"
+            @edge-click="onEdgeClick"
+          >
+            <Background variant="dots" :gap="16" :size="1" />
+          </VueFlow>
+
+          <div v-if="flowNodes.length === 0" class="cmh-agent-core__flow-empty">
+            {{ $t('cmh-agent.core.dragBlocksHere') }}
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>

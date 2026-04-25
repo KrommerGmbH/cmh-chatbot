@@ -1,0 +1,39 @@
+{
+  "cmh-model": {
+    "navigation": {
+      "label": "モデル"
+    },
+    "module": {
+      "title": "モデル"
+    },
+    "list": {
+      "pageTitle": "モデル一覧",
+      "addModel": "モデル追加",
+      "syncRemote": "リモートモデル同期",
+      "syncRemoteSuccess": "リモートモデルの同期が完了しました。",
+      "syncRemoteError": "リモートモデルの同期に失敗しました。",
+      "allProviders": "全プロバイダー",
+      "searchPlaceholder": "モデルを検索...",
+      "empty": "登録されたモデルがありません。",
+      "default": "デフォルト",
+      "columns": {
+        "name": "名前",
+        "modelId": "モデルID",
+        "provider": "プロバイダー",
+        "contextLength": "コンテキスト",
+        "status": "ステータス",
+        "default": "デフォルト"
+      },
+      "loadError": "モデルリストの読み込みに失敗しました。"
+    },
+    "detail": {
+      "pageTitle": "モデル詳細",
+      "name": "モデル名",
+      "modelId": "モデルID",
+      "provider": "プロバイダー",
+      "contextLength": "コンテキスト長",
+      "description": "説明",
+      "default": "デフォルトモデル"
+    }
+  }
+}

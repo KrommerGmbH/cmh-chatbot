@@ -1,0 +1,19 @@
+{
+  "cmh-chat": {
+    "navigation": { "label": "聊天" },
+    "module": { "title": "聊天" },
+    "list": {
+      "pageTitle": "对话列表",
+      "columnTitle": "标题",
+      "columnModel": "模型",
+      "columnUpdatedAt": "最后修改",
+      "emptyState": "还没有对话。开始新的聊天。"
+    },
+    "detail": {
+      "pageTitle": "对话详情",
+      "messageCount": "消息数",
+      "createdAt": "创建日期",
+      "modelUsed": "使用的模型"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+﻿.cmh-card-view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  &.has--sidebar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr;
+    justify-content: end;
+
+    .cmh-card-view__content {
+      height: initial;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media screen and (max-width: 1360px) {
+      padding: 15px;
+
+      .mt-card--large {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .mt-card__titles {
+    font-size: var(--font-size-m, 16px);
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: 1.4;
+    color: var(--color-text-primary-default, #111827);
+  }
+
+  .mt-card__title {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+}

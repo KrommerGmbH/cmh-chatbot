@@ -1,0 +1,59 @@
+{
+  "cmh-settings": {
+    "navigation": {
+      "general": "一般設定"
+    },
+    "module": {
+      "title": "設定"
+    },
+    "list": {
+      "pageTitle": "設定",
+      "description": "チャットボットの機能とモデル設定を管理します。",
+      "tts": {
+        "title": "音声合成 (TTS)",
+        "description": "テキスト読み上げモデルの選択と設定"
+      },
+      "stt": {
+        "title": "音声認識 (STT)",
+        "description": "音声認識モデルの選択と設定"
+      },
+      "general": {
+        "title": "一般設定",
+        "description": "言語、テーマなどの一般的な環境設定"
+      }
+    },
+    "detail": {
+      "pageTitle": "設定詳細",
+      "backToSettings": "設定に戻る",
+      "default": "デフォルト",
+      "localModel": "ローカルモデル",
+      "cloudModel": "クラウド",
+      "tts": {
+        "title": "音声合成 (TTS) 設定",
+        "description": "AI応答を音声で読み上げるモデルとオプションを設定します。",
+        "modelLabel": "TTSモデル選択",
+        "rateLabel": "読み上げ速度",
+        "autoReadLabel": "自動読み上げ"
+      },
+      "stt": {
+        "title": "音声認識 (STT) 設定",
+        "description": "マイク入力をテキストに変換するモデルを設定します。",
+        "modelLabel": "STTモデル選択",
+        "statusLabel": "モデル状態",
+        "status": {
+          "idle": "待機中",
+          "loadingModel": "モデル読み込み中...",
+          "ready": "準備完了",
+          "recording": "録音中...",
+          "transcribing": "変換中...",
+          "error": "エラー"
+        }
+      },
+      "general": {
+        "title": "一般設定",
+        "description": "チャットボットの一般的な環境設定を管理します。",
+        "comingSoon": "追加設定は近日公開予定です。"
+      }
+    }
+  }
+}

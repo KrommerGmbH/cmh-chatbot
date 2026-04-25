@@ -1,0 +1,23 @@
+{
+  "cmh-chat": {
+    "navigation": {
+      "label": "채팅"
+    },
+    "module": {
+      "title": "채팅"
+    },
+    "list": {
+      "pageTitle": "대화 목록",
+      "columnTitle": "제목",
+      "columnModel": "모델",
+      "columnUpdatedAt": "최종 수정",
+      "emptyState": "대화가 없습니다. 새로운 대화를 시작하세요."
+    },
+    "detail": {
+      "pageTitle": "대화 상세",
+      "messageCount": "메시지 수",
+      "createdAt": "생성일",
+      "modelUsed": "사용 모델"
+    }
+  }
+}

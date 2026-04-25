@@ -1,0 +1,30 @@
+{
+  "cmh-log": {
+    "navigation": {
+      "label": "Protokolle"
+    },
+    "module": {
+      "title": "Protokolle"
+    },
+    "list": {
+      "pageTitle": "Protokollliste",
+      "allLevels": "Alle Stufen",
+      "levelError": "Fehler",
+      "levelWarning": "Warnung",
+      "levelInfo": "Info",
+      "levelDebug": "Debug",
+      "clearAll": "Alle loeschen",
+      "empty": "Keine Protokolle.",
+      "columns": {
+        "level": "Stufe",
+        "source": "Quelle",
+        "message": "Nachricht",
+        "createdAt": "Zeit"
+      }
+    },
+    "detail": {
+      "pageTitle": "Protokolldetail",
+      "notFound": "Protokolleintrag nicht gefunden."
+    }
+  }
+}

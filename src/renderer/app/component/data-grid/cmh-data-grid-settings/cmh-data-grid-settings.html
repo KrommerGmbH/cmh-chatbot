@@ -1,0 +1,87 @@
+﻿<cmh-context-button
+    v-tooltip="{ message: $t('cmh-global.dataGrid.tooltipListSettings') }"
+    :disabled="disabled"
+    :menu-width="300"
+    :auto-close="false"
+    :auto-close-outside-click="true"
+    :additional-context-menu-classes="contextMenuClasses"
+>
+    <template #button>
+        <mt-button
+            class="cmh-data-grid-settings__trigger"
+            :disabled="disabled"
+            :aria-label="$t('cmh-global.dataGrid.tooltipListSettings')"
+            size="x-small"
+            square
+            variant="secondary"
+        >
+            <mt-icon name="regular-bars-s" size="14px" />
+        </mt-button>
+    </template>
+
+    <div class="cmh-data-grid-settings__container">
+        <!-- 컴팩트 모드 -->
+        <mt-switch
+            :model-value="currentCompact"
+            remove-top-margin
+            :label="$t('cmh-global.dataGrid.labelSettingsCompactMode')"
+            @update:model-value="onChangeCompactMode"
+        />
+
+        <!-- 프리뷰 이미지 -->
+        <mt-switch
+            v-if="enablePreviews"
+            :model-value="currentPreviews"
+            remove-top-margin
+            :label="$t('cmh-global.dataGrid.labelSettingsPreviewImages')"
+            @update:model-value="onChangePreviews"
+        />
+
+        <slot name="additionalSettings"></slot>
+    </div>
+
+    <cmh-context-menu-divider />
+
+    <transition-group
+        name="columns-list"
+        tag="div"
+        class="cmh-data-grid-settings__container cmh-data-grid-settings__column-list"
+    >
+        <div
+            v-for="(column, index) in currentColumns"
+            :key="column.property"
+            :class="['cmh-data-grid-settings__column-item', `cmh-data-grid-settings__item--${index}`]"
+        >
+            <mt-checkbox
+                :disabled="column.primary"
+                :label="getColumnLabel(column)"
+                :model-value="currentColumns[index].visible"
+                @update:model-value="onChangeColumnVisibility($event, index)"
+            />
+
+            <div
+                v-if="currentColumns.length >= 2"
+                class="cmh-data-grid-settings__column-item-controls"
+            >
+                <mt-button
+                    size="x-small"
+                    square
+                    :disabled="index === 0"
+                    variant="secondary"
+                    @click="onClickChangeColumnOrderUp(column)"
+                >
+                    <mt-icon name="regular-chevron-up-xxs" size="14px" />
+                </mt-button>
+                <mt-button
+                    size="x-small"
+                    square
+                    :disabled="index === (currentColumns.length - 1)"
+                    variant="secondary"
+                    @click="onClickChangeColumnOrderDown(column)"
+                >
+                    <mt-icon name="regular-chevron-down-xxs" size="14px" />
+                </mt-button>
+            </div>
+        </div>
+    </transition-group>
+</cmh-context-button>

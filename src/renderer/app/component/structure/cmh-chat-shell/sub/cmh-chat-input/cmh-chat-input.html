@@ -1,0 +1,190 @@
+<div class="cmh-chat-input">
+  <!-- hidden file input -->
+  <input
+    ref="fileInput"
+    type="file"
+    multiple
+    style="display: none;"
+    @change="onFileInputChange"
+  />
+
+  <!-- ── 에이전트 드롭다운 — row 위에 렌더링 ── -->
+  <div v-if="showAgentDropdown" class="cmh-chat-input__dropdown is--agent">
+    <button
+      v-for="agent in selectableAgents"
+      :key="agent.id"
+      class="cmh-chat-input__dropdown-option"
+      :class="{ 'is--selected': agent.id === selectedAgentId }"
+      @click="onSelectAgent(agent.id)"
+    >
+      <span class="cmh-chat-input__dropdown-name">{{ agent.name }}</span>
+    </button>
+  </div>
+
+  <!-- ── 모델 드롭다운 (2단 패널) — row 위에 렌더링 ── -->
+  <div v-if="showModelDropdown" class="cmh-chat-input__model-picker">
+    <div class="cmh-chat-input__model-picker-providers">
+      <button
+        v-for="(models, provider) in modelsByProvider"
+        :key="provider"
+        class="cmh-chat-input__model-picker-provider"
+        :class="{ 'is--active': activeProvider === provider }"
+        @click="activeProvider = String(provider)"
+      >
+        {{ provider }}
+      </button>
+    </div>
+    <div class="cmh-chat-input__model-picker-models">
+      <div class="cmh-chat-input__model-search">
+        <iconify-icon icon="ph:magnifying-glass" class="cmh-chat-input__ph-icon is--search" />
+        <input
+          type="text"
+          class="cmh-chat-input__model-search-input"
+          v-model="modelSearchQuery"
+          :placeholder="$t('cmh-global.labels.searchModels')"
+          @input="onModelSearch"
+        />
+        <button
+          v-if="modelSearchQuery"
+          class="cmh-chat-input__model-search-clear"
+          @click="modelSearchQuery = ''"
+        >×</button>
+      </div>
+      <button
+        v-for="model in filteredModels"
+        :key="model.id"
+        class="cmh-chat-input__dropdown-option"
+        :class="{
+          'is--selected': model.id === selectedModelId,
+          'is--disabled': !model.hasApiKey,
+        }"
+        :disabled="!model.hasApiKey"
+        :title="!model.hasApiKey ? $t('cmh-global.chat.noApiKey') : model.description"
+        @click="model.hasApiKey && onSelectModel(model.id)"
+      >
+        <span class="cmh-chat-input__dropdown-name">{{ model.name }}</span>
+        <span class="cmh-chat-input__dropdown-desc">{{ model.description }}</span>
+        <span v-if="!model.hasApiKey" class="cmh-chat-input__no-key-badge">
+          {{ $t('cmh-global.chat.apiKeyRequiredShort') }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ 통합 입력 박스 ═══ -->
+  <div class="cmh-chat-input__row">
+    <!-- ── 상단: 파일 첨부 버튼 + 첨부 파일 chips ── -->
+    <div class="cmh-chat-input__top">
+      <button
+        class="cmh-chat-input__attach-btn"
+        @click="onAttachFile"
+        :title="$t('cmh-global.labels.attachFile')"
+      >
+        <iconify-icon icon="ph:paperclip" class="cmh-chat-input__ph-icon" />
+      </button>
+
+      <div v-if="pendingAttachments.length > 0" class="cmh-chat-input__file-chips">
+        <div
+          v-for="file in visibleAttachments"
+          :key="file.id"
+          class="cmh-chat-input__file-chip"
+        >
+          <iconify-icon :icon="fileTypeIcon(file.name)" class="cmh-chat-input__ph-icon is--file" />
+          <span class="cmh-chat-input__file-name">{{ file.name }}</span>
+          <button class="cmh-chat-input__file-remove" @click="$emit('remove-attachment', file.id)">×</button>
+        </div>
+        <button
+          v-if="pendingAttachments.length > maxVisibleFiles"
+          class="cmh-chat-input__overflow-btn"
+          @click="showAllAttachments = !showAllAttachments"
+          :title="$t('cmh-global.labels.showMore')"
+        >
+          <iconify-icon icon="ph:dots-three" class="cmh-chat-input__ph-icon" />
+        </button>
+      </div>
+    </div>
+
+    <!-- ── 중간: 텍스트 입력 ── -->
+    <textarea
+      ref="inputTextarea"
+      class="cmh-chat-input__textarea"
+      :value="inputText"
+      @input="onInput"
+      :placeholder="$t('cmh-global.labels.chatPlaceholder')"
+      rows="1"
+      @keydown="onKeyDown"
+    ></textarea>
+
+    <!-- ── 하단: 셀렉트 + 액션 버튼 ── -->
+    <div class="cmh-chat-input__bottom">
+      <div class="cmh-chat-input__selects">
+        <!-- 에이전트 선택 -->
+        <div class="cmh-chat-input__select-wrap" @click="showAgentDropdown = !showAgentDropdown">
+          <span class="cmh-chat-input__select-label">{{ selectedAgentLabel }}</span>
+          <iconify-icon icon="ph:caret-down" class="cmh-chat-input__ph-icon is--caret" :class="{ 'is--open': showAgentDropdown }" />
+        </div>
+
+        <!-- 모델 선택 -->
+        <div class="cmh-chat-input__select-wrap" @click="showModelDropdown = !showModelDropdown">
+          <span class="cmh-chat-input__select-label">{{ selectedModelName }}</span>
+          <iconify-icon icon="ph:caret-down" class="cmh-chat-input__ph-icon is--caret" :class="{ 'is--open': showModelDropdown }" />
+        </div>
+      </div>
+
+      <div class="cmh-chat-input__actions">
+        <!-- STT (Speech-to-Text) -->
+        <button
+          class="cmh-chat-input__action-icon-btn"
+          :class="{
+            'is--active': sttActive,
+            'is--recording': sttStatus === 'recording',
+            'is--loading': sttStatus === 'loading-model' || sttStatus === 'transcribing',
+          }"
+          @click="$emit('toggle-stt')"
+          :title="$t('cmh-global.labels.stt')"
+          :disabled="sttStatus === 'loading-model' || sttStatus === 'transcribing' || isStreaming"
+        >
+          <iconify-icon
+            v-if="sttStatus === 'recording'"
+            icon="ph:microphone"
+            class="cmh-chat-input__ph-icon is--pulse"
+          />
+          <iconify-icon
+            v-else-if="sttStatus === 'loading-model' || sttStatus === 'transcribing'"
+            icon="ph:spinner"
+            class="cmh-chat-input__ph-icon is--spin"
+          />
+          <iconify-icon
+            v-else
+            icon="ph:microphone-slash"
+            class="cmh-chat-input__ph-icon"
+          />
+        </button>
+
+        <!-- TTS (Text-to-Speech) -->
+        <button
+          class="cmh-chat-input__action-icon-btn"
+          :class="{ 'is--active': ttsEnabled }"
+          @click="$emit('toggle-tts')"
+          :title="$t('cmh-global.labels.tts')"
+        >
+          <iconify-icon :icon="ttsEnabled ? 'ph:speaker-high' : 'ph:speaker-slash'" class="cmh-chat-input__ph-icon" />
+        </button>
+
+        <!-- 전송 / 멈춤 -->
+        <button
+          class="cmh-chat-input__send-btn"
+          :disabled="!canSend && !isStreaming"
+          @click="isStreaming ? $emit('stop') : $emit('send')"
+          :title="isStreaming ? $t('cmh-global.actions.stop') : $t('cmh-global.actions.send')"
+        >
+          <iconify-icon
+            :icon="isStreaming ? 'ph:stop-circle-fill' : 'ph:arrow-circle-right'"
+            class="cmh-chat-input__ph-icon is--send"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

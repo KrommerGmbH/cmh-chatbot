@@ -1,0 +1,59 @@
+{
+  "cmh-settings": {
+    "navigation": {
+      "general": "Allgemeine Einstellungen"
+    },
+    "module": {
+      "title": "Einstellungen"
+    },
+    "list": {
+      "pageTitle": "Einstellungen",
+      "description": "Chatbot-Funktionen und Modelleinstellungen verwalten.",
+      "tts": {
+        "title": "Sprachsynthese (TTS)",
+        "description": "Text-zu-Sprache-Modelle auswählen und konfigurieren"
+      },
+      "stt": {
+        "title": "Spracherkennung (STT)",
+        "description": "Spracherkennungsmodelle auswählen und konfigurieren"
+      },
+      "general": {
+        "title": "Allgemeine Einstellungen",
+        "description": "Sprache, Design und allgemeine Einstellungen"
+      }
+    },
+    "detail": {
+      "pageTitle": "Einstellungen Detail",
+      "backToSettings": "Zurück zu Einstellungen",
+      "default": "Standard",
+      "localModel": "Lokales Modell",
+      "cloudModel": "Cloud",
+      "tts": {
+        "title": "Sprachsynthese (TTS) Einstellungen",
+        "description": "Modell und Optionen für das Vorlesen von KI-Antworten konfigurieren.",
+        "modelLabel": "TTS-Modell auswählen",
+        "rateLabel": "Sprechgeschwindigkeit",
+        "autoReadLabel": "Automatisches Vorlesen"
+      },
+      "stt": {
+        "title": "Spracherkennung (STT) Einstellungen",
+        "description": "Modell zur Umwandlung von Mikrofoneingaben in Text konfigurieren.",
+        "modelLabel": "STT-Modell auswählen",
+        "statusLabel": "Modellstatus",
+        "status": {
+          "idle": "Bereit",
+          "loadingModel": "Modell wird geladen...",
+          "ready": "Bereit",
+          "recording": "Aufnahme...",
+          "transcribing": "Wird transkribiert...",
+          "error": "Fehler"
+        }
+      },
+      "general": {
+        "title": "Allgemeine Einstellungen",
+        "description": "Allgemeine Chatbot-Einstellungen verwalten.",
+        "comingSoon": "Weitere Einstellungen folgen in Kürze."
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+﻿<button
+  type="button"
+  class="cmh-search-more-results"
+  @click="$emit('open', { entity, term })"
+>
+  <mt-icon name="regular-double-chevron-right-s" size="14px" />
+  <span>{{ $t('cmh-global.searchBar.moreResults') }}</span>
+</button>

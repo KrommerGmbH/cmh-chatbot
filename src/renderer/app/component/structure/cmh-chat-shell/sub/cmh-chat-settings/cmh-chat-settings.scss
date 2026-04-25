@@ -1,0 +1,167 @@
+@use '../../_variables' as *;
+
+// ── 설정 패널 ──────────────────────────────────────
+.cmh-chat-settings {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cmh-chat-settings__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid $border-color;
+
+  h3 {
+    margin: 0;
+    font-size: var(--cmh-font-size-lg, 18px);
+    font-weight: var(--cmh-font-weight-lg, 600);
+    color: $text-primary;
+  }
+}
+
+.cmh-chat-settings__icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border: none; border-radius: $radius-sm;
+  background: transparent; color: $text-secondary; cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+  &:hover { background: $bg-hover; color: $text-primary; }
+}
+
+.cmh-chat-settings__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.cmh-chat-settings__section {
+  margin-bottom: 20px;
+
+  h4 {
+    font-size: var(--cmh-font-size-sm, 13px);
+    font-weight: var(--cmh-font-weight-sm, 400);
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+}
+
+.cmh-chat-settings__section-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
+}
+
+.cmh-chat-settings__section-desc {
+  font-size: var(--cmh-font-size-xs, 11px); color: $text-muted; margin: 0 0 12px;
+}
+
+.cmh-chat-settings__reset-btn {
+  padding: 2px 8px; border: 1px solid $border-color; border-radius: $radius-sm;
+  background: transparent; color: $text-secondary;
+  font-size: var(--cmh-font-size-xs, 11px); cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast;
+  &:hover { background: $bg-hover; border-color: $text-muted; }
+}
+
+// ── 타이포그래피 설정 ──────────────────────────────
+.cmh-chat-settings__typography-header {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  padding: 4px 0; margin-bottom: 4px;
+  font-size: var(--cmh-font-size-xs, 11px); color: $text-muted;
+}
+
+.cmh-chat-settings__typography-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  align-items: center; padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &.is--base { background: rgba($accent, 0.04); border-radius: $radius-sm; padding: 6px 4px; }
+}
+
+.cmh-chat-settings__typography-label {
+  color: $text-secondary;
+}
+
+// ── 색상 조합 선택 ─────────────────────────────────
+.cmh-chat-settings__color-options {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+
+.cmh-chat-settings__color-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border: 1px solid $border-color; border-radius: $radius-md;
+  background: transparent; color: $text-secondary;
+  font-size: var(--cmh-font-size-xs, 11px); cursor: pointer;
+  transition: border-color $transition-fast, background $transition-fast;
+
+  &:hover { border-color: $text-muted; background: $bg-hover; }
+  &.is--active { border-color: $accent; background: rgba($accent, 0.08); color: $accent; font-weight: 500; }
+}
+
+.cmh-chat-settings__color-swatch {
+  width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cmh-chat-settings__color-name {
+  white-space: nowrap;
+}
+
+// ── 테마 선택 ──────────────────────────────────────
+.cmh-chat-settings__theme-options {
+  display: flex; gap: 8px;
+}
+
+.cmh-chat-settings__theme-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border: 1px solid $border-color; border-radius: $radius-md;
+  background: transparent; color: $text-secondary;
+  font-size: var(--cmh-font-size-sm, 13px); cursor: pointer;
+  transition: border-color $transition-fast, background $transition-fast;
+
+  &:hover { border-color: $text-muted; background: $bg-hover; }
+  &.is--active { border-color: $accent; background: rgba($accent, 0.08); color: $accent; font-weight: 500; }
+}
+
+// ── 미리보기 박스 ──────────────────────────────────
+.cmh-chat-settings__preview-box {
+  margin-top: 12px; padding: 12px;
+  border: 1px solid $border-color; border-radius: $radius-md;
+  background: $bg-secondary;
+}
+
+.cmh-chat-settings__preview-label {
+  font-size: var(--cmh-font-size-xs, 11px); color: $text-muted; margin-bottom: 8px;
+}
+
+.cmh-chat-settings__preview-user,
+.cmh-chat-settings__preview-assistant {
+  padding: 6px 10px; border-radius: $radius-sm; margin-bottom: 6px;
+  font-size: var(--cmh-font-size-base, 15px);
+  &:last-child { margin-bottom: 0; }
+}
+
+.cmh-chat-settings__preview-user {
+  background: $accent; color: #fff; text-align: right;
+  border-radius: $radius-md $radius-md 4px $radius-md;
+}
+
+.cmh-chat-settings__preview-assistant {
+  background: $bg-tertiary; color: $text-primary;
+  border-radius: $radius-md $radius-md $radius-md 4px;
+}
+
+// ── 언어 목록 ──────────────────────────────────────
+.cmh-chat-settings__language-list {
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.cmh-chat-settings__language-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: $radius-sm; cursor: pointer;
+  font-size: var(--cmh-font-size-sm, 13px); color: $text-secondary;
+  transition: background $transition-fast;
+  &:hover { background: $bg-hover; }
+  &.is--active { background: rgba($accent, 0.08); color: $accent; font-weight: 500; }
+}

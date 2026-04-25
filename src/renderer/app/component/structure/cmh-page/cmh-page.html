@@ -1,0 +1,36 @@
+<div class="cmh-page">
+  <div v-if="showSmartBar" class="cmh-page__smart-bar" :style="{ borderColor: moduleColor }">
+    <div class="cmh-page__smart-bar-header">
+      <slot name="smart-bar-header">
+        <div class="cmh-page__title">
+          <iconify-icon v-if="moduleIcon && moduleIcon.startsWith('ph:')" :icon="moduleIcon" width="24" height="24"></iconify-icon>
+          <mt-icon v-else-if="moduleIcon" :name="moduleIcon" size="24" />
+          <h2>{{ pageTitle }}</h2>
+        </div>
+      </slot>
+    </div>
+    <div class="cmh-page__smart-bar-actions">
+      <slot name="smart-bar-actions" />
+    </div>
+  </div>
+
+  <div v-if="showSearchBar" class="cmh-page__search-bar">
+    <slot name="search-bar">
+      <cmh-search-bar />
+    </slot>
+  </div>
+
+  <div class="cmh-page__body">
+    <div class="cmh-page__side-content">
+      <slot name="side-content" />
+    </div>
+
+    <div class="cmh-page__content">
+      <slot name="content" />
+    </div>
+
+    <div class="cmh-page__sidebar">
+      <slot name="sidebar" />
+    </div>
+  </div>
+</div>

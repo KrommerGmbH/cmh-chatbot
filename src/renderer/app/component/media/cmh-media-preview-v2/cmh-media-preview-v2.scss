@@ -1,0 +1,81 @@
+﻿.cmh-media-preview-v2 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-background-primary-default);
+
+    &.is--no-media {
+        background-color: var(--color-background-primary-disabled);
+        color: var(--color-icon-primary-default);
+    }
+
+    // 투명 배경 패턴
+    &.is--icon,
+    .shows--transparency {
+        background-image:
+            linear-gradient(45deg, var(--color-background-primary-disabled) 25%, transparent 25%),
+            linear-gradient(-45deg, var(--color-background-primary-disabled) 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, var(--color-background-primary-disabled) 75%),
+            linear-gradient(-45deg, transparent 75%, var(--color-background-primary-disabled) 75%);
+        background-size: 16px 16px;
+        background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .cmh-media-preview-v2__item {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+
+        &--audio {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .cmh-media-preview-v2__placeholder {
+        object-fit: contain;
+        padding: var(--spacing-xs);
+    }
+
+    .cmh-media-preview-v2__play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+        border-radius: var(--border-radius-round);
+        cursor: pointer;
+        color: var(--color-icon-static-default);
+        transition: background-color 0.15s ease;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    }
+
+    .cmh-media-preview-v2__play-icon {
+        color: var(--color-icon-static-default);
+    }
+
+    .cmh-media-preview-v2__locked-icon {
+        position: absolute;
+        bottom: var(--spacing-2xs);
+        right: var(--spacing-2xs);
+        color: var(--color-icon-static-default);
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+    }
+}

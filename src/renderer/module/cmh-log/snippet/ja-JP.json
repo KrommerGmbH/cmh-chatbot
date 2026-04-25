@@ -1,0 +1,30 @@
+{
+  "cmh-log": {
+    "navigation": {
+      "label": "ログ"
+    },
+    "module": {
+      "title": "ログ"
+    },
+    "list": {
+      "pageTitle": "ログ一覧",
+      "allLevels": "全レベル",
+      "levelError": "エラー",
+      "levelWarning": "警告",
+      "levelInfo": "情報",
+      "levelDebug": "デバッグ",
+      "clearAll": "全削除",
+      "empty": "ログがありません。",
+      "columns": {
+        "level": "レベル",
+        "source": "ソース",
+        "message": "メッセージ",
+        "createdAt": "時刻"
+      }
+    },
+    "detail": {
+      "pageTitle": "ログ詳細",
+      "notFound": "ログが見つかりません。"
+    }
+  }
+}

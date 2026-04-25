@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════════════════════════════════
+ *  CMH-Chatbot — Design Tokens
+ *  Shopware Meteor 토큰 체계 기반 (aideworks/shopware-tokens.scss 동일)
+ *  ⚠️  색상 하드코딩 금지 — 반드시 이 변수를 사용할 것
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────
+ *  1. Font-Size / Font-Weight 토큰 (5단계)
+ *  copilot-instructions.md §2.4 참조
+ * ───────────────────────────────────────────────────────────────────── */
+:root {
+  --cmh-font-size-xs: 11px;
+  --cmh-font-size-sm: 13px;
+  --cmh-font-size-base: 15px;
+  --cmh-font-size-lg: 18px;
+  --cmh-font-size-xl: 24px;
+
+  --cmh-font-weight-xs: 300;
+  --cmh-font-weight-sm: 400;
+  --cmh-font-weight-base: 400;
+  --cmh-font-weight-lg: 600;
+  --cmh-font-weight-xl: 700;
+
+  /* compat aliases */
+  --cmh-font-base: var(--cmh-font-size-base);
+  --cmh-font-chat: var(--cmh-font-size-sm);
+  --cmh-font-code: var(--cmh-font-size-xs);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ *  2. Shopware Color Tokens — Light (기본)
+ *  aideworks/src/renderer/app/assets/shopware-tokens.scss 와 동일
+ * ───────────────────────────────────────────────────────────────────── */
+:root {
+  /* ── Interaction ── */
+  --color-interaction-primary-default: #0870ff;
+  --color-interaction-primary-hover: #005cd7;
+  --color-interaction-primary-pressed: #0042a0;
+  --color-interaction-primary-disabled: #76aaff;
+  --color-interaction-secondary-default: #ffffff;
+  --color-interaction-secondary-hover: #f2f3f8;
+  --color-interaction-secondary-pressed: #e2e3e9;
+  --color-interaction-secondary-disabled: #e2e3e9;
+  --color-interaction-secondary-dark: #f2f3f8;
+  --color-interaction-critical-default: #e2262a;
+  --color-interaction-critical-hover: #c20017;
+  --color-interaction-critical-pressed: #90000e;
+  --color-interaction-critical-disabled: #ffa9a0;
+
+  /* ── Elevation / Surface ── */
+  --color-elevation-surface-sunken: #fafbfe;
+  --color-elevation-surface-default: #ffffff;
+  --color-elevation-surface-selected: #cdced4;
+  --color-elevation-surface-hover: #e2e3e9;
+  --color-elevation-surface-raised: #ffffff;
+  --color-elevation-surface-overlay: #ffffff;
+  --color-elevation-surface-frame: #fafbfe;
+  --color-elevation-surface-backdrop: #101013;
+  --color-elevation-surface-floating: #26262b;
+  --color-elevation-backdrop-default: #10101399;
+  --color-elevation-floating-default: #26262b;
+  --color-elevation-shadow-default: #1010131a;
+
+  /* ── Background ── */
+  --color-background-primary-default: #ffffff;
+  --color-background-primary-disabled: #f2f3f8;
+  --color-background-secondary-default: #fafbfe;
+  --color-background-tertiary-default: #f2f3f8;
+  --color-background-brand-default: #f0f6ff;
+  --color-background-critical-default: #fff2f0;
+  --color-background-attention-default: #fff3e3;
+  --color-background-positive-default: #e1ffe0;
+  --color-background-accent-default: #e4e1ff;
+
+  /* ── Icon ── */
+  --color-icon-primary-default: #1e1e24;
+  --color-icon-primary-disabled: #b9babf;
+  --color-icon-primary-inverse: #fafbfe;
+  --color-icon-secondary-default: #696a6e;
+  --color-icon-secondary-disabled: #b9babf;
+  --color-icon-secondary-inverse: #a5a6ab;
+  --color-icon-brand-default: #0870ff;
+  --color-icon-brand-hover: #005cd7;
+  --color-icon-brand-pressed: #0042a0;
+  --color-icon-brand-disabled: #76aaff;
+  --color-icon-critical-default: #e2262a;
+  --color-icon-critical-hover: #c20017;
+  --color-icon-critical-disabled: #ff7f74;
+  --color-icon-attention-default: #fbaf18;
+  --color-icon-positive-default: #36d046;
+  --color-icon-accent-default: #633bc6;
+  --color-icon-static-default: #ffffff;
+  --color-icon-static-dark: #09090b;
+  --color-icon-inverse-default: #fafbfe;
+
+  /* ── Border ── */
+  --color-border-primary-default: #cdced4;
+  --color-border-secondary-default: #e2e3e9;
+  --color-border-brand-selected: #0870ff;
+  --color-border-brand-default: #0870ff;
+  --color-border-brand-disabled: #76aaff;
+  --color-border-critical-default: #e2262a;
+  --color-border-critical-dark: #5e0006;
+  --color-border-critical-disabled: #ff7f74;
+  --color-border-attention-default: #fbaf18;
+  --color-border-positive-default: #36d046;
+  --color-border-accent-default: #a694ff;
+
+  /* ── Text ── */
+  --color-text-primary-default: #1e1e24;
+  --color-text-primary-disabled: #b9babf;
+  --color-text-primary-inverse: #fafbfe;
+  --color-text-secondary-default: #696a6e;
+  --color-text-secondary-disabled: #b9babf;
+  --color-text-secondary-inverse: #a5a6ab;
+  --color-text-tertiary-default: #696a6e;
+  --color-text-brand-default: #0870ff;
+  --color-text-brand-hover: #005cd7;
+  --color-text-brand-pressed: #0042a0;
+  --color-text-brand-disabled: #76aaff;
+  --color-text-brand-inverse: hsl(217, 100%, 65%);
+  --color-text-critical-default: #e2262a;
+  --color-text-critical-hover: #c20017;
+  --color-text-critical-pressed: #90000e;
+  --color-text-critical-disabled: #ff7f74;
+  --color-text-critical-dark: #e2262a;
+  --color-text-attention-default: #533600;
+  --color-text-positive-default: #00470a;
+  --color-text-accent-default: #633bc6;
+  --color-text-static-default: #ffffff;
+  --color-text-static-dark: #09090b;
+  --color-text-inverse-default: #fafbfe;
+
+  /* ── Static / Brand Scale ── */
+  --color-static-white: #ffffff;
+  --color-static-black: #09090b;
+  --color-shopware-brand-500: #189eff;
+  --color-shopware-brand-900: #0870ff;
+
+  /* ── Font Family ── */
+  --font-family-headings: 'Inter';
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ *  3. Dark Theme Override
+ *  aideworks dark 토큰과 동일한 팔레트
+ * ───────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* ── 배경 (sunken < default < raised) ── */
+  --color-background-primary-default: #111212;
+  --color-background-secondary-default: #111212;
+  --color-background-tertiary-default: #1e1e1e;
+  --color-background-user-message: #252525;
+  --color-elevation-surface-sunken: #111212;
+  --color-elevation-surface-default: #1a1a1a;
+  --color-elevation-surface-raised: #222222;
+  --color-elevation-surface-overlay: #2a2a2a;
+  --color-elevation-surface-hover: #2a2a2a;
+  --color-elevation-surface-selected: #333333;
+
+  /* ── 보더 ── */
+  --color-border-primary-default: #2a2a2a;
+  --color-border-secondary-default: #333333;
+
+  /* ── 텍스트·아이콘 ── */
+  --color-text-primary-default: #e0e0e0;
+  --color-text-secondary-default: #a0a0a0;
+  --color-text-tertiary-default: #707070;
+  --color-text-critical-default: #ff7f74;
+  --color-text-positive-default: #6ee77a;
+  --color-icon-primary-default: #e0e0e0;
+  --color-icon-secondary-default: #a0a0a0;
+
+  /* ── Secondary 버튼 ── */
+  --color-interaction-secondary-default: #1e1e1e;
+  --color-interaction-secondary-hover: #2a2a2a;
+  --color-interaction-secondary-disabled: #1a1a1a;
+  --color-interaction-secondary-pressed: #333333;
+  --color-interaction-secondary-dark: #2a2a2a;
+
+  /* ── Critical·backdrop ── */
+  --color-interaction-critical-default: #ff7f74;
+  --color-border-critical-default: #ff7f74;
+  --color-elevation-backdrop-default: rgb(16 16 19 / 72%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ *  4. 호환 Alias (기존 컴포넌트 깨짐 방지)
+ *  새 코드에서는 Shopware 토큰 직접 사용. 이 alias는 마이그레이션 완료 후 제거.
+ * ───────────────────────────────────────────────────────────────────── */
+:root {
+  /* structure: cmh-admin, global.scss */
+  --color-background: var(--color-background-secondary-default);
+  --color-surface: var(--color-elevation-surface-default);
+  --color-sidebar-bg: var(--color-elevation-surface-sunken);
+  --color-border: var(--color-border-primary-default);
+  --color-text: var(--color-text-primary-default);
+  --color-text-secondary: var(--color-text-secondary-default);
+
+  /* brand / interaction */
+  --color-primary: var(--color-interaction-primary-default);
+  --color-primary-hover: var(--color-interaction-primary-hover);
+  --color-hover: var(--color-elevation-surface-hover);
+  --color-active: var(--color-elevation-surface-selected);
+
+  /* semantic */
+  --color-success: var(--color-icon-positive-default);
+  --color-warning: var(--color-icon-attention-default);
+  --color-danger: var(--color-interaction-critical-default);
+  --color-info: var(--color-interaction-primary-default);
+
+  /* chat-shell specific aliases */
+  --color-bg-primary: var(--color-background-primary-default);
+  --color-bg-secondary: var(--color-background-secondary-default);
+  --color-bg-tertiary: var(--color-background-tertiary-default);
+  --color-bg-hover: var(--color-elevation-surface-hover);
+  --color-bg-active: var(--color-elevation-surface-selected);
+  --color-text-primary: var(--color-text-primary-default);
+  --color-text-muted: var(--color-text-tertiary-default);
+  --color-accent: var(--color-interaction-primary-default);
+  --color-accent-hover: var(--color-interaction-primary-hover);
+  --cmh-accent: var(--color-interaction-primary-default);
+}

@@ -1,0 +1,44 @@
+<cmh-page>
+  <template #smart-bar-header>
+    <div class="cmh-chat-detail__header">
+      <mt-button variant="ghost" @click="onGoBack">
+        <mt-icon name="regular-chevron-left-s" size="20" />
+        {{ i18n.t('cmh-global.actions.back') }}
+      </mt-button>
+      <h2 v-if="conversation">{{ conversation.title }}</h2>
+    </div>
+  </template>
+
+  <template #content>
+    <div class="cmh-chat-detail">
+      <div class="cmh-chat-detail__messages">
+        <div
+          v-for="msg in messages"
+          :key="msg.id"
+          class="cmh-chat-detail__message"
+          :class="`cmh-chat-detail__message--${msg.role}`"
+        >
+          <div class="cmh-chat-detail__message-content">{{ msg.content }}</div>
+        </div>
+      </div>
+
+      <div class="cmh-chat-detail__input-bar">
+        <textarea
+          v-model="inputText"
+          class="cmh-chat-detail__input"
+          :placeholder="i18n.t('cmh-global.actions.send')"
+          rows="1"
+          :disabled="isStreaming"
+          @keydown="onKeyDown"
+        />
+        <mt-button
+          variant="primary"
+          :disabled="!inputText.trim() || isStreaming"
+          @click="onSendMessage"
+        >
+          <mt-icon name="regular-arrow-right" size="20" />
+        </mt-button>
+      </div>
+    </div>
+  </template>
+</cmh-page>

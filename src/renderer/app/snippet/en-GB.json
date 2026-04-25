@@ -1,0 +1,194 @@
+{
+  "cmh-global": {
+    "default": {
+      "warning": "Warning",
+      "error": "Error",
+      "info": "Information",
+      "success": "Success"
+    },
+    "actions": {
+      "close": "Close",
+      "save": "Save",
+      "cancel": "Cancel",
+      "search": "Search",
+      "refresh": "Refresh",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "back": "Back",
+      "next": "Next",
+      "previous": "Previous",
+      "confirm": "Confirm",
+      "apply": "Apply",
+      "reset": "Reset",
+      "send": "Send",
+      "stop": "Stop",
+      "copy": "Copy",
+      "resend": "Resend",
+      "forkHere": "Fork from here"
+    },
+    "labels": {
+      "loading": "Loading…",
+      "noResults": "No results found.",
+      "total": "Total",
+      "date": "Date",
+      "name": "Name",
+      "description": "Description",
+      "status": "Status",
+      "type": "Type",
+      "yes": "Yes",
+      "no": "No",
+      "newChat": "New Chat",
+      "emptyChat": "Type a message to start a conversation.",
+      "thinking": "Thinking",
+      "toolCalls": "Tool Calls",
+      "artifact": "Artifact",
+      "openInPanel": "Open in Panel",
+      "attachFile": "Attach file",
+      "chatPlaceholder": "Type a message... (Shift+Enter: new line)",
+      "searchModels": "Search models...",
+      "stt": "Speech to Text",
+      "tts": "Text to Speech",
+      "showMore": "Show more",
+      "selectAgent": "Select agent",
+      "todos": "Todos",
+      "active": "Active",
+      "inactive": "Inactive"
+    },    "languageSwitch": {
+      "label": "Language",
+      "locales": {
+        "ko-KR": "한국어",
+        "en-GB": "English",
+        "de-DE": "Deutsch",
+        "zh-CN": "中文",
+        "ja-JP": "日本語"
+      }
+    },    "theme": {
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "menu": {
+      "toggleMenu": "Toggle menu",
+      "collapseMenu": "Collapse menu",
+      "expandMenu": "Expand menu",
+      "mainNavigation": "Main navigation",
+      "switchToChat": "Switch to chat",
+      "switchToAdmin": "Switch to admin",
+      "chatMode": "CMH Chatbot",
+      "adminMode": "Admin Mode"
+    },
+    "navigation": {
+      "chat": "Chat",
+      "workflow": "Workflow",
+      "provider": "Providers",
+      "model": "Models",
+      "settings": "Settings",
+      "aiManagement": "AI Management"
+    },
+    "chat": {
+      "newChat": "New Chat",
+      "connectionFailed": "LLM server connection failed — Mock response mode. Please check if llama-server is running.",
+      "generationStopped": "Response generation was stopped.",
+      "sttModelLoading": "Downloading speech recognition model... This may take a while on first use.",
+      "sttTranscribing": "Converting speech to text...",
+      "serverError": "Internal server error",
+      "modelNotFound": "Model not found",
+      "rateLimited": "Too many requests",
+      "networkError": "Network error",
+      "visionNotSupported": "Image processing not supported",
+      "visionNotSupportedMessage": "The model {model} does not support image processing. Only text will be sent.",
+      "imageAttached": "Attached images: {files} (not processed — current model does not support vision)",
+      "statusConnecting": "Connecting...",
+      "statusGenerating": "Generating...",
+      "timeoutError": "Response timeout",
+      "timeoutMessage": "The model did not respond within 90 seconds. Please try again.",
+      "noModelSelected": "No model selected",
+      "noModelSelectedMessage": "Please select a model before sending a message.",
+      "noApiKey": "API key is not configured",
+      "apiKeyRequiredShort": "API key required",
+      "forkedConversation": "Conversation forked."
+    },
+    "settings": {
+      "appearance": "Appearance",
+      "typography": "Typography",
+      "typographyDescription": "Set font size and weight individually for each level",
+      "typographyLevel": "Level",
+      "typographySize": "Size (px)",
+      "typographyWeight": "Weight",
+      "resetFontTokens": "Reset to defaults",
+      "fontLevel": {
+        "xs": "XS",
+        "sm": "SM",
+        "base": "Base ★",
+        "lg": "LG",
+        "xl": "XL"
+      },
+      "fontSize": "Font Size",
+      "colorScheme": "Color Scheme",
+      "themeMode": "Theme",
+      "preview": "Preview",
+      "previewUser": "Hello! This is a user message.",
+      "previewAssistant": "Hi! This is an AI response preview.",
+      "colorDefault": "Default",
+      "colorOcean": "Ocean",
+      "colorForest": "Forest",
+      "colorSunset": "Sunset",
+      "colorLavender": "Lavender"
+    },
+    "agentType": {
+      "title": "Agent Type",
+      "orchestrator": "Orchestrator",
+      "orchestratorDesc": "Top-level coordinator that routes user requests to the appropriate manager agents and assembles final responses.",
+      "manager": "Manager",
+      "managerDesc": "Mid-level coordinator that decomposes tasks and delegates to worker or sub-manager agents. Supports recursive hierarchy.",
+      "worker": "Worker",
+      "workerDesc": "Leaf-level executor that handles atomic, indivisible tasks. Can process up to 3 concurrent tasks.",
+      "profiler": "Profiler",
+      "profilerDesc": "Post-chat analysis agent that hooks into LangChain save callbacks to analyze user preferences, psychology, and behavioral patterns.",
+      "supporter": "Supporter",
+      "supporterDesc": "Utility agent providing web search, RAG retrieval, document parsing, API calls, and other tool-based operations."
+    },
+    "agent": {
+      "title": "Agent",
+      "name": "Agent Name",
+      "status": "Status",
+      "idle": "Idle",
+      "running": "Running",
+      "paused": "Paused",
+      "error": "Error",
+      "terminated": "Terminated",
+      "parentAgent": "Parent Agent",
+      "childAgents": "Child Agents",
+      "systemPrompt": "System Prompt",
+      "capabilities": "Capabilities",
+      "maxTasks": "Max Concurrent Tasks"
+    },
+    "dataGrid": {
+      "actionsMenu": "Actions menu",
+      "columnsActions": "Column actions",
+      "labelSelectAll": "Select all",
+      "labelSelected": "Selected"
+    },
+    "contextButton": {
+      "ariaLabel": "Context menu"
+    },
+    "searchBar": {
+      "moreResults": "More results",
+      "allTypes": "All types",
+      "placeholder": "Search",
+      "clearSearch": "Clear search",
+      "searching": "Searching...",
+      "filterByType": "Filter by type",
+      "noResultsFor": "No results for '{query}'."
+    },
+    "rating": {
+      "unrated": "Unrated",
+      "rateResponse": "Rate dissatisfaction",
+      "tooltip": "Click when the AI response doesn't match your intent or is inaccurate. Higher score = more dissatisfied.",
+      "dissatisfactionDef": "Dissatisfaction score: A reverse score indicating how far the AI response deviated from user intent (0=satisfied, 100=completely dissatisfied). This is NOT a positive star rating.",
+      "sadTooltip": "{sad}/{max} — Dissatisfaction score: {score}"
+    }
+  }
+}

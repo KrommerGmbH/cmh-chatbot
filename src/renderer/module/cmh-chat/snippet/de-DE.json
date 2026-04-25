@@ -1,0 +1,19 @@
+{
+  "cmh-chat": {
+    "navigation": { "label": "Chat" },
+    "module": { "title": "Chat" },
+    "list": {
+      "pageTitle": "Konversationen",
+      "columnTitle": "Titel",
+      "columnModel": "Modell",
+      "columnUpdatedAt": "Zuletzt geändert",
+      "emptyState": "Noch keine Konversationen. Starten Sie einen neuen Chat."
+    },
+    "detail": {
+      "pageTitle": "Konversationsdetails",
+      "messageCount": "Nachrichten",
+      "createdAt": "Erstellt am",
+      "modelUsed": "Verwendetes Modell"
+    }
+  }
+}

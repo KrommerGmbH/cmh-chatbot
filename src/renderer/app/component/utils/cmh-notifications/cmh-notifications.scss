@@ -1,0 +1,63 @@
+﻿$cmh-notifications-gap: 20px;
+$cmh-notifications-width: 400px;
+$cmh-notifications-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.cmh-notifications {
+    position: absolute;
+    top: $cmh-notifications-gap;
+    right: $cmh-notifications-gap;
+    width: $cmh-notifications-width;
+    z-index: 9000;
+    max-height: calc(100% - #{$cmh-notifications-gap});
+    pointer-events: none;
+
+    > * {
+        pointer-events: auto;
+    }
+
+    .mt-banner {
+        background-color: var(--color-elevation-surface-overlay);
+        border-color: var(--color-border-primary-default);
+        box-shadow: 0 8px 16px 0 rgb(0 0 0 / 6%);
+    }
+
+    .mt-banner__message {
+        width: 100%;
+        color: var(--color-text-primary-default);
+    }
+
+    .mt-banner .mt-banner__close {
+        color: var(--color-icon-primary-default);
+    }
+
+    &__message {
+        font-size: var(--font-size-xs);
+        line-height: var(--font-line-height-s, 20px);
+        color: var(--color-text-primary-default);
+        white-space: pre-line;
+    }
+
+    &__actions {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+.cmh-notifications-slide-fade-move,
+.cmh-notifications-slide-fade-enter-active,
+.cmh-notifications-slide-fade-leave-active {
+    transition: transform $cmh-notifications-transition, opacity $cmh-notifications-transition;
+}
+
+.cmh-notifications-slide-fade-leave-active {
+    position: absolute;
+    width: $cmh-notifications-width;
+}
+
+.cmh-notifications-slide-fade-enter-from,
+.cmh-notifications-slide-fade-leave-to {
+    opacity: 0;
+    transform: translateX(calc($cmh-notifications-gap * 2) + $cmh-notifications-width);
+}

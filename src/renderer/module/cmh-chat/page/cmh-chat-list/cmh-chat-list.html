@@ -1,0 +1,44 @@
+<cmh-page>
+  <template #smart-bar-actions>
+    <mt-button variant="primary" @click="onNewConversation">
+      <mt-icon name="regular-plus-circle" size="16" />
+      {{ i18n.t('cmh-global.actions.add') }}
+    </mt-button>
+  </template>
+
+  <template #content>
+    <div v-if="isLoading" class="cmh-chat-list__loading">
+      {{ i18n.t('cmh-global.labels.loading') }}
+    </div>
+
+    <div v-else-if="isEmpty" class="cmh-chat-list__empty">
+      <iconify-icon icon="ph--chats-thin" style="font-size:48px;color:var(--cmh-icon-color,rgba(255,255,255,0.5))" />
+      <p>{{ i18n.t('cmh-chat.list.emptyState') }}</p>
+      <mt-button variant="primary" @click="onNewConversation">
+        {{ i18n.t('cmh-global.actions.add') }}
+      </mt-button>
+    </div>
+
+    <div v-else class="cmh-chat-list__grid">
+      <div
+        v-for="conv in conversations"
+        :key="conv.id"
+        class="cmh-chat-list__card"
+        @click="onOpenConversation(conv.id)"
+      >
+        <div class="cmh-chat-list__card-header">
+          <h3>{{ conv.title }}</h3>
+          <span class="cmh-chat-list__card-date">{{ formatDate(conv.updatedAt) }}</span>
+        </div>
+        <div class="cmh-chat-list__card-meta">
+          <span>{{ conv.messages.length }} {{ i18n.t('cmh-chat.detail.messageCount') }}</span>
+        </div>
+        <div class="cmh-chat-list__card-actions" @click.stop>
+          <mt-button variant="ghost" size="small" @click="onDeleteConversation(conv.id)">
+            <mt-icon name="regular-trash" size="14" />
+          </mt-button>
+        </div>
+      </div>
+    </div>
+  </template>
+</cmh-page>

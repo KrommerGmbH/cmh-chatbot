@@ -1,0 +1,33 @@
+﻿<div class="cmh-empty-state" :class="classes">
+    <div class="cmh-empty-state__element">
+        <div class="cmh-empty-state__icon">
+            <slot name="icon">
+                <mt-icon
+                    v-if="resolvedIcon"
+                    :name="resolvedIcon"
+                    size="60px"
+                    :color="resolvedColor"
+                />
+            </slot>
+        </div>
+
+        <div v-if="title" class="cmh-empty-state__title" role="alert">
+            {{ title }}
+        </div>
+
+        <div v-if="showDescription" class="cmh-empty-state__description">
+            <slot>
+                <div
+                    v-if="resolvedSubline"
+                    class="cmh-empty-state__description-content"
+                >
+                    {{ resolvedSubline }}
+                </div>
+            </slot>
+        </div>
+
+        <div v-if="hasActionSlot" class="cmh-empty-state__actions">
+            <slot name="actions"></slot>
+        </div>
+    </div>
+</div>

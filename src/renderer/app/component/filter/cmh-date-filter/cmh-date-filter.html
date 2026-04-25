@@ -1,0 +1,44 @@
+﻿<sw-range-filter
+    :class="'sw-date-filter' + ((filter.showTimeframe) ? ' --has-timeframe' : '')"
+    :value="dateValue"
+    :title="filter.label"
+    :active="active"
+    :show-reset-button="!!dateValue.from || !!dateValue.to"
+    :is-show-divider="showDivider"
+    :property="filter.property"
+    @filter-update="updateFilter"
+    @filter-reset="resetFilter"
+>
+    <sw-single-select
+        v-if="filter.showTimeframe"
+        v-model:value="dateValue.timeframe"
+        class="sw-date-filter__timeframe"
+        :placeholder="$t('sw-date-filter.selectTimeframe.placeholder')"
+        :options="timeframeOptions"
+        @update:value="onTimeframeSelect"
+    />
+
+    <template #from-field>
+        <mt-datepicker
+            v-model="dateValue.from"
+            v-bind="$attrs"
+            class="sw-date-filter__from"
+            :date-type="dateType"
+            :placeholder="filter.fromPlaceholder"
+            :label="fromToFieldLabel('from')"
+            @update:model-value="resetTimeframe"
+        />
+    </template>
+
+    <template #to-field>
+        <mt-datepicker
+            v-model="dateValue.to"
+            v-bind="$attrs"
+            class="sw-date-filter__to"
+            :date-type="dateType"
+            :placeholder="filter.toPlaceholder"
+            :label="fromToFieldLabel('to')"
+            @update:model-value="resetTimeframe"
+        />
+    </template>
+</sw-range-filter>

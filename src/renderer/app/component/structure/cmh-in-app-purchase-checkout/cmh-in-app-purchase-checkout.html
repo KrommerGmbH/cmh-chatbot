@@ -1,0 +1,19 @@
+﻿<cmh-modal
+  v-if="entry"
+  class="cmh-in-app-purchase-checkout"
+  :title="$t('cmh-global.inAppPurchase.title')"
+  width="680px"
+  @modal-close="$emit('modal-close')"
+>
+  <div class="cmh-in-app-purchase-checkout__body">
+    <h3>{{ $t('cmh-global.inAppPurchase.subtitle') }}</h3>
+    <p>{{ $t('cmh-global.inAppPurchase.description') }}</p>
+    <slot></slot>
+  </div>
+
+  <template #footer>
+    <cmh-button variant="secondary" @click="$emit('modal-close')">
+      {{ $t('cmh-global.actions.close') }}
+    </cmh-button>
+  </template>
+</cmh-modal>

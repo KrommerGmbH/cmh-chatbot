@@ -1,0 +1,39 @@
+{
+  "cmh-model": {
+    "navigation": {
+      "label": "模型"
+    },
+    "module": {
+      "title": "模型"
+    },
+    "list": {
+      "pageTitle": "模型列表",
+      "addModel": "添加模型",
+      "syncRemote": "同步远程模型",
+      "syncRemoteSuccess": "远程模型同步完成。",
+      "syncRemoteError": "远程模型同步失败。",
+      "allProviders": "所有提供商",
+      "searchPlaceholder": "搜索模型...",
+      "empty": "暂无注册模型。",
+      "default": "默认",
+      "columns": {
+        "name": "名称",
+        "modelId": "模型ID",
+        "provider": "供应商",
+        "contextLength": "上下文",
+        "status": "状态",
+        "default": "默认"
+      },
+      "loadError": "无法加载模型列表。"
+    },
+    "detail": {
+      "pageTitle": "模型详情",
+      "name": "模型名称",
+      "modelId": "模型 ID",
+      "provider": "提供商",
+      "contextLength": "上下文长度",
+      "description": "描述",
+      "default": "默认模型"
+    }
+  }
+}

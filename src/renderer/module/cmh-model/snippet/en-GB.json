@@ -1,0 +1,39 @@
+{
+  "cmh-model": {
+    "navigation": {
+      "label": "Models"
+    },
+    "module": {
+      "title": "Models"
+    },
+    "list": {
+      "pageTitle": "Model list",
+      "addModel": "Add model",
+      "syncRemote": "Sync remote models",
+      "syncRemoteSuccess": "Remote model sync completed.",
+      "syncRemoteError": "Failed to sync remote models.",
+      "allProviders": "All providers",
+      "searchPlaceholder": "Search models...",
+      "empty": "No models registered.",
+      "default": "Default",
+      "columns": {
+        "name": "Name",
+        "modelId": "Model ID",
+        "provider": "Provider",
+        "contextLength": "Context",
+        "status": "Status",
+        "default": "Default"
+      },
+      "loadError": "Failed to load model list."
+    },
+    "detail": {
+      "pageTitle": "Model detail",
+      "name": "Model name",
+      "modelId": "Model ID",
+      "provider": "Provider",
+      "contextLength": "Context length",
+      "description": "Description",
+      "default": "Default model"
+    }
+  }
+}

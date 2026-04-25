@@ -1,0 +1,23 @@
+﻿<cmh-base-filter
+    v-bind="$attrs"
+    class="sw-range-filter"
+>
+    <sw-container
+        :class="{ 'sw-container--has-divider': isShowDivider }"
+    >
+        <slot></slot>
+
+        <slot name="from-field">
+        </slot>
+
+        <slot name="divider">
+            <span
+                v-if="isShowDivider"
+                class="sw-range-filter__divider"
+            ></span>
+        </slot>
+
+        <slot name="to-field">
+        </slot>
+    </sw-container>
+</cmh-base-filter>

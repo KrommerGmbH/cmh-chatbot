@@ -1,0 +1,29 @@
+﻿<div class="cmh-help-center-v2" :class="{ 'is--open': isOpen }">
+  <button
+    type="button"
+    class="cmh-help-center-v2__trigger"
+    :aria-label="$t('cmh-global.helpCenter.open')"
+    :title="$t('cmh-global.helpCenter.open')"
+    @click="toggleOpen"
+  >
+    <mt-icon name="regular-question-circle" size="16px" />
+  </button>
+
+  <div v-if="isOpen" class="cmh-help-center-v2__panel">
+    <div class="cmh-help-center-v2__header">
+      <div>
+        <strong>{{ $t('cmh-global.helpCenter.title') }}</strong>
+        <p>{{ $t('cmh-global.helpCenter.subtitle') }}</p>
+      </div>
+      <button type="button" class="cmh-help-center-v2__close" @click="closePanel">
+        <mt-icon name="regular-times-xs" size="12px" />
+      </button>
+    </div>
+
+    <div class="cmh-help-center-v2__links">
+      <button type="button" class="cmh-help-center-v2__link" @click="closePanel">{{ $t('cmh-global.helpCenter.docs') }}</button>
+      <button type="button" class="cmh-help-center-v2__link" @click="closePanel">{{ $t('cmh-global.helpCenter.releaseNotes') }}</button>
+      <button type="button" class="cmh-help-center-v2__link" @click="closePanel">{{ $t('cmh-global.helpCenter.contact') }}</button>
+    </div>
+  </div>
+</div>

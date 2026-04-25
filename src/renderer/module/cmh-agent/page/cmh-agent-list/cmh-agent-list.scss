@@ -1,0 +1,177 @@
+/* cmh-agent-list — Mobile-first agent tree view */
+
+.cmh-agent-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: 12px;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: var(--cmh-font-size-lg, 18px);
+    font-weight: var(--cmh-font-weight-lg, 600);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__search {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    min-width: 180px;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    font-size: var(--cmh-font-size-sm, 13px);
+    min-height: 44px;
+
+    &--primary {
+      background: var(--color-accent, #189EFF);
+      color: #fff;
+      border-color: transparent;
+    }
+  }
+
+  &__loading {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+  }
+
+  /* ── Tree ────────────────────────────────────── */
+  &__tree {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__node {
+    &.is--inactive {
+      opacity: 0.5;
+    }
+  }
+
+  &__node-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    min-height: 44px;
+
+    &:hover {
+      background: var(--color-bg-hover, rgba(255, 255, 255, 0.05));
+    }
+  }
+
+  &__expand-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: var(--cmh-font-size-xs, 11px);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__expand-spacer {
+    width: 24px;
+    flex-shrink: 0;
+  }
+
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__icon {
+    font-size: var(--cmh-font-size-base, 15px);
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: var(--cmh-font-size-base, 15px);
+    color: var(--color-text-primary);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__domain-badge {
+    font-size: var(--cmh-font-size-xs, 11px);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  &__node-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__action-btn {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--cmh-font-size-xs, 11px);
+
+    &--danger {
+      color: var(--color-danger, #E74C3C);
+    }
+  }
+
+  &__children {
+    padding-left: 32px;
+    border-left: 1px solid var(--color-border);
+    margin-left: 12px;
+  }
+}
+
+@media (min-width: 640px) {
+  .cmh-agent-list {
+    padding: 16px 20px;
+  }
+}

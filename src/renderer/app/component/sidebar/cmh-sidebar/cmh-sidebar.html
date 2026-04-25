@@ -1,0 +1,39 @@
+﻿<aside class="cmh-sidebar" :class="sidebarClasses">
+    <nav class="cmh-sidebar__navigation">
+        <ul
+            v-for="(section, index) in sections"
+            :key="`sidebar-section-${index}`"
+            class="cmh-sidebar__navigation-list"
+            :class="`is--${index}`"
+        >
+            <li v-for="item in section" :key="item.id ?? item.title">
+                <button
+                    class="cmh-sidebar__nav-button"
+                    :class="{ 'is--active': item.isActive, 'is--disabled': item.disabled }"
+                    :title="item.title"
+                    :disabled="item.disabled || undefined"
+                    @click="setItemActive(item)"
+                >
+                    <iconify-icon v-if="item.icon && item.icon.startsWith('ph:')" :icon="item.icon" width="20" height="20" />
+                    <mt-icon v-else :name="item.icon" size="20px" />
+                    <span
+                        v-if="item.badge && item.badge > 0"
+                        class="cmh-sidebar__nav-badge"
+                        :class="`is--${item.badgeType ?? 'info'}`"
+                    >
+                        {{ item.badge }}
+                    </span>
+                    <span
+                        v-else-if="item.hasSimpleBadge"
+                        class="cmh-sidebar__nav-badge-simple"
+                        :class="`is--${item.badgeType ?? 'info'}`"
+                    ></span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="cmh-sidebar__content">
+        <slot></slot>
+    </div>
+</aside>

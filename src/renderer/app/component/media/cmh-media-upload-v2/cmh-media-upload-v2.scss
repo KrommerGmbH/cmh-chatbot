@@ -1,0 +1,118 @@
+﻿.cmh-media-upload-v2 {
+    width: 100%;
+
+    .cmh-media-upload-v2__content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+
+        &.is--small {
+            .cmh-media-upload-v2__dropzone {
+                min-height: 80px;
+            }
+        }
+    }
+
+    // 헤더 (라벨 + 모드 전환 버튼)
+    .cmh-media-upload-v2__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-xs);
+    }
+
+    .cmh-media-upload-v2__label {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-primary-default);
+    }
+
+    // 드롭존
+    .cmh-media-upload-v2__dropzone {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-xs);
+        min-height: 160px;
+        padding: var(--spacing-md);
+        border: var(--border-width-sm) dashed var(--color-border-primary-default);
+        border-radius: var(--border-radius-sm);
+        background-color: var(--color-background-primary-default);
+        overflow: hidden;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+        cursor: pointer;
+
+        &.is--active {
+            background-color: var(--color-background-brand-default);
+            border-color: var(--color-border-brand-selected);
+            border-style: solid;
+        }
+
+        &:hover:not(.is--active) {
+            background-color: var(--color-background-primary-hover);
+        }
+    }
+
+    // 드롭존 힌트
+    .cmh-media-upload-v2__dropzone-hint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-2xs);
+        pointer-events: none;
+    }
+
+    .cmh-media-upload-v2__dropzone-icon {
+        color: var(--color-icon-primary-default);
+        font-size: 32px;
+    }
+
+    .cmh-media-upload-v2__dropzone-text {
+        margin: 0;
+        font-size: var(--font-size-xs);
+        color: var(--color-text-secondary-default);
+        text-align: center;
+    }
+
+    // 프리뷰
+    .cmh-media-upload-v2__preview {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--border-radius-sm);
+    }
+
+    .cmh-media-upload-v2__preview-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transition: opacity 0.15s ease;
+
+        .cmh-media-upload-v2__dropzone:hover & {
+            opacity: 1;
+        }
+    }
+
+    // URL 폼
+    .cmh-media-upload-v2__url-form {
+        width: 100%;
+    }
+
+    // compact 버튼 그룹
+    .cmh-button-group {
+        display: flex;
+    }
+
+    // 숨김 파일 input
+    .cmh-media-upload-v2__form {
+        display: none;
+    }
+}

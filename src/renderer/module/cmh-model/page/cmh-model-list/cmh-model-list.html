@@ -1,0 +1,71 @@
+﻿<cmh-page :show-search-bar="true">
+  <template #smart-bar-actions>
+    <div class="cmh-model-list__filters">
+      <select
+        class="cmh-model-list__filter-select"
+        :value="filterProvider"
+        @change="onFilterProvider($event.target.value)"
+      >
+        <option value="">{{ $t('cmh-model.list.allProviders') }}</option>
+        <option v-for="p in providers" :key="p.id" :value="p.id">{{ p.name }}</option>
+      </select>
+    </div>
+
+    <mt-button variant="primary" size="small" @click="onAdd">
+      {{ $t('cmh-model.list.addModel') }}
+    </mt-button>
+
+    <mt-button variant="secondary" size="small" @click="onSyncRemote" :disabled="isLoading">
+      {{ $t('cmh-model.list.syncRemote') }}
+    </mt-button>
+  </template>
+
+  <template #content>
+    <cmh-entity-listing
+      class="cmh-model-list__grid"
+      :data-source="models"
+      :columns="modelColumns"
+      :repository="modelRepository"
+      :is-loading="isLoading"
+      :current-page="page"
+      :per-page="limit"
+      :total-items="total"
+      :disable-data-fetching="true"
+      :allow-inline-edit="false"
+      :allow-delete="true"
+      :show-selection="true"
+      detail-route="cmh.model.detail"
+      :sort-by="sortBy"
+      :sort-direction="sortDirection"
+      @column-sort="onColumnSort"
+      @page-change="onPageChange"
+    >
+      <!-- Provider 컬럼: ID 대신 이름 표시 -->
+      <template #column-providerId="{ item }">
+        <span class="cmh-model-list__provider-name">{{ getProviderName(item.providerId) }}</span>
+      </template>
+
+      <!-- Context Length 포맷 -->
+      <template #column-contextLength="{ item }">
+        <span class="cmh-model-list__context">{{ formatContextLength(item.contextLength) }}</span>
+      </template>
+
+      <!-- Status 뱃지 -->
+      <template #column-isActive="{ item }">
+        <span
+          class="cmh-model-list__badge"
+          :class="item.isActive ? 'is--active' : 'is--inactive'"
+        >
+          {{ item.isActive ? $t('cmh-global.labels.active') : $t('cmh-global.labels.inactive') }}
+        </span>
+      </template>
+
+      <!-- Default 뱃지 -->
+      <template #column-isDefault="{ item }">
+        <span v-if="item.isDefault" class="cmh-model-list__badge is--default">
+          {{ $t('cmh-model.list.default') }}
+        </span>
+      </template>
+    </cmh-entity-listing>
+  </template>
+</cmh-page>

@@ -1,0 +1,53 @@
+<div class="cmh-chat-sidebar">
+  <div class="cmh-chat-sidebar__header">
+    <h3>{{ $t('cmh-global.menu.chatMode') }}</h3>
+    <button class="cmh-chat-sidebar__icon-btn" @click="$emit('new-conversation')" :title="$t('cmh-global.actions.add')">
+      <mt-icon name="regular-plus-circle" size="20px" />
+    </button>
+  </div>
+
+  <div class="cmh-chat-sidebar__list">
+    <div
+      v-for="conv in conversations"
+      :key="conv.id"
+      class="cmh-chat-sidebar__conv-item"
+      :class="{ 'is--active': conv.id === currentConversationId }"
+      role="button"
+      tabindex="0"
+      @click="$emit('select-conversation', conv.id)"
+      @dblclick.stop="startEdit(conv)"
+      @keydown.enter="$emit('select-conversation', conv.id)"
+    >
+      <input
+        v-if="editingConvId === conv.id"
+        ref="editInput"
+        class="cmh-chat-sidebar__conv-edit-input"
+        :value="editTitle"
+        @input="editTitle = $event.target.value"
+        @keydown.enter.stop="commitEdit(conv.id)"
+        @keydown.escape.stop="cancelEdit"
+        @blur="commitEdit(conv.id)"
+        @click.stop
+      />
+      <span v-else class="cmh-chat-sidebar__conv-title">{{ conv.title || $t('cmh-global.labels.newChat') }}</span>
+      <button
+        class="cmh-chat-sidebar__conv-delete"
+        @click.stop="$emit('delete-conversation', conv.id)"
+        :title="$t('cmh-global.actions.delete')"
+      >
+        <mt-icon name="regular-times-xs" size="14px" />
+      </button>
+    </div>
+  </div>
+
+  <div class="cmh-chat-sidebar__footer">
+    <button class="cmh-chat-sidebar__mode-switch" @click="$emit('open-settings')">
+      <mt-icon name="regular-content" size="16px" />
+      <span>{{ $t('cmh-global.settings.appearance') }}</span>
+    </button>
+    <button class="cmh-chat-sidebar__mode-switch" @click="$emit('switch-to-admin')">
+      <mt-icon name="regular-cog" size="16px" />
+      <span>{{ $t('cmh-global.menu.adminMode') }}</span>
+    </button>
+  </div>
+</div>

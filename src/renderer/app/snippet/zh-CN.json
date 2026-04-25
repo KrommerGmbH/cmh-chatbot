@@ -1,0 +1,196 @@
+{
+  "cmh-global": {
+    "default": {
+      "warning": "警告",
+      "error": "错误",
+      "info": "提示",
+      "success": "成功"
+    },
+    "actions": {
+      "close": "关闭",
+      "save": "保存",
+      "cancel": "取消",
+      "search": "搜索",
+      "refresh": "刷新",
+      "delete": "删除",
+      "edit": "编辑",
+      "add": "添加",
+      "back": "返回",
+      "next": "下一步",
+      "previous": "上一步",
+      "confirm": "确认",
+      "apply": "应用",
+      "reset": "重置",
+      "send": "发送",
+      "stop": "停止",
+      "copy": "复制",
+      "resend": "重新发送",
+      "forkHere": "从此处分支"
+    },
+    "labels": {
+      "loading": "加载中…",
+      "noResults": "未找到结果。",
+      "total": "总计",
+      "date": "日期",
+      "name": "名称",
+      "description": "描述",
+      "status": "状态",
+      "type": "类型",
+      "yes": "是",
+      "no": "否",
+      "newChat": "新对话",
+      "emptyChat": "输入消息以开始对话。",
+      "thinking": "思考中",
+      "toolCalls": "工具调用",
+      "artifact": "工件",
+      "openInPanel": "在面板中打开",
+      "attachFile": "附加文件",
+      "chatPlaceholder": "输入消息... (Shift+Enter: 换行)",
+      "searchModels": "搜索模型...",
+      "stt": "语音识别",
+      "tts": "语音输出",
+      "showMore": "查看更多",
+      "selectAgent": "选择代理",
+      "todos": "任务列表",
+      "active": "启用",
+      "inactive": "停用"
+    },
+    "languageSwitch": {
+      "label": "语言",
+      "locales": {
+        "ko-KR": "한국어",
+        "en-GB": "English",
+        "de-DE": "Deutsch",
+        "zh-CN": "中文",
+        "ja-JP": "日本語"
+      }
+    },
+    "theme": {
+      "switchToLight": "切换到浅色模式",
+      "switchToDark": "切换到深色模式",
+      "dark": "深色",
+      "light": "浅色"
+    },
+    "menu": {
+      "toggleMenu": "切换菜单",
+      "collapseMenu": "收起菜单",
+      "expandMenu": "展开菜单",
+      "mainNavigation": "主导航",
+      "switchToChat": "切换到聊天",
+      "switchToAdmin": "切换到管理",
+      "chatMode": "CMH Chatbot",
+      "adminMode": "管理模式"
+    },
+    "navigation": {
+      "chat": "聊天",
+      "workflow": "工作流",
+      "provider": "提供商",
+      "model": "模型",
+      "settings": "设置",
+      "aiManagement": "AI 管理"
+    },
+    "chat": {
+      "newChat": "新对话",
+      "connectionFailed": "LLM 服务器连接失败 — Mock 响应模式。请确认 llama-server 是否正在运行。",
+      "generationStopped": "响应生成已停止。",
+      "sttModelLoading": "正在下载语音识别模型... 首次使用可能需要一些时间。",
+      "sttTranscribing": "正在将语音转换为文本...",
+      "serverError": "服务器内部错误",
+      "modelNotFound": "未找到模型",
+      "rateLimited": "请求过多",
+      "networkError": "网络连接失败",
+      "visionNotSupported": "不支持图像处理",
+      "visionNotSupportedMessage": "{model} 模型不支持图像处理，仅发送文本。",
+      "imageAttached": "附件图片：{files}（当前模型不支持图像，未处理）",
+      "statusConnecting": "连接中...",
+      "statusGenerating": "生成中...",
+      "timeoutError": "响应超时",
+      "timeoutMessage": "模型在90秒内未响应。请重试。",
+      "noModelSelected": "未选择模型",
+      "noModelSelectedMessage": "请先选择一个模型再发送消息。",
+      "noApiKey": "API 密钥未配置",
+      "apiKeyRequiredShort": "需要 API 密钥",
+      "forkedConversation": "对话已分支。"
+    },
+    "settings": {
+      "appearance": "外观设置",
+      "typography": "字体排版",
+      "typographyDescription": "为每个字体级别单独设置大小和粗细",
+      "typographyLevel": "级别",
+      "typographySize": "大小 (px)",
+      "typographyWeight": "粗细",
+      "resetFontTokens": "恢复默认值",
+      "fontLevel": {
+        "xs": "XS",
+        "sm": "SM",
+        "base": "Base ★",
+        "lg": "LG",
+        "xl": "XL"
+      },
+      "fontSize": "字体大小",
+      "colorScheme": "配色方案",
+      "themeMode": "主题",
+      "preview": "预览",
+      "previewUser": "你好！这是用户消息。",
+      "previewAssistant": "你好！这是AI回复预览。",
+      "colorDefault": "默认",
+      "colorOcean": "海洋",
+      "colorForest": "森林",
+      "colorSunset": "日落",
+      "colorLavender": "薰衣草"
+    },
+    "agentType": {
+      "title": "代理类型",
+      "orchestrator": "编排器",
+      "orchestratorDesc": "顶层协调者 — 将用户请求路由到相应的管理代理并组装最终响应。",
+      "manager": "管理者",
+      "managerDesc": "中层协调者 — 分解任务并委派给工作者或子管理代理。支持递归层级结构。",
+      "worker": "工作者",
+      "workerDesc": "末端执行者 — 处理原子的、不可分割的任务。最多同时处理 3 个任务。",
+      "profiler": "分析器",
+      "profilerDesc": "聊天后分析代理 — 通过挂钩 LangChain 保存回调来分析用户偏好、心理状态和行为模式。",
+      "supporter": "支持者",
+      "supporterDesc": "实用代理 — 提供网页搜索、RAG检索、文档解析、API调用等工具操作。"
+    },
+    "agent": {
+      "title": "代理",
+      "name": "代理名称",
+      "status": "状态",
+      "idle": "空闲",
+      "running": "运行中",
+      "paused": "已暂停",
+      "error": "错误",
+      "terminated": "已终止",
+      "parentAgent": "上级代理",
+      "childAgents": "下级代理",
+      "systemPrompt": "系统提示词",
+      "capabilities": "能力",
+      "maxTasks": "最大并发任务数"
+    },
+    "dataGrid": {
+      "actionsMenu": "操作菜单",
+      "columnsActions": "列操作",
+      "labelSelectAll": "全选",
+      "labelSelected": "已选择"
+    },
+    "contextButton": {
+      "ariaLabel": "上下文菜单"
+    },
+    "searchBar": {
+      "moreResults": "更多结果",
+      "allTypes": "所有类型",
+      "placeholder": "搜索",
+      "clearSearch": "清除搜索",
+      "searching": "搜索中...",
+      "filterByType": "按类型筛选",
+      "noResultsFor": "没有找到'{query}'的结果。"
+    },
+    "rating": {
+      "unrated": "未评价",
+      "rateResponse": "评价不满意程度",
+      "tooltip": "当AI回答不符合您的意图或不准确时点击。分数越高表示越不满意。",
+      "dissatisfactionDef": "不满意分数：一个反向评分，表示AI回答与用户意图的偏离程度（0=满意，100=完全不满意）。这不是正面的星级评分。",
+      "sadTooltip": "{sad}/{max} — 不满意分数：{score}分"
+    }
+  }
+}

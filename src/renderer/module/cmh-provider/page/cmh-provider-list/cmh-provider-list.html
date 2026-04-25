@@ -1,0 +1,54 @@
+<cmh-page :show-search-bar="true">
+  <template #smart-bar-actions>
+    <button class="cmh-provider-list__add-btn" @click="onAdd">
+      <mt-icon name="regular-plus-circle" size="16" />
+      <span>{{ $t('cmh-provider.list.addProvider') }}</span>
+    </button>
+  </template>
+
+  <template #content>
+    <cmh-entity-listing
+      class="cmh-provider-list__grid"
+      :data-source="providers"
+      :columns="providerColumns"
+      :repository="providerRepository"
+      :is-loading="isLoading"
+      :current-page="page"
+      :per-page="limit"
+      :total-items="total"
+      :sort-by="sortBy"
+      :sort-direction="sortDirection"
+      detail-route="cmh.provider.detail"
+      :disable-data-fetching="true"
+      :allow-delete="false"
+      :show-selection="false"
+      @column-sort="onColumnSort"
+      @page-change="onPageChange"
+    >
+      <!-- baseUrl: 길면 잘라서 표시 -->
+      <template #column-baseUrl="{ item }">
+        <span class="cmh-provider-list__url">{{ item.baseUrl || '—' }}</span>
+      </template>
+
+      <!-- priority -->
+      <template #column-priority="{ item }">
+        <span class="cmh-provider-list__priority">{{ item.priority }}</span>
+      </template>
+
+      <!-- modelCount: 가상 컬럼 -->
+      <template #column-modelCount="{ item }">
+        <span>{{ getModelCount(item.id) }}</span>
+      </template>
+
+      <!-- isActive: 뱃지 -->
+      <template #column-isActive="{ item }">
+        <span
+          class="cmh-provider-list__badge"
+          :class="item.isActive ? 'is--active' : 'is--inactive'"
+        >
+          {{ item.isActive ? $t('cmh-global.labels.active') : $t('cmh-global.labels.inactive') }}
+        </span>
+      </template>
+    </cmh-entity-listing>
+  </template>
+</cmh-page>

@@ -1,0 +1,30 @@
+﻿<router-link
+    v-if="routerLink"
+    :to="routerLink"
+    class="cmh-context-menu-item"
+    :class="contextMenuItemStyles"
+    v-bind="$attrs"
+    :target="disabled ? undefined : target"
+>
+    <slot name="icon">
+        <mt-icon v-if="icon" :name="icon" size="16px" />
+    </slot>
+    <span class="cmh-context-menu-item__text" :class="{ 'is--disabled': disabled }">
+        <slot></slot>
+    </span>
+</router-link>
+
+<button
+    v-else
+    class="cmh-context-menu-item"
+    :class="contextMenuItemStyles"
+    v-bind="$attrs"
+    @click.capture="handleClick"
+>
+    <slot name="icon">
+        <mt-icon v-if="icon" :name="icon" size="16px" />
+    </slot>
+    <span class="cmh-context-menu-item__text" :class="{ 'is--disabled': disabled }">
+        <slot></slot>
+    </span>
+</button>

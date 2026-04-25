@@ -1,0 +1,10 @@
+﻿<div class="cmh-hidden-iframes" aria-hidden="true" style="display: none;">
+  <iframe
+    v-for="extension in extensions"
+    :key="`${extension.type}-${extension.name}`"
+    :src="extension.baseUrl"
+    :title="extension.name || locationId"
+  />
+
+  <slot></slot>
+</div>

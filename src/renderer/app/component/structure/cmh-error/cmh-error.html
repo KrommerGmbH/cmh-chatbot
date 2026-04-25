@@ -1,0 +1,20 @@
+﻿<section class="cmh-error" role="alert">
+  <div class="cmh-error__container">
+    <div class="cmh-error__illustration">
+      <img v-if="imagePath" :src="imagePath" alt="" />
+      <mt-icon v-else name="regular-exclamation-circle" size="32px" />
+    </div>
+
+    <div class="cmh-error__content">
+      <slot>
+        <div v-if="statusCode" class="cmh-error__status-code">{{ statusCode }}</div>
+        <strong>{{ $t(title) }}</strong>
+        <p v-if="message">{{ message }}</p>
+        <code v-if="showStack && error && error.stack" class="cmh-error__stack">{{ error.stack }}</code>
+        <cmh-button v-if="showLink" variant="primary">
+          {{ $t(linkText) }}
+        </cmh-button>
+      </slot>
+    </div>
+  </div>
+</section>

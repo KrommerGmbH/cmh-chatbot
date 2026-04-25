@@ -1,0 +1,59 @@
+{
+  "cmh-workflow": {
+    "navigation": {
+      "label": "Workflow"
+    },
+    "module": {
+      "title": "Workflow"
+    },
+    "list": {
+      "pageTitle": "Workflow list",
+      "addWorkflow": "Add workflow",
+      "empty": "No workflows registered.",
+      "emptyHint": "Add a workflow to build agent pipelines.",
+      "agents": "Agents"
+    },
+    "detail": {
+      "pageTitle": "Workflow detail",
+      "newWorkflow": "New Workflow",
+      "palette": {
+        "title": "Block Palette",
+        "agents": "Agents",
+        "langchain": "LangChain",
+        "mcp": "MCP",
+        "control": "Control",
+        "transform": "Transform"
+      },
+      "settings": {
+        "title": "Node Settings",
+        "label": "Label",
+        "rolePrompt": "Role Prompt",
+        "missionPrompt": "Mission Prompt",
+        "conditionExpression": "Condition Expression",
+        "loopMaxIterations": "Max Iterations",
+        "mcpServerId": "MCP Server ID",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "toolbar": {
+        "save": "Save",
+        "export": "Export",
+        "monitoring": "Monitoring"
+      },
+      "monitoring": {
+        "title": "Execution Monitoring",
+        "nodeMetrics": "Node Metrics",
+        "noData": "No execution data yet.",
+        "node": "Node",
+        "status": "Status",
+        "duration": "Duration",
+        "tokens": "Tokens",
+        "toolHistory": "Tool Call History",
+        "noToolCalls": "No tool calls yet.",
+        "timeTravelTitle": "Execution History (Time Travel)",
+        "noSnapshots": "No snapshots yet."
+      }
+    }
+  }
+}

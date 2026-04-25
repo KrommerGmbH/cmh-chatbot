@@ -1,0 +1,43 @@
+﻿.cmh-context-button {
+    position: relative;
+    display: inline-flex;
+
+    &.is--disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    &__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: var(--border-radius-default);
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-text-secondary-default);
+        transition: background 0.1s, color 0.1s;
+
+        &:hover,
+        &.is--active {
+            background: var(--color-background-primary-hover);
+            color: var(--color-text-primary-default);
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__menu-wrapper {
+        position: fixed;
+    }
+}

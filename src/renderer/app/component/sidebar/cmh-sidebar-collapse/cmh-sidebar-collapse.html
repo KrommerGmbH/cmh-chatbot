@@ -1,0 +1,44 @@
+﻿<!-- extends AwCollapse: 자체 template으로 header를 sidebar 스타일로 교체 -->
+<div class="cmh-collapse cmh-sidebar-collapse">
+    <!-- 사이드바 전용 헤더 -->
+    <div class="cmh-sidebar-collapse__header">
+        <h4
+            class="cmh-sidebar-collapse__title"
+            aria-level="4"
+            @click="collapseItem"
+        >
+            <slot name="header" :expanded="expanded"></slot>
+        </h4>
+
+        <div class="cmh-sidebar-collapse__actions">
+            <slot name="actions"></slot>
+        </div>
+
+        <div
+            class="cmh-sidebar-collapse__indicator"
+            role="button"
+            tabindex="0"
+            :aria-label="$t('cmh-global.sidebar.collapseIndicator')"
+            @click="collapseItem"
+            @keydown.enter="collapseItem"
+        >
+            <mt-icon
+                size="24px"
+                :name="`regular-chevron-${expandChevronDirection}-xxs`"
+                class="cmh-sidebar-collapse__expand-button"
+                :class="expandButtonClass"
+            />
+            <mt-icon
+                size="16px"
+                name="regular-chevron-down-xxs"
+                class="cmh-sidebar-collapse__collapse-button"
+                :class="collapseButtonClass"
+            />
+        </div>
+    </div>
+
+    <!-- 콘텐츠 영역 (cmh-collapse 기본 패턴) -->
+    <div v-if="expanded" class="cmh-collapse__content">
+        <slot name="content"></slot>
+    </div>
+</div>

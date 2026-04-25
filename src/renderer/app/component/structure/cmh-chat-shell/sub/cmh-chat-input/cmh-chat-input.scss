@@ -1,0 +1,257 @@
+@use '../../_variables' as *;
+
+// ── 입력 영역 (하단 고정) ──────────────────────────
+.cmh-chat-input {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 16px 12px;
+  border-top: 1px solid $border-color;
+  background: $bg-primary;
+
+  @media (min-width: 640px) { padding: 10px 24px 14px; }
+}
+
+.cmh-chat-input__row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: 8px;
+  background: $bg-secondary;
+  transition: border-color $transition-fast;
+
+  &:focus-within { border-color: $accent; }
+}
+
+// ── 상단: 파일 첨부 + chips ────────────────────────
+.cmh-chat-input__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.cmh-chat-input__attach-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border: none; border-radius: $radius-sm;
+  background: transparent; color: $text-muted; cursor: pointer;
+  transition: color $transition-fast, background $transition-fast;
+  flex-shrink: 0;
+  &:hover { color: $text-primary; background: $bg-hover; }
+}
+
+.cmh-chat-input__file-chips {
+  display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0;
+}
+
+.cmh-chat-input__file-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: $radius-sm;
+  border: 1px solid $border-color;
+  font-size: var(--cmh-font-size-xs, 11px); color: $text-secondary;
+}
+
+.cmh-chat-input__file-name {
+  max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.cmh-chat-input__file-remove {
+  display: flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border: none; border-radius: 50%;
+  background: transparent; color: $text-muted; cursor: pointer;
+  font-size: 12px; line-height: 1;
+  &:hover { color: var(--color-text-critical-default, #ff4d4f); background: rgba(255, 0, 0, 0.08); }
+}
+
+.cmh-chat-input__overflow-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border: none; border-radius: $radius-sm;
+  background: transparent; color: $text-muted; cursor: pointer;
+  &:hover { color: $text-primary; }
+}
+
+// ── 텍스트 영역 ────────────────────────────────────
+.cmh-chat-input__textarea {
+  flex: 1; min-height: 38px; max-height: 160px;
+  padding: 4px 8px; border: none; border-radius: $radius-sm;
+  background: transparent; color: $text-primary;
+  font-family: inherit; font-size: var(--cmh-font-size-base, 15px);
+  line-height: 1.5; resize: none; overflow-y: auto;
+
+  &::placeholder { color: $text-muted; }
+  &:focus { outline: none; }
+  @media (max-width: 639px) { font-size: 16px; /* iOS 자동 줌 방지 */ }
+}
+
+// ── 하단: 셀렉트 + 액션 버튼 ────────────────────────
+.cmh-chat-input__bottom {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+
+.cmh-chat-input__selects {
+  display: flex; gap: 6px; flex: 1; min-width: 0;
+}
+
+.cmh-chat-input__select-wrap {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border: 1px solid $border-color; border-radius: $radius-lg;
+  background: transparent; color: $text-secondary;
+  font-size: var(--cmh-font-size-xs, 11px); cursor: pointer;
+  transition: border-color $transition-fast, color $transition-fast;
+  max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  &:hover { border-color: $text-muted; color: $text-primary; }
+}
+
+.cmh-chat-input__select-label {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.cmh-chat-input__ph-icon {
+  font-size: 18px; line-height: 1;
+  &.is--file { font-size: 14px; color: $text-muted; }
+  &.is--caret { font-size: 12px; transition: transform $transition-fast; &.is--open { transform: rotate(180deg); } }
+  &.is--send { font-size: 20px; }
+  &.is--pulse { animation: stt-pulse 1.2s infinite; }
+  &.is--spin { animation: stt-spin 1s linear infinite; }
+}
+
+.cmh-chat-input__actions {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.cmh-chat-input__action-icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border: none; border-radius: $radius-sm;
+  background: transparent; color: $text-muted; cursor: pointer;
+  transition: color $transition-fast, background $transition-fast;
+
+  .cmh-chat-input__ph-icon { font-size: 24px; }
+  &:hover { color: $text-primary; background: $bg-hover; }
+  &.is--active { color: $accent; background: rgba($accent, 0.08); }
+  &.is--recording { color: var(--color-text-critical-default, #ff4d4f); animation: stt-pulse 1.2s infinite; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// ── 전송 버튼 ──────────────────────────────────────
+.cmh-chat-input__send-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border: none; border-radius: 50%;
+  background: transparent; color: $accent; cursor: pointer;
+  transition: color $transition-fast, transform $transition-fast;
+  flex-shrink: 0;
+
+  .cmh-chat-input__ph-icon.is--send { font-size: 28px; }
+  &:hover { color: $accent-hover; }
+  &:active { transform: scale(0.94); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+}
+
+// ── 드롭다운 (에이전트/모델 선택) ───────────────────
+.cmh-chat-input__dropdown {
+  position: absolute; bottom: 100%; left: 0;
+  min-width: 220px; max-height: 280px; overflow-y: auto;
+  margin-bottom: 4px; padding: 4px;
+  border: 1px solid $border-color; border-radius: $radius-md;
+  background: $bg-primary; box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 50;
+
+  &.is--agent { /* 이제 __row 위에 렌더링되므로 model-picker와 동일 스타일 */ }
+}
+
+.cmh-chat-input__dropdown-option {
+  display: flex; flex-direction: column; gap: 2px;
+  width: 100%; padding: 7px 10px; border: none; border-radius: $radius-sm;
+  background: transparent; text-align: left;
+  font-size: var(--cmh-font-size-sm, 13px); color: $text-primary;
+  cursor: pointer; transition: background $transition-fast;
+
+  &:hover { background: $bg-hover; }
+  &.is--selected { background: rgba($accent, 0.1); color: $accent; font-weight: 500; }
+  &.is--disabled { opacity: 0.45; cursor: not-allowed; &:hover { background: transparent; } }
+}
+
+.cmh-chat-input__dropdown-name {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.cmh-chat-input__dropdown-desc {
+  font-size: var(--cmh-font-size-xs, 11px); color: $text-muted; white-space: nowrap;
+}
+
+.cmh-chat-input__no-key-badge {
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: $radius-sm;
+  border: 1px solid $border-color;
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: $text-muted;
+  background: $bg-secondary;
+}
+
+// ── 모델 피커 (2단 패널) ────────────────────────────
+.cmh-chat-input__model-picker {
+  display: flex;
+  border: 1px solid $border-color; border-radius: $radius-md;
+  background: $bg-primary; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  margin-top: 4px; max-height: 300px; overflow: hidden;
+}
+
+.cmh-chat-input__model-picker-providers {
+  display: flex; flex-direction: column;
+  min-width: 120px; border-right: 1px solid $border-color;
+  padding: 4px; overflow-y: auto;
+}
+
+.cmh-chat-input__model-picker-provider {
+  padding: 6px 10px; border: none; border-radius: $radius-sm;
+  background: transparent; text-align: left;
+  font-size: var(--cmh-font-size-sm, 13px); color: $text-secondary;
+  cursor: pointer; transition: background $transition-fast;
+
+  &:hover { background: $bg-hover; }
+  &.is--active { background: rgba($accent, 0.1); color: $accent; font-weight: 500; }
+}
+
+.cmh-chat-input__model-picker-models {
+  flex: 1; padding: 4px; overflow-y: auto;
+}
+
+// ── 모델 검색 입력 ─────────────────────────────────
+.cmh-chat-input__model-search {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; margin-bottom: 4px;
+  border-bottom: 1px solid $border-color;
+  position: sticky; top: 0; background: $bg-primary; z-index: 1;
+}
+
+.cmh-chat-input__model-search-input {
+  flex: 1; border: none; background: transparent;
+  color: $text-primary; font-size: var(--cmh-font-size-sm, 13px);
+  outline: none; min-width: 0;
+  &::placeholder { color: $text-muted; }
+}
+
+.cmh-chat-input__model-search-clear {
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border: none; border-radius: 50%;
+  background: rgba($text-muted, 0.15); color: $text-muted; cursor: pointer;
+  font-size: 12px; line-height: 1;
+  &:hover { color: $text-primary; background: rgba($text-muted, 0.25); }
+}
+
+.cmh-chat-input__ph-icon.is--search {
+  font-size: 14px; color: $text-muted; flex-shrink: 0;
+}
+
+// ── 애니메이션 ──────────────────────────────────────
+@keyframes stt-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes stt-spin {
+  to { transform: rotate(360deg); }
+}

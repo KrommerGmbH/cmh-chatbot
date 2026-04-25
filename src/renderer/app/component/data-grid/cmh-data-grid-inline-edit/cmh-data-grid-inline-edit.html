@@ -1,0 +1,26 @@
+﻿<div class="cmh-data-grid-inline-edit" :class="classes">
+    <mt-text-field
+        v-if="column.inlineEdit === 'string'"
+        key="string"
+        v-model="currentValue"
+        :size="inputFieldSize"
+        @update:model-value="emitInput"
+    />
+    <mt-number-field
+        v-else-if="column.inlineEdit === 'number'"
+        key="number"
+        v-model="currentValue"
+        :size="inputFieldSize"
+        :number-align-end="true"
+        @update:model-value="emitInput"
+    />
+    <mt-checkbox
+        v-else-if="column.inlineEdit === 'boolean'"
+        key="boolean"
+        v-model="currentValue"
+        @update:model-value="emitInput"
+    />
+    <span v-else key="unknown" class="cmh-data-grid-inline-edit__placeholder">
+        Unknown type: {{ column.inlineEdit }}
+    </span>
+</div>

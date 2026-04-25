@@ -1,0 +1,25 @@
+<div class="cmh-rating-sads" :class="{ 'is--readonly': readonly, 'is--compact': compact }" :title="$t('cmh-global.rating.tooltip')">
+  <button
+    v-for="sad in maxSads"
+    :key="sad"
+    class="cmh-rating-sads__sad"
+    :class="{
+      'is--filled': sad <= displayValue,
+      'is--hovered': !readonly && hoverValue > 0 && sad <= hoverValue,
+    }"
+    :disabled="readonly"
+    :title="readonly ? '' : sadLabel(sad)"
+    :aria-label="sadLabel(sad)"
+    @mouseenter="!readonly && (hoverValue = sad)"
+    @mouseleave="!readonly && (hoverValue = 0)"
+    @click="!readonly && onRate(sad)"
+  >
+    <iconify-icon
+      :icon="sad <= (hoverValue || displayValue) ? 'ph:smiley-sad-fill' : 'ph:smiley-sad'"
+      class="cmh-rating-sads__icon"
+    />
+  </button>
+  <span v-if="showScore" class="cmh-rating-sads__score">
+    {{ scoreLabel }}
+  </span>
+</div>

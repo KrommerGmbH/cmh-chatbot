@@ -1,0 +1,82 @@
+﻿<!-- modal 변형 -->
+<mt-modal-root
+    v-if="variant === 'modal'"
+    :is-open="showModal"
+    @change="onModalChange"
+>
+    <mt-modal
+        class="cmh-media-url-form"
+        variant="small"
+        :title="$t('cmh-global.media.urlFormTitle')"
+    >
+        <mt-text-field
+            v-model="url"
+            class="cmh-media-url-form__url-input"
+            :label="$t('cmh-global.labels.url')"
+            :error="invalidUrlError"
+            :placeholder="$t('cmh-global.media.urlFormExample')"
+            name="cmh-field--url"
+        />
+
+        <mt-text-field
+            v-if="missingFileExtension"
+            v-model="extensionFromInput"
+            class="cmh-media-url-form__extension-input"
+            :label="$t('cmh-global.media.urlFormLabelFileExtension')"
+            validation="required"
+            :placeholder="$t('cmh-global.media.urlFormExtensionPlaceholder')"
+            :help-text="$t('cmh-global.media.urlFormMissingFileExtension')"
+        />
+
+        <template #footer>
+            <mt-button
+                size="small"
+                variant="secondary"
+                @click="onModalChange(false)"
+            >
+                {{ $t('cmh-global.common.cancel') }}
+            </mt-button>
+            <mt-button
+                class="cmh-media-url-form__submit-button"
+                variant="primary"
+                size="small"
+                :disabled="!isValid"
+                @click.prevent="emitUrl"
+            >
+                {{ $t('cmh-global.media.urlFormUpload') }}
+            </mt-button>
+        </template>
+    </mt-modal>
+</mt-modal-root>
+
+<!-- inline 변형 -->
+<div v-else-if="variant === 'inline'" class="cmh-media-url-form cmh-media-url-form--inline">
+    <mt-text-field
+        v-model="url"
+        class="cmh-media-url-form__url-input"
+        :label="$t('cmh-global.labels.url')"
+        :error="invalidUrlError"
+        :placeholder="$t('cmh-global.media.urlFormExample')"
+        name="cmh-field--url"
+    />
+
+    <mt-text-field
+        v-if="missingFileExtension"
+        v-model="extensionFromInput"
+        class="cmh-media-url-form__extension-input"
+        :label="$t('cmh-global.media.urlFormLabelFileExtension')"
+        validation="required"
+        :placeholder="$t('cmh-global.media.urlFormExtensionPlaceholder')"
+        :help-text="$t('cmh-global.media.urlFormMissingFileExtension')"
+    />
+
+    <mt-button
+        class="cmh-media-url-form__submit-button"
+        :disabled="!isValid"
+        size="small"
+        variant="primary"
+        @click="emitUrl"
+    >
+        {{ $t('cmh-global.media.urlFormUpload') }}
+    </mt-button>
+</div>

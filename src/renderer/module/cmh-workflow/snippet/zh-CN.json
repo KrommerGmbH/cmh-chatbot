@@ -1,0 +1,59 @@
+{
+  "cmh-workflow": {
+    "navigation": {
+      "label": "工作流"
+    },
+    "module": {
+      "title": "工作流"
+    },
+    "list": {
+      "pageTitle": "工作流列表",
+      "addWorkflow": "添加工作流",
+      "empty": "暂无注册工作流。",
+      "emptyHint": "添加工作流以构建代理管道。",
+      "agents": "代理"
+    },
+    "detail": {
+      "pageTitle": "工作流详情",
+      "newWorkflow": "新建工作流",
+      "palette": {
+        "title": "块调色板",
+        "agents": "代理",
+        "langchain": "LangChain",
+        "mcp": "MCP",
+        "control": "控制",
+        "transform": "转换"
+      },
+      "settings": {
+        "title": "节点设置",
+        "label": "标签",
+        "rolePrompt": "角色提示词",
+        "missionPrompt": "任务提示词",
+        "conditionExpression": "条件表达式",
+        "loopMaxIterations": "最大迭代次数",
+        "mcpServerId": "MCP服务器ID",
+        "delete": "删除",
+        "cancel": "取消",
+        "save": "保存"
+      },
+      "toolbar": {
+        "save": "保存",
+        "export": "导出",
+        "monitoring": "监控"
+      },
+      "monitoring": {
+        "title": "执行监控",
+        "nodeMetrics": "节点指标",
+        "noData": "尚无执行数据。",
+        "node": "节点",
+        "status": "状态",
+        "duration": "持续时间",
+        "tokens": "令牌",
+        "toolHistory": "工具调用记录",
+        "noToolCalls": "尚无工具调用。",
+        "timeTravelTitle": "执行历史（Time Travel）",
+        "noSnapshots": "尚无快照。"
+      }
+    }
+  }
+}

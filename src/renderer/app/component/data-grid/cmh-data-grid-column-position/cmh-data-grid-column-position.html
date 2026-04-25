@@ -1,0 +1,27 @@
+﻿<div class="cmh-data-grid-column-position">
+    <span v-if="showValue" class="cmh-data-grid-column-position__value">
+        {{ item[field] }}
+    </span>
+    <div class="cmh-data-grid-column-position__group">
+        <mt-button
+            class="cmh-data-grid-column-position__arrow arrow_up"
+            size="x-small"
+            :disabled="disabled || itemMin"
+            square
+            variant="secondary"
+            @click="onLowerPositionValue"
+        >
+            <mt-icon name="regular-chevron-up-xs" size="12" />
+        </mt-button>
+        <mt-button
+            class="cmh-data-grid-column-position__arrow arrow_down"
+            size="x-small"
+            :disabled="disabled || itemMax"
+            square
+            variant="secondary"
+            @click="onRaisePositionValue"
+        >
+            <mt-icon name="regular-chevron-down-xs" size="12" />
+        </mt-button>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿.cmh-pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+
+    &__page-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--color-border-primary-default);
+        border-radius: var(--border-radius-default);
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-text-primary-default);
+        transition: background 0.15s, border-color 0.15s;
+
+        &:hover:not(:disabled) {
+            background: var(--color-background-primary-hover);
+            border-color: var(--color-border-primary-hover);
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+
+    &__list {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 4px;
+    }
+
+    &__list-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 6px;
+        border: 1px solid transparent;
+        border-radius: var(--border-radius-default);
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-text-primary-default);
+        font-size: var(--font-size-sm);
+        transition: background 0.15s;
+
+        &:hover {
+            background: var(--color-background-primary-hover);
+        }
+
+        &.is-active {
+            background: var(--color-interaction-primary-default);
+            color: var(--color-text-inverted-default);
+            border-color: var(--color-interaction-primary-default);
+        }
+    }
+
+    &__list-separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        color: var(--color-text-secondary-default);
+        font-size: var(--font-size-sm);
+    }
+
+    &__per-page {
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+    }
+}

@@ -1,0 +1,89 @@
+﻿<!--
+  cmh-sidebar-renderer — 우측 사이드바 렌더러
+
+  Shopware sw-sidebar + sw-sidebar-renderer 대응.
+  SidebarFactory에 등록된 항목들을 동적으로 렌더링.
+
+  사용 패턴:
+    1. 플러그인이 AideWorks.Sidebar.register()로 항목 등록
+    2. cmh-sidebar-renderer가 등록된 항목들을 아이콘 버튼으로 표시
+    3. 아이콘 클릭 → 해당 component가 패널 영역에 렌더링
+-->
+<aside
+  v-if="sidebarItems.length > 0"
+  class="cmh-sidebar-renderer"
+  :class="sidebarClasses"
+>
+  <div
+    v-if="activeItem && isPanelOpen"
+    class="cmh-sidebar-renderer__backdrop"
+    @click="closePanel"
+  />
+
+  <!-- 아이콘 버튼 목록 (우측 상단) -->
+  <div class="cmh-sidebar-renderer__tabs">
+    <button
+      v-for="item in sidebarItems"
+      :key="item.id"
+      type="button"
+      class="cmh-sidebar-renderer__tab-btn"
+      :class="{
+        'is--active': activeItemId === item.id,
+      }"
+      :title="item.label"
+      :disabled="item.disabled ? item.disabled() : false"
+      @click="onTabClick(item.id)"
+    >
+      <mt-icon :name="item.icon" />
+
+      <!-- 배지 (필터 수 등) -->
+      <span
+        v-if="item.badge && item.badge() > 0"
+        class="cmh-sidebar-renderer__badge"
+      >{{ item.badge() }}</span>
+    </button>
+  </div>
+
+  <!-- 패널 내용 -->
+  <div
+    v-if="activeItem && isPanelOpen"
+    class="cmh-sidebar-renderer__panel"
+  >
+    <div class="cmh-sidebar-renderer__overlay">
+      <div class="cmh-sidebar-renderer__resize-handle" aria-hidden="true" />
+
+      <!-- 패널 헤더 -->
+      <div class="cmh-sidebar-renderer__panel-header">
+        <div class="cmh-sidebar-renderer__header-content">
+          <span class="cmh-sidebar-renderer__panel-title">{{ activeItem.label }}</span>
+
+          <button
+            type="button"
+            class="cmh-sidebar-renderer__panel-collapse"
+            :aria-label="$t('cmh-global.sidebar.collapse')"
+            @click="closePanel"
+          >
+            <mt-icon name="regular-long-arrow-right" size="12px" />
+            <span>{{ $t('cmh-global.sidebar.collapse') }}</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="cmh-sidebar-renderer__panel-close"
+          @click="closePanel"
+        >
+          <mt-icon name="regular-times" />
+        </button>
+      </div>
+
+      <!-- 동적 컴포넌트 렌더링 -->
+      <div class="cmh-sidebar-renderer__panel-content">
+        <component
+          :is="activeItem.component"
+          v-bind="activeItemProps"
+        />
+      </div>
+    </div>
+  </div>
+</aside>

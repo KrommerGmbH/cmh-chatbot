@@ -1,0 +1,42 @@
+﻿<cmh-base-filter
+    :title="filter.label"
+    :show-reset-button="!!values.length"
+    :active="active"
+    @filter-reset="resetFilter"
+>
+
+    <sw-entity-multi-select
+        v-if="isEntityMultiSelect"
+        :label-property="labelProperty"
+        :placeholder="filter.placeholder"
+        :criteria="filter.criteria"
+        :entity-name="filter.schema.entity"
+        :entity-collection="values"
+        :display-variants="filter.displayVariants"
+        @update:entity-collection="changeValue"
+    >
+        <template #selection-label-property="{ item, index }">
+            <slot
+                name="selection-label-property"
+                v-bind="{ item, index }"
+            ></slot>
+        </template>
+
+        <template #result-item="{ item, index }">
+            <slot
+                name="result-item"
+                v-bind="{ item, index }"
+            ></slot>
+        </template>
+    </sw-entity-multi-select>
+
+    <sw-multi-select
+        v-if="filter.options"
+        :label-property="filter.labelProperty"
+        :value-property="filter.valueProperty"
+        :placeholder="filter.placeholder"
+        :options="filter.options"
+        :value="values"
+        @update:value="changeValue"
+    />
+</cmh-base-filter>

@@ -1,0 +1,13 @@
+﻿<div class="cmh-data-grid-column-boolean">
+    <mt-switch
+        v-if="isInlineEdit"
+        v-model:checked="currentValue"
+        :disabled="disabled"
+    />
+    <mt-icon
+        v-else
+        :name="value ? 'regular-checkmark-circle' : 'regular-circle'"
+        :color="value ? 'var(--color-icon-positive-default)' : 'var(--color-icon-secondary-default)'"
+        size="16px"
+    />
+</div>

@@ -1,0 +1,13 @@
+﻿.cmh-context-menu {
+    background: var(--color-elevation-surface-raised);
+    border: 1px solid var(--color-border-primary-default);
+    border-radius: var(--border-radius-default);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1100;
+
+    &__content {
+        padding: 4px 0;
+        min-width: 160px;
+    }
+}

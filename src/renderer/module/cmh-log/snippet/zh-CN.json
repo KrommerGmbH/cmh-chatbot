@@ -1,0 +1,30 @@
+{
+  "cmh-log": {
+    "navigation": {
+      "label": "日志"
+    },
+    "module": {
+      "title": "日志"
+    },
+    "list": {
+      "pageTitle": "日志列表",
+      "allLevels": "所有级别",
+      "levelError": "错误",
+      "levelWarning": "警告",
+      "levelInfo": "信息",
+      "levelDebug": "调试",
+      "clearAll": "全部清除",
+      "empty": "暂无日志。",
+      "columns": {
+        "level": "级别",
+        "source": "来源",
+        "message": "消息",
+        "createdAt": "时间"
+      }
+    },
+    "detail": {
+      "pageTitle": "日志详情",
+      "notFound": "未找到日志。"
+    }
+  }
+}

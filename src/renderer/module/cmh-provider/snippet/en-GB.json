@@ -1,0 +1,48 @@
+{
+  "cmh-provider": {
+    "navigation": {
+      "label": "Providers"
+    },
+    "module": {
+      "title": "Providers"
+    },
+    "list": {
+      "pageTitle": "Provider list",
+      "addProvider": "Add Provider",
+      "empty": "No providers registered.",
+      "priority": "Priority",
+      "models": "Models",
+      "columns": {
+        "name": "Name",
+        "type": "Type",
+        "baseUrl": "Base URL",
+        "priority": "Priority",
+        "modelCount": "Models",
+        "status": "Status"
+      },
+      "loadError": "Failed to load provider list."
+    },
+    "detail": {
+      "pageTitle": "Provider detail",
+      "newProvider": "New provider",
+      "name": "Name",
+      "description": "Description",
+      "type": "Type",
+      "priority": "Priority",
+      "baseUrl": "Base URL",
+      "baseUrlPlaceholder": "https://api.example.com/v1",
+      "apiKey": "API key",
+      "apiKeyPlaceholder": "Enter API key",
+      "isActive": "Active",
+      "typeOptions": {
+        "localGguf": "Local (GGUF)",
+        "cloudApi": "Cloud API",
+        "selfHosted": "Self-hosted"
+      },
+      "saveError": "Failed to save provider.",
+      "engineUnavailable": "Cannot connect to Engine server (127.0.0.1:4000). Start the engine and try saving again.",
+      "syncModelsSuccess": "Provider saved and model list synchronized.",
+      "syncModelsError": "Provider was saved, but model synchronization failed."
+    }
+  }
+}

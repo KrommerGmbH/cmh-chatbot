@@ -1,0 +1,363 @@
+﻿<div
+    class="cmh-data-grid"
+    :class="classes"
+>
+    <!-- 선택된 항목 bulk 액션 표시 -->
+    <div
+        v-if="selectionCount > 0"
+        class="cmh-data-grid__bulk"
+    >
+        <span class="cmh-data-grid__bulk-selected cmh-data-grid__bulk-selected-label">{{ $t('cmh-global.dataGrid.labelSelectionCount', { count: selectionCount }) }}</span>
+        <span class="cmh-data-grid__bulk-selected cmh-data-grid__bulk-selected-count">{{ selectionCount }}</span>
+        <span
+            v-if="reachMaximumSelectionExceed"
+            class="cmh-data-grid__bulk-selected cmh-data-grid__bulk-max-selection"
+        >
+            {{ $t('cmh-global.dataGrid.maximumSelectionExceed') }}
+        </span>
+        <span class="cmh-data-grid__bulk-selected bulk-link">
+            <a
+                v-if="hasInvisibleSelection"
+                class="link link-warning bulk-deselect-all"
+                role="button"
+                tabindex="0"
+                @click="resetSelection"
+                @keydown.enter="resetSelection"
+            >
+                {{ $t('cmh-global.dataGrid.labelDeSelectAll') }}
+            </a>
+            <slot name="bulk"></slot>
+        </span>
+    </div>
+
+    <!-- bulk modal 슬롯 -->
+    <slot
+        name="bulk-modals"
+        v-bind="{ selection }"
+    ></slot>
+
+    <div class="cmh-data-grid__wrapper" ref="wrapper">
+        <table ref="table" class="cmh-data-grid__table">
+            <!-- 헤더 -->
+            <thead v-if="showHeader" class="cmh-data-grid__header">
+                <tr class="cmh-data-grid__row">
+                    <!-- 선택 체크박스 헤더 -->
+                    <th
+                        v-if="showSelection"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--header cmh-data-grid__cell--selection"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <mt-checkbox
+                                v-if="records && records.length > 0"
+                                :aria-label="$t(allSelectedChecked ? 'cmh-global.dataGrid.labelDeSelectAll' : 'cmh-global.dataGrid.labelSelectAll')"
+                                :disabled="isSelectAllDisabled"
+                                class="cmh-data-grid__select-all"
+                                :model-value="allSelectedChecked"
+                                @update:model-value="selectAll"
+                            />
+                        </div>
+                    </th>
+
+                    <!-- 컬럼 헤더 -->
+                    <th
+                        v-for="(column, colIdx) in currentColumns"
+                        v-show="column.visible"
+                        :key="`${column.property}-${colIdx}`"
+                        ref="column"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--header cmh-data-grid__cell--property"
+                        :class="getHeaderCellClasses(column, colIdx)"
+                        :style="{ width: column.width, minWidth: column.width }"
+                        @click="onClickHeaderCell($event, column)"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <slot
+                                :name="`column-label-${column.property}`"
+                                v-bind="{ column, columnIndex: colIdx }"
+                            >
+                                <mt-icon
+                                    v-if="column.iconLabel && column.iconTooltip"
+                                    v-tooltip="column.iconTooltip"
+                                    :name="column.iconLabel"
+                                >
+                                    {{ column.label }}
+                                </mt-icon>
+                                <mt-icon
+                                    v-else-if="column.iconLabel"
+                                    :name="column.iconLabel"
+                                >
+                                    {{ column.label }}
+                                </mt-icon>
+                                <template v-else>
+                                    {{ column.label }}
+                                </template>
+                            </slot>
+
+                            <!-- 컬럼 액션 (숨기기) -->
+                            <cmh-context-button
+                                v-if="allowColumnEdit && !isInlineEditActive"
+                                class="cmh-data-grid__action-edit-column"
+                                aria-label="cmh-global.dataGrid.columnsActions"
+                            >
+                                <cmh-context-menu-item
+                                    :disabled="column.primary"
+                                    variant="danger"
+                                    @click="hideColumn(colIdx)"
+                                >
+                                    {{ $t('cmh-global.dataGrid.labelColumnHide') }}
+                                </cmh-context-menu-item>
+                            </cmh-context-button>
+
+                            <!-- 정렬 인디케이터 -->
+                            <span
+                                v-if="column.sortable && currentSortBy === column.dataIndex"
+                                class="cmh-data-grid__sort-indicator"
+                            >
+                                <transition name="sort-indicator" mode="out-in">
+                                    <mt-icon
+                                        v-if="currentSortDirection === 'ASC'"
+                                        key="ASC"
+                                        name="regular-chevron-up-xxs"
+                                        size="16px"
+                                    />
+                                    <mt-icon
+                                        v-else
+                                        key="DESC"
+                                        name="regular-chevron-down-xxs"
+                                        size="16px"
+                                    />
+                                </transition>
+                            </span>
+                        </div>
+
+                        <!-- 리사이즈 핸들 -->
+                        <span
+                            v-if="column.allowResize"
+                            class="cmh-data-grid__cell-resize"
+                            @mousedown="onStartResize($event, column, colIdx)"
+                        ></span>
+                    </th>
+
+                    <!-- 리사이즈 컬럼 spacer -->
+                    <th
+                        v-if="hasResizeColumns"
+                        aria-hidden="true"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--header cmh-data-grid__cell-spacer"
+                    >
+                        <div class="cmh-data-grid__cell-content"></div>
+                    </th>
+
+                    <!-- 액션 헤더 -->
+                    <th
+                        v-if="showActions"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--header cmh-data-grid__cell--actions cmh-data-grid__cell-settings"
+                        :class="{ 'is--loading': loading }"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <cmh-data-grid-settings
+                                v-if="showSettings"
+                                :columns="currentColumns"
+                                :compact="compact"
+                                :previews="previews"
+                                :enable-previews="hasPreviewSlots"
+                                :disabled="isInlineEditActive"
+                                @change-compact-mode="onChangeCompactMode"
+                                @change-preview-images="onChangePreviews"
+                                @change-column-visibility="onChangeColumnVisibility"
+                                @change-column-order="onChangeColumnOrder"
+                            >
+                                <template #additionalSettings>
+                                    <slot name="additionalSettings"></slot>
+                                </template>
+                            </cmh-data-grid-settings>
+                            <slot name="customSettings"></slot>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+
+            <!-- 바디 -->
+            <tbody v-if="!loading" class="cmh-data-grid__body">
+                <tr
+                    v-for="(item, itemIndex) in records"
+                    :key="item[itemIdentifierProperty]"
+                    class="cmh-data-grid__row"
+                    :class="getRowClasses(item, itemIndex)"
+                    @click="onRowClick(item, $event)"
+                >
+                    <!-- 행 선택 -->
+                    <td
+                        v-if="showSelection"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--selection"
+                    >
+                        <slot
+                            name="selection-content"
+                            v-bind="{ item, isSelected, isRecordSelectable, selectItem, itemIdentifierProperty }"
+                        >
+                            <div class="cmh-data-grid__cell-content">
+                                <mt-checkbox
+                                    :aria-label="$t('cmh-global.dataGrid.labelSelected')"
+                                    :disabled="!isRecordSelectable(item)"
+                                    :model-value="isSelected(item[itemIdentifierProperty])"
+                                    @update:model-value="selectItem($event, item)"
+                                />
+                            </div>
+                        </slot>
+                    </td>
+
+                    <!-- 데이터 컬럼 -->
+                    <td
+                        v-for="(column, colIdx) in currentVisibleColumns"
+                        :key="`${item[itemIdentifierProperty]}-${colIdx}`"
+                        class="cmh-data-grid__cell"
+                        :class="getCellClasses(column)"
+                        role="gridcell"
+                        @dblclick="onDbClickCell(item)"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <!-- 프리뷰 슬롯 -->
+                            <slot
+                                v-if="previews && !isInlineEdit(item)"
+                                :name="`preview-${column.property}`"
+                                v-bind="{ item, column, compact }"
+                            ></slot>
+
+                            <!-- 컬럼 슬롯 -->
+                            <slot
+                                :name="`column-${column.property}`"
+                                v-bind="{ item, itemIndex, column, columnIndex: colIdx, compact, isInlineEdit: (isInlineEdit(item) && Object.prototype.hasOwnProperty.call(column, 'inlineEdit')), selectItem }"
+                            >
+                                <template v-if="column.inlineEdit === 'boolean'">
+                                    <cmh-data-grid-column-boolean
+                                        v-model:value="item[column.property]"
+                                        :is-inline-edit="isInlineEdit(item) && Object.prototype.hasOwnProperty.call(column, 'inlineEdit')"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <template v-if="isInlineEdit(item) && Object.prototype.hasOwnProperty.call(column, 'inlineEdit')">
+                                        <cmh-data-grid-inline-edit
+                                            v-model:value="item[column.property]"
+                                            :column="column"
+                                            :compact="compact"
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <router-link
+                                            v-if="column.routerLink"
+                                            class="cmh-data-grid__cell-value"
+                                            :to="{ name: column.routerLink, params: { id: item.id } }"
+                                        >
+                                            {{ renderColumn(item, column) }}
+                                        </router-link>
+                                        <span
+                                            v-else
+                                            class="cmh-data-grid__cell-value"
+                                        >
+                                            {{ renderColumn(item, column) }}
+                                        </span>
+                                    </template>
+                                </template>
+                            </slot>
+                        </div>
+                    </td>
+
+                    <!-- spacer -->
+                    <td
+                        v-if="hasResizeColumns"
+                        aria-hidden="true"
+                        class="cmh-data-grid__cell cmh-data-grid__cell-spacer"
+                        @dblclick="onDbClickCell(item)"
+                    >
+                        <div class="cmh-data-grid__cell-content"></div>
+                    </td>
+
+                    <!-- 액션 -->
+                    <td
+                        v-if="showActions"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--actions"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <template v-if="isInlineEditActive && currentInlineEditId === item[itemIdentifierProperty]">
+                                <mt-button
+                                    class="cmh-data-grid__inline-edit-cancel"
+                                    size="x-small"
+                                    :title="$t('cmh-global.default.cancel')"
+                                    :aria-label="$t('cmh-global.default.cancel')"
+                                    square
+                                    variant="secondary"
+                                    @click="onClickCancelInlineEdit(item)"
+                                >
+                                    <mt-icon name="regular-times-xs" size="10px" />
+                                </mt-button>
+                                <mt-button
+                                    class="cmh-data-grid__inline-edit-save"
+                                    variant="primary"
+                                    size="x-small"
+                                    :title="$t('cmh-global.default.save')"
+                                    :aria-label="$t('cmh-global.default.save')"
+                                    square
+                                    @click="onClickSaveInlineEdit(item)"
+                                >
+                                    <mt-icon name="regular-checkmark-xxs" size="10px" />
+                                </mt-button>
+                            </template>
+
+                            <cmh-context-button
+                                v-else
+                                :menu-width="contextButtonMenuWidth"
+                                :aria-label="'cmh-global.dataGrid.actionsMenu'"
+                            >
+                                <slot
+                                    name="actions"
+                                    :item="item"
+                                    :item-index="itemIndex"
+                                ></slot>
+                            </cmh-context-button>
+
+                            <slot
+                                name="action-modals"
+                                :item="item"
+                            ></slot>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- 스켈레톤 로딩 -->
+            <tbody v-else class="cmh-data-grid__body cmh-data-grid__body--skeleton">
+                <tr
+                    v-for="i in skeletonItemAmount"
+                    :key="`skeleton-${i}`"
+                    class="cmh-data-grid__row cmh-data-grid__row--skeleton"
+                >
+                    <td
+                        v-if="showSelection"
+                        class="cmh-data-grid__cell cmh-data-grid__cell--selection"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <div class="cmh-data-grid__skeleton-box"></div>
+                        </div>
+                    </td>
+                    <td
+                        v-for="col in currentVisibleColumns"
+                        :key="col.property"
+                        class="cmh-data-grid__cell"
+                    >
+                        <div class="cmh-data-grid__cell-content">
+                            <div class="cmh-data-grid__skeleton-box"></div>
+                        </div>
+                    </td>
+                    <td v-if="showActions" class="cmh-data-grid__cell cmh-data-grid__cell--actions">
+                        <div class="cmh-data-grid__cell-content">
+                            <div class="cmh-data-grid__skeleton-box cmh-data-grid__skeleton-box--small"></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 페이지네이션 슬롯 -->
+    <div class="cmh-data-grid__pagination">
+        <slot name="pagination"></slot>
+    </div>
+</div>

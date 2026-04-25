@@ -1,0 +1,58 @@
+{
+  "cmh-agent": {
+    "general": {
+      "pageTitle": "Agents"
+    },
+    "navigation": {
+      "label": "Agents"
+    },
+    "list": {
+      "pageTitle": "Agent Management",
+      "searchPlaceholder": "Search agents...",
+      "addAgent": "Add Agent",
+      "addSubAgent": "Add Sub-Agent",
+      "newAgent": "New Agent",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
+    },
+    "detail": {
+      "notFound": "Agent not found.",
+      "backToList": "Back to list"
+    },
+    "core": {
+      "basicInfo": "Basic Info",
+      "prompts": "Prompts",
+      "langchainFlow": "LangChain Flow",
+      "agentType": "Agent Type",
+      "agentName": "Agent Name",
+      "typeOrchestrator": "Orchestrator",
+      "typeManager": "Manager",
+      "typeWorker": "Worker",
+      "typeProfiler": "Profiler",
+      "typeSupporter": "Supporter",
+      "rolePrompt": "Role Prompt",
+      "rolePromptPlaceholder": "Define the role of this agent...",
+      "missionPrompt": "Mission Prompt",
+      "missionPromptPlaceholder": "Define the mission/goal of this agent...",
+      "userPrompt": "User Prompt",
+      "userPromptPlaceholder": "Default prompt shown to the user...",
+      "mainModel": "Main Model",
+      "subModel": "Sub Model",
+      "selectModel": "Select model...",
+      "langchainConfig": "LangChain Configuration",
+      "langchainBlocks": "LangChain Blocks",
+      "dragBlocksHere": "Drag blocks from the palette to the canvas",
+      "flowHint": "Drag blocks onto the canvas, connect them by dragging handles. Double-click a node to remove it.",
+      "block": {
+        "messages": "Messages",
+        "tools": "Tools",
+        "outputParsers": "Output Parsers",
+        "embeddings": "Embeddings",
+        "callbacks": "Callbacks",
+        "tracing": "Tracing"
+      },
+      "temperature": "Temperature",
+      "maxTokens": "Max Tokens"
+    }
+  }
+}

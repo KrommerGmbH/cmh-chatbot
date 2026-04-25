@@ -1,0 +1,22 @@
+﻿<ul
+    v-if="hasItems"
+    class="cmh-sortable-list"
+>
+    <slot :sorted-items="sortedItems" :sortable="sortable">
+        <li
+            v-for="item in sortedItems"
+            :key="item.id"
+            v-draggable="{ ...mergedDragConfig, data: item }"
+            v-droppable="{ ...mergedDragConfig, data: item }"
+            class="cmh-sortable-list__item"
+        >
+            <slot name="item" :item="item" :sortable="sortable"></slot>
+        </li>
+    </slot>
+</ul>
+
+<cmh-empty-state
+    v-else
+    class="cmh-sortable-list__empty-state"
+    :title="$t('cmh-global.emptyState.noResultsTitle')"
+/>

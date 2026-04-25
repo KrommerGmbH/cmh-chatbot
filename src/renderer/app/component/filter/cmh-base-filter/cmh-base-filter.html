@@ -1,0 +1,17 @@
+﻿<div class="cmh-base-filter">
+    <div class="cmh-base-filter__headline">
+        <h4 class="cmh-base-filter__title">
+            {{ title }}
+        </h4>
+        <a
+            v-if="showResetButton"
+            class="cmh-base-filter__reset"
+            role="button"
+            tabindex="0"
+            @click="resetFilter"
+            @keydown.enter="resetFilter"
+        >{{ $t('cmh-filter.resetButton') }}</a>
+    </div>
+
+    <slot></slot>
+</div>

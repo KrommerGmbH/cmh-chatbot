@@ -1,0 +1,183 @@
+﻿<div class="cmh-media-upload-v2 cmh-media-compact-upload-v2">
+    <!-- 라벨 -->
+    <label v-if="label" class="cmh-media-compact-upload-v2__label">
+        {{ label }}
+    </label>
+
+    <!-- compact 변형: 버튼 + URL 업로드 -->
+    <div v-if="variant === 'compact'" class="cmh-media-upload-v2__content">
+        <div class="cmh-button-group">
+            <mt-button
+                :disabled="disabled"
+                class="cmh-media-upload-v2__button-compact-upload"
+                variant="primary"
+                @click="onClickUpload"
+            >
+                {{ buttonFileUploadLabel }}
+            </mt-button>
+
+            <cmh-context-button :disabled="disabled">
+                <template #button>
+                    <mt-button
+                        :disabled="disabled"
+                        square
+                        variant="primary"
+                        class="cmh-media-upload-v2__button-context-menu"
+                    >
+                        <mt-icon name="regular-chevron-down-xs" size="16" />
+                    </mt-button>
+                </template>
+
+                <cmh-context-menu-item
+                    class="cmh-media-upload-v2__button-url-upload"
+                    @click="useUrlUpload"
+                >
+                    {{ $t('cmh-global.media.buttonUrlUpload') }}
+                </cmh-context-menu-item>
+            </cmh-context-button>
+        </div>
+
+        <cmh-media-url-form
+            v-if="isUrlUpload"
+            variant="modal"
+            @modal-close="useFileUpload"
+            @media-url-form-submit="onUrlUpload"
+        />
+    </div>
+
+    <!-- regular 변형: 드롭존 + 프리뷰 -->
+    <div
+        v-else-if="variant === 'regular'"
+        class="cmh-media-upload-v2__content"
+    >
+        <div
+            ref="dropzone"
+            class="cmh-media-upload-v2__dropzone"
+            :class="isDragActiveClass"
+            @dragover.prevent
+            @dragenter="onDragEnter"
+            @dragleave="onDragLeave"
+            @drop="onDrop"
+        >
+            <!-- 프리뷰 영역 -->
+            <div class="cmh-media-compact-upload-v2__preview-wrapper">
+                <!-- 멀티셀렉트 프리뷰 -->
+                <template v-if="allowMultiSelect && mediaPreview">
+                    <div
+                        v-for="item in (mediaPreview as any[])"
+                        :key="(item as any).name || (item as any).id"
+                        class="cmh-media-compact-upload-v2__preview-item"
+                    >
+                        <cmh-media-preview-v2
+                            class="cmh-media-upload-v2__preview"
+                            :source="item"
+                        />
+
+                        <cmh-context-button>
+                            <slot name="context-menu-items">
+                                <cmh-context-menu-item variant="headline">
+                                    {{ getFileName(item as any) }}
+                                </cmh-context-menu-item>
+                                <cmh-context-menu-divider />
+                                <cmh-context-menu-item
+                                    class="cmh-media-upload-v2__delete-item-button"
+                                    :disabled="isDeletionDisabled"
+                                    variant="danger"
+                                    @click="$emit('delete-item', item)"
+                                >
+                                    {{ removeFileButtonLabel }}
+                                </cmh-context-menu-item>
+                            </slot>
+                        </cmh-context-button>
+                    </div>
+                </template>
+
+                <!-- 단일 프리뷰 -->
+                <template v-else-if="!allowMultiSelect && source">
+                    <cmh-media-preview-v2
+                        class="cmh-media-upload-v2__preview"
+                        :source="source"
+                    />
+                </template>
+
+                <!-- 폴백 아이콘 -->
+                <div
+                    v-else
+                    class="cmh-media-upload-v2__preview is--fallback"
+                >
+                    <mt-icon
+                        class="cmh-media-upload-v2__fallback-icon"
+                        name="regular-image"
+                    />
+                </div>
+            </div>
+
+            <!-- 액션 영역 -->
+            <div
+                class="cmh-media-upload-v2__actions"
+                :class="{ 'has--source': source }"
+            >
+                <!-- 소스가 있을 때: 파일명 + 삭제 버튼 -->
+                <div v-if="source" class="cmh-media-upload-v2__file-info">
+                    <div class="cmh-media-upload-v2__file-headline">
+                        {{ typeof source === 'object' ? getFileName(source as any) : source }}
+                    </div>
+                    <mt-icon
+                        class="cmh-media-upload-v2__remove-icon"
+                        name="regular-times-xs"
+                        @click="onRemoveMediaItem"
+                    />
+                </div>
+
+                <template v-else>
+                    <!-- URL 업로드 폼 -->
+                    <cmh-media-url-form
+                        v-if="isUrlUpload"
+                        class="cmh-media-upload-v2__url-form"
+                        variant="inline"
+                        @media-url-form-submit="onUrlUpload"
+                    />
+
+                    <!-- 파일 업로드 버튼들 -->
+                    <template v-if="!isUrlUpload">
+                        <mt-button
+                            class="cmh-media-upload-v2__button upload"
+                            :disabled="disabled"
+                            ghost
+                            size="small"
+                            variant="secondary"
+                            @click="onClickUpload"
+                        >
+                            {{ buttonFileUploadLabel }}
+                        </mt-button>
+
+                        <mt-button
+                            variant="primary"
+                            :disabled="disabled"
+                            class="cmh-media-compact-upload-v2__browse-button"
+                            @click="useUrlUpload"
+                        >
+                            <mt-icon
+                                class="cmh-media-compact-upload-v2__browse-icon"
+                                name="regular-link"
+                            />
+                        </mt-button>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 input (숨김) -->
+    <form ref="fileForm" class="cmh-media-upload-v2__form">
+        <input
+            id="cmh-media-files"
+            ref="fileInput"
+            class="cmh-media-upload-v2__file-input"
+            type="file"
+            :accept="fileAccept"
+            :multiple="allowMultiSelect"
+            @change="onFileInputChange"
+        />
+    </form>
+</div>

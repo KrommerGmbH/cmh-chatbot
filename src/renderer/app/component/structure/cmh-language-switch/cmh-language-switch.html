@@ -1,0 +1,21 @@
+﻿<div class="cmh-language-switch">
+  <label for="cmh-language-switch" class="visually-hidden">
+    {{ $t('cmh-global.languageSwitch.label') }}
+  </label>
+
+  <select
+    id="cmh-language-switch"
+    class="cmh-language-switch__select"
+    :value="selectedLocale"
+    :aria-label="$t('cmh-global.languageSwitch.label')"
+    @change="onChange($event.target.value)"
+  >
+    <option
+      v-for="option in localeOptions"
+      :key="option.value"
+      :value="option.value"
+    >
+      {{ option.label }}
+    </option>
+  </select>
+</div>

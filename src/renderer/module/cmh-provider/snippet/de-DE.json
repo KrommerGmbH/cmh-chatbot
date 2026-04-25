@@ -1,0 +1,48 @@
+{
+  "cmh-provider": {
+    "navigation": {
+      "label": "Anbieter"
+    },
+    "module": {
+      "title": "Anbieter"
+    },
+    "list": {
+      "pageTitle": "Anbieterliste",
+      "addProvider": "Anbieter hinzuf\u00fcgen",
+      "empty": "Keine Anbieter registriert.",
+      "priority": "Priorit\u00e4t",
+      "models": "Modelle",
+      "columns": {
+        "name": "Name",
+        "type": "Typ",
+        "baseUrl": "Basis-URL",
+        "priority": "Priorität",
+        "modelCount": "Modelle",
+        "status": "Status"
+      },
+      "loadError": "Anbieterliste konnte nicht geladen werden."
+    },
+    "detail": {
+      "pageTitle": "Anbieterdetail",
+      "newProvider": "Neuer Anbieter",
+      "name": "Name",
+      "description": "Beschreibung",
+      "type": "Typ",
+      "priority": "Priorität",
+      "baseUrl": "Basis-URL",
+      "baseUrlPlaceholder": "https://api.example.com/v1",
+      "apiKey": "API-Schlüssel",
+      "apiKeyPlaceholder": "API-Schlüssel eingeben",
+      "isActive": "Aktiv",
+      "typeOptions": {
+        "localGguf": "Lokal (GGUF)",
+        "cloudApi": "Cloud-API",
+        "selfHosted": "Self-hosted"
+      },
+      "saveError": "Anbieter konnte nicht gespeichert werden.",
+      "engineUnavailable": "Verbindung zum Engine-Server (127.0.0.1:4000) fehlgeschlagen. Starten Sie die Engine und speichern Sie erneut.",
+      "syncModelsSuccess": "Anbieter gespeichert und Modellliste synchronisiert.",
+      "syncModelsError": "Anbieter wurde gespeichert, aber die Modellsynchronisierung ist fehlgeschlagen."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<cmh-page :show-search-bar="false">
+  <template #content>
+    <div class="cmh-settings-list">
+      <div class="cmh-settings-list__header">
+        <h1 class="cmh-settings-list__title">{{ $t('cmh-settings.list.pageTitle') }}</h1>
+        <p class="cmh-settings-list__description">{{ $t('cmh-settings.list.description') }}</p>
+      </div>
+
+      <div class="cmh-settings-list__grid">
+        <!-- TTS Card -->
+        <div class="cmh-settings-card" @click="navigateToSection('tts')">
+          <div class="cmh-settings-card__icon-wrapper cmh-settings-card__icon-wrapper--tts">
+            <iconify-icon icon="ph:speaker-high" width="28" height="28"></iconify-icon>
+          </div>
+          <div class="cmh-settings-card__body">
+            <h3 class="cmh-settings-card__title">{{ $t('cmh-settings.list.tts.title') }}</h3>
+            <p class="cmh-settings-card__description">{{ $t('cmh-settings.list.tts.description') }}</p>
+          </div>
+          <iconify-icon icon="ph:caret-right" width="20" height="20" class="cmh-settings-card__arrow"></iconify-icon>
+        </div>
+
+        <!-- STT Card -->
+        <div class="cmh-settings-card" @click="navigateToSection('stt')">
+          <div class="cmh-settings-card__icon-wrapper cmh-settings-card__icon-wrapper--stt">
+            <iconify-icon icon="ph:microphone" width="28" height="28"></iconify-icon>
+          </div>
+          <div class="cmh-settings-card__body">
+            <h3 class="cmh-settings-card__title">{{ $t('cmh-settings.list.stt.title') }}</h3>
+            <p class="cmh-settings-card__description">{{ $t('cmh-settings.list.stt.description') }}</p>
+          </div>
+          <iconify-icon icon="ph:caret-right" width="20" height="20" class="cmh-settings-card__arrow"></iconify-icon>
+        </div>
+
+        <!-- General Card -->
+        <div class="cmh-settings-card" @click="navigateToSection('general')">
+          <div class="cmh-settings-card__icon-wrapper cmh-settings-card__icon-wrapper--general">
+            <iconify-icon icon="ph:gear" width="28" height="28"></iconify-icon>
+          </div>
+          <div class="cmh-settings-card__body">
+            <h3 class="cmh-settings-card__title">{{ $t('cmh-settings.list.general.title') }}</h3>
+            <p class="cmh-settings-card__description">{{ $t('cmh-settings.list.general.description') }}</p>
+          </div>
+          <iconify-icon icon="ph:caret-right" width="20" height="20" class="cmh-settings-card__arrow"></iconify-icon>
+        </div>
+      </div>
+    </div>
+  </template>
+</cmh-page>

@@ -1,0 +1,200 @@
+<div class="cmh-media-index">
+  <!-- Header -->
+  <div class="cmh-media-index__header">
+    <h2 class="cmh-media-index__title">{{ $t('cmh-media.general.pageTitle') }}</h2>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div v-if="isInSubfolder" class="cmh-media-index__breadcrumbs">
+    <button type="button" class="cmh-media-index__breadcrumb-item" @click="goToRoot">
+      {{ $t('cmh-media.index.rootFolderName') }}
+    </button>
+    <span class="cmh-media-index__breadcrumb-separator">/</span>
+    <span class="cmh-media-index__breadcrumb-item is--active">{{ currentFolderId }}</span>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="cmh-media-index__toolbar">
+    <div class="cmh-media-index__toolbar-left">
+      <select class="cmh-media-index__select" v-model="presentation">
+        <option value="grid-normal">{{ $t('cmh-media.index.presentationNormal') }}</option>
+        <option value="grid-large">{{ $t('cmh-media.index.presentationLarge') }}</option>
+        <option value="list">{{ $t('cmh-media.index.presentationList') }}</option>
+      </select>
+      <select class="cmh-media-index__select" v-model="sortOption">
+        <option value="name-asc">{{ $t('cmh-media.index.sortNameAsc') }}</option>
+        <option value="name-desc">{{ $t('cmh-media.index.sortNameDesc') }}</option>
+        <option value="size-asc">{{ $t('cmh-media.index.sortSizeAsc') }}</option>
+        <option value="size-desc">{{ $t('cmh-media.index.sortSizeDesc') }}</option>
+        <option value="date-asc">{{ $t('cmh-media.index.sortDateAsc') }}</option>
+        <option value="date-desc">{{ $t('cmh-media.index.sortDateDesc') }}</option>
+      </select>
+    </div>
+    <div class="cmh-media-index__toolbar-right">
+      <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="openFolderModal">
+        {{ $t('cmh-media.index.createFolder') }}
+      </button>
+      <label class="cmh-media-index__btn cmh-media-index__btn--primary">
+        {{ $t('cmh-media.index.uploadButton') }}
+        <input type="file" multiple hidden @change="onFileSelect" />
+      </label>
+      <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="openUrlUpload">
+        {{ $t('cmh-media.index.uploadFromUrl') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div v-if="isLoading" class="cmh-media-index__loading">
+    <p>{{ $t('cmh-global.actions.search') }}...</p>
+  </div>
+
+  <!-- Empty -->
+  <div v-else-if="!hasItems" class="cmh-media-index__empty">
+    <p class="cmh-media-index__empty-title">{{ $t('cmh-media.index.emptyState') }}</p>
+    <p class="cmh-media-index__empty-desc">{{ $t('cmh-media.index.emptyStateDescription') }}</p>
+  </div>
+
+  <!-- Grid / List -->
+  <div
+    v-else
+    class="cmh-media-index__grid"
+    :class="{
+      'cmh-media-index__grid--large': presentation === 'grid-large',
+      'cmh-media-index__grid--list': presentation === 'list',
+    }"
+  >
+    <!-- Folders -->
+    <div
+      v-for="folder in sortedFolders"
+      :key="'folder-' + folder.id"
+      class="cmh-media-index__grid-item cmh-media-index__grid-item--folder"
+      :class="{ 'is--selected': selectedFolder?.id === folder.id }"
+      @click="enterFolder(folder)"
+    >
+      <div
+        class="cmh-media-index__grid-item-check"
+        @click.stop="selectFolderItem(folder)"
+      >
+        <span v-if="selectedFolder?.id === folder.id">✓</span>
+      </div>
+      <div class="cmh-media-index__grid-item-preview cmh-media-index__folder-icon">
+        📁
+      </div>
+      <div class="cmh-media-index__grid-item-name">{{ folder.name }}</div>
+      <div class="cmh-media-index__grid-item-meta">{{ $t('cmh-media.index.folderType') }}</div>
+    </div>
+
+    <!-- Media items -->
+    <div
+      v-for="item in sortedItems"
+      :key="'media-' + item.id"
+      class="cmh-media-index__grid-item"
+      :class="{ 'is--selected': selectedMedia?.id === item.id }"
+      @click="selectMedia(item)"
+    >
+      <div class="cmh-media-index__grid-item-check">
+        <span v-if="selectedMedia?.id === item.id">✓</span>
+      </div>
+      <div class="cmh-media-index__grid-item-preview">
+        <span class="cmh-media-index__file-icon">{{ item.fileExtension.toUpperCase() }}</span>
+      </div>
+      <div class="cmh-media-index__grid-item-name">{{ item.fileName }}.{{ item.fileExtension }}</div>
+      <div class="cmh-media-index__grid-item-meta">{{ formatFileSize(item.fileSize) }}</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div v-if="selectedMedia || selectedFolder" class="cmh-media-index__sidebar">
+    <!-- Media info -->
+    <template v-if="selectedMedia">
+      <h3 class="cmh-media-index__sidebar-title">{{ selectedMedia.fileName }}.{{ selectedMedia.fileExtension }}</h3>
+      <div class="cmh-media-index__sidebar-info">
+        <div><strong>{{ $t('cmh-media.sidebar.mimeType') }}:</strong> {{ selectedMedia.mimeType }}</div>
+        <div><strong>{{ $t('cmh-media.sidebar.fileSize') }}:</strong> {{ formatFileSize(selectedMedia.fileSize) }}</div>
+        <div><strong>{{ $t('cmh-media.sidebar.hash') }}:</strong> {{ selectedMedia.hash || '-' }}</div>
+        <div><strong>{{ $t('cmh-media.sidebar.uploadedAt') }}:</strong> {{ formatDate(selectedMedia.createdAt) }}</div>
+      </div>
+      <div class="cmh-media-index__sidebar-actions">
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="openEditModal(selectedMedia.id)">
+          {{ $t('cmh-media.sidebar.actionEdit') }}
+        </button>
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--danger" @click="onMediaDelete(selectedMedia)">
+          {{ $t('cmh-media.sidebar.actionDelete') }}
+        </button>
+      </div>
+    </template>
+    <!-- Folder info -->
+    <template v-if="selectedFolder">
+      <h3 class="cmh-media-index__sidebar-title">{{ selectedFolder.name }}</h3>
+      <div class="cmh-media-index__sidebar-actions">
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--danger" @click="onFolderDelete(selectedFolder)">
+          {{ $t('cmh-media.sidebar.actionDelete') }}
+        </button>
+      </div>
+    </template>
+  </div>
+
+  <!-- Folder Create Modal -->
+  <div v-if="showFolderModal" class="cmh-media-index__modal-overlay" @click.self="closeFolderModal">
+    <div class="cmh-media-index__modal">
+      <h3>{{ $t('cmh-media.index.createFolder') }}</h3>
+      <input
+        v-model="newFolderName"
+        type="text"
+        class="cmh-media-index__input"
+        :placeholder="$t('cmh-media.index.folderNamePlaceholder')"
+        @keydown.enter="createFolder"
+      />
+      <div class="cmh-media-index__modal-footer">
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="closeFolderModal">
+          {{ $t('cmh-global.actions.cancel') }}
+        </button>
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--primary" :disabled="!newFolderName.trim() || isCreatingFolder" @click="createFolder">
+          {{ $t('cmh-media.index.createFolderCreate') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- URL Upload Modal -->
+  <div v-if="showUrlUpload" class="cmh-media-index__modal-overlay" @click.self="closeUrlUpload">
+    <div class="cmh-media-index__modal">
+      <h3>{{ $t('cmh-media.index.uploadFromUrl') }}</h3>
+      <input
+        v-model="urlToUpload"
+        type="url"
+        class="cmh-media-index__input"
+        :placeholder="$t('cmh-media.index.urlPlaceholder')"
+        @keydown.enter="submitUrlUpload"
+      />
+      <div class="cmh-media-index__modal-footer">
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="closeUrlUpload">
+          {{ $t('cmh-global.actions.cancel') }}
+        </button>
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--primary" :disabled="!urlToUpload.trim() || isUrlUploading" @click="submitUrlUpload">
+          {{ $t('cmh-media.index.urlUploadSubmit') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div v-if="showEditModal" class="cmh-media-index__modal-overlay" @click.self="closeEditModal">
+    <div class="cmh-media-index__modal">
+      <h3>{{ $t('cmh-media.sidebar.actionEdit') }}</h3>
+      <label class="cmh-media-index__label">{{ $t('cmh-media.sidebar.title') }}</label>
+      <input v-model="editTitle" type="text" class="cmh-media-index__input" />
+      <label class="cmh-media-index__label">{{ $t('cmh-media.sidebar.alt') }}</label>
+      <input v-model="editAlt" type="text" class="cmh-media-index__input" />
+      <div class="cmh-media-index__modal-footer">
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--secondary" @click="closeEditModal">
+          {{ $t('cmh-global.actions.cancel') }}
+        </button>
+        <button type="button" class="cmh-media-index__btn cmh-media-index__btn--primary" :disabled="isSavingEdit" @click="saveEditMedia">
+          {{ $t('cmh-global.actions.save') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

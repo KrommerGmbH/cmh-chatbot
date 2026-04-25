@@ -1,0 +1,52 @@
+/* cmh-agent-block-node — LangChain block node for agent mini-editor */
+
+.cmh-agent-block-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--cmh-font-size-sm, 13px);
+  min-width: 100px;
+  cursor: default;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: var(--color-accent, #189EFF);
+  }
+
+  /* Category color accents */
+  &--core {
+    border-left: 3px solid var(--color-accent, #189EFF);
+  }
+
+  &--rag {
+    border-left: 3px solid var(--color-success, #27AE60);
+  }
+
+  &--monitoring {
+    border-left: 3px solid var(--color-warning, #F39C12);
+  }
+
+  &__icon {
+    font-size: var(--cmh-font-size-base, 15px);
+    flex-shrink: 0;
+  }
+
+  &__label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__handle {
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent, #189EFF);
+    border: 1.5px solid var(--color-bg-primary);
+    border-radius: 50%;
+  }
+}

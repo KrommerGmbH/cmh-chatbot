@@ -1,0 +1,15 @@
+﻿<div class="sw-existence-filter">
+    <cmh-base-filter
+        :title="filter.label"
+        :show-reset-button="!!value"
+        :active="active"
+        @filter-reset="resetFilter"
+    >
+        <mt-select
+            :model-value="value"
+            :placeholder="filter.placeholder"
+            :options="filterOptions"
+            @update:model-value="changeValue"
+        />
+    </cmh-base-filter>
+</div>

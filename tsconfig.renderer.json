@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "jsx": "preserve",
+    "paths": {
+      "@/*": ["./src/renderer/*"],
+      "@engine/*": ["./src/engine/*"],
+      "@core/*": ["./src/renderer/core/*"]
+    }
+  },
+  "include": [
+    "src/renderer/**/*.ts",
+    "src/renderer/**/*.vue",
+    "src/renderer/**/*.d.ts",
+    "src/engine/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

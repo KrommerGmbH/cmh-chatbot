@@ -1,0 +1,19 @@
+{
+  "cmh-chat": {
+    "navigation": { "label": "チャット" },
+    "module": { "title": "チャット" },
+    "list": {
+      "pageTitle": "会話一覧",
+      "columnTitle": "タイトル",
+      "columnModel": "モデル",
+      "columnUpdatedAt": "最終更新",
+      "emptyState": "会話がありません。新しいチャットを始めましょう。"
+    },
+    "detail": {
+      "pageTitle": "会話詳細",
+      "messageCount": "メッセージ数",
+      "createdAt": "作成日",
+      "modelUsed": "使用モデル"
+    }
+  }
+}

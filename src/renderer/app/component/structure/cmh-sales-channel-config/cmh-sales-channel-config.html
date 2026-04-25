@@ -1,0 +1,18 @@
+﻿<section class="cmh-sales-channel-config">
+  <div class="cmh-sales-channel-config__global-sales-channel-switch">
+    <slot name="select" v-bind="{ onInput, selectedSalesChannelId, salesChannel: options }">
+      <mt-select
+        :model-value="selectedSalesChannelId"
+        :options="options"
+        value-property="id"
+        label-property="name"
+        @update:model-value="onInput"
+      />
+    </slot>
+  </div>
+
+  <slot
+    name="content"
+    v-bind="{ actualConfigData, allConfigs, selectedSalesChannelId }"
+  ></slot>
+</section>

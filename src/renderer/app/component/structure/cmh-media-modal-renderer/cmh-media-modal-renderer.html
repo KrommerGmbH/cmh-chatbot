@@ -1,0 +1,23 @@
+﻿<cmh-modal
+  v-if="mediaModal"
+  :title="$t('cmh-global.media.mediaModalTitle')"
+  width="72vw"
+  @modal-close="$emit('modal-close')"
+>
+  <template #default>
+    <slot>
+      <div class="cmh-media-modal-renderer">
+        <div class="cmh-media-modal-renderer__placeholder">{{ $t('cmh-global.media.mediaModalPlaceholder') }}</div>
+      </div>
+    </slot>
+  </template>
+
+  <template #footer>
+    <cmh-button variant="secondary" @click="$emit('modal-close')">
+      {{ $t('cmh-global.actions.cancel') }}
+    </cmh-button>
+    <cmh-button variant="primary" @click="$emit('media-modal-selection-change', mediaModal)">
+      {{ $t('cmh-global.actions.confirm') }}
+    </cmh-button>
+  </template>
+</cmh-modal>

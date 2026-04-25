@@ -1,0 +1,58 @@
+{
+  "cmh-agent": {
+    "general": {
+      "pageTitle": "에이전트"
+    },
+    "navigation": {
+      "label": "에이전트"
+    },
+    "list": {
+      "pageTitle": "에이전트 관리",
+      "searchPlaceholder": "에이전트 검색...",
+      "addAgent": "에이전트 추가",
+      "addSubAgent": "하위 에이전트 추가",
+      "newAgent": "새 에이전트",
+      "activate": "활성화",
+      "deactivate": "비활성화"
+    },
+    "detail": {
+      "notFound": "에이전트를 찾을 수 없습니다.",
+      "backToList": "목록으로"
+    },
+    "core": {
+      "basicInfo": "기본 정보",
+      "prompts": "프롬프트",
+      "langchainFlow": "LangChain 플로우",
+      "agentType": "에이전트 타입",
+      "agentName": "에이전트 이름",
+      "typeOrchestrator": "오케스트레이터",
+      "typeManager": "매니저",
+      "typeWorker": "워커",
+      "typeProfiler": "프로파일러",
+      "typeSupporter": "서포터",
+      "rolePrompt": "역할 프롬프트",
+      "rolePromptPlaceholder": "이 에이전트의 역할을 정의하세요...",
+      "missionPrompt": "미션 프롬프트",
+      "missionPromptPlaceholder": "이 에이전트의 미션/목표를 정의하세요...",
+      "userPrompt": "사용자 프롬프트",
+      "userPromptPlaceholder": "사용자에게 보여줄 기본 프롬프트...",
+      "mainModel": "메인 모델",
+      "subModel": "보조 모델",
+      "selectModel": "모델 선택...",
+      "langchainConfig": "LangChain 구성",
+      "langchainBlocks": "LangChain 블록",
+      "dragBlocksHere": "팔레트에서 블록을 캔버스로 드래그하세요",
+      "flowHint": "블록을 캔버스에 드래그하고, 핸들을 연결하여 파이프라인을 구성합니다. 노드를 더블클릭하면 삭제됩니다.",
+      "block": {
+        "messages": "메시지",
+        "tools": "도구 (Tools)",
+        "outputParsers": "출력 파서",
+        "embeddings": "임베딩",
+        "callbacks": "콜백",
+        "tracing": "트레이싱"
+      },
+      "temperature": "온도 (Temperature)",
+      "maxTokens": "최대 토큰"
+    }
+  }
+}

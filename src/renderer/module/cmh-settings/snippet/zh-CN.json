@@ -1,0 +1,59 @@
+{
+  "cmh-settings": {
+    "navigation": {
+      "general": "常规设置"
+    },
+    "module": {
+      "title": "设置"
+    },
+    "list": {
+      "pageTitle": "设置",
+      "description": "管理聊天机器人功能和模型设置。",
+      "tts": {
+        "title": "语音合成 (TTS)",
+        "description": "选择和配置文本转语音模型"
+      },
+      "stt": {
+        "title": "语音识别 (STT)",
+        "description": "选择和配置语音识别模型"
+      },
+      "general": {
+        "title": "常规设置",
+        "description": "语言、主题等常规偏好设置"
+      }
+    },
+    "detail": {
+      "pageTitle": "设置详情",
+      "backToSettings": "返回设置",
+      "default": "默认",
+      "localModel": "本地模型",
+      "cloudModel": "云端",
+      "tts": {
+        "title": "语音合成 (TTS) 设置",
+        "description": "配置用于朗读AI回复的模型和选项。",
+        "modelLabel": "选择TTS模型",
+        "rateLabel": "语速",
+        "autoReadLabel": "自动朗读"
+      },
+      "stt": {
+        "title": "语音识别 (STT) 设置",
+        "description": "配置将麦克风输入转换为文本的模型。",
+        "modelLabel": "选择STT模型",
+        "statusLabel": "模型状态",
+        "status": {
+          "idle": "空闲",
+          "loadingModel": "模型加载中...",
+          "ready": "就绪",
+          "recording": "录音中...",
+          "transcribing": "转录中...",
+          "error": "错误"
+        }
+      },
+      "general": {
+        "title": "常规设置",
+        "description": "管理聊天机器人的常规偏好设置。",
+        "comingSoon": "更多设置即将推出。"
+      }
+    }
+  }
+}

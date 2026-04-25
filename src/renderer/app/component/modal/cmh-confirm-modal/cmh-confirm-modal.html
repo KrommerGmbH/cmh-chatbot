@@ -1,0 +1,30 @@
+﻿<mt-modal
+    class="cmh-confirm-modal"
+    v-bind="$attrs"
+    :title="titleText"
+    @modal-close="$emit('close')"
+>
+    <slot>
+        <p class="cmh-confirm-modal__text">{{ descriptionText }}</p>
+    </slot>
+
+    <template #modal-footer>
+        <mt-button
+            class="cmh-confirm-modal__button-cancel"
+            size="small"
+            variant="secondary"
+            @click="$emit('cancel')"
+        >
+            {{ cancelText }}
+        </mt-button>
+
+        <mt-button
+            class="cmh-confirm-modal__button-confirm"
+            :variant="confirmButtonVariant"
+            size="small"
+            @click="$emit('confirm')"
+        >
+            {{ confirmText }}
+        </mt-button>
+    </template>
+</mt-modal>

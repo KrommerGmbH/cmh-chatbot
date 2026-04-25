@@ -1,0 +1,14 @@
+﻿<div class="cmh-collapse">
+    <div
+        class="cmh-collapse__header"
+        role="button"
+        tabindex="0"
+        @click="collapseItem"
+        @keydown.enter="collapseItem"
+    >
+        <slot name="header" :expanded="expanded"></slot>
+    </div>
+    <div v-if="expanded" class="cmh-collapse__content">
+        <slot name="content"></slot>
+    </div>
+</div>

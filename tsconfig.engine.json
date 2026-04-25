@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": [
+    "src/index.ts",
+    "src/server.ts",
+    "src/client.ts",
+    "src/client/**/*",
+    "src/engine/**/*",
+    "src/cli/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "src/renderer"]
+}

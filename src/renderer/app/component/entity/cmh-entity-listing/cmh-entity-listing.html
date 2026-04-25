@@ -1,0 +1,120 @@
+﻿<cmh-data-grid
+    v-bind="dataGridProps"
+    :data-source="records"
+    :is-loading="loading"
+    :sort-by="currentSortBy"
+    :sort-direction="currentSortDirection"
+    @column-sort="onDataGridColumnSort"
+    @row-click="$emit('row-click', $event)"
+>
+    <!-- 페이지네이션 슬롯 -->
+    <template #pagination>
+        <cmh-pagination
+            :page="page"
+            :limit="limit"
+            :total="total"
+            :steps="steps"
+            :total-visible="7"
+            @page-change="paginate"
+        />
+    </template>
+
+    <!-- bulk 추가 액션 -->
+    <template #bulk>
+        <a
+            v-if="allowBulkEdit"
+            class="link link-primary"
+            role="button"
+            tabindex="0"
+            @click="onClickBulkEdit"
+            @keydown.enter="onClickBulkEdit"
+        >
+            <mt-icon name="regular-edit" size="14" />
+            {{ $t('cmh-global.entityListing.bulkEdit') }}
+        </a>
+        <a
+            v-if="allowDelete"
+            class="link link-danger"
+            role="button"
+            tabindex="0"
+            @click="showBulkDeleteModal = true"
+            @keydown.enter="showBulkDeleteModal = true"
+        >
+            <mt-icon name="regular-trash" size="14" />
+            {{ $t('cmh-global.default.delete') }}
+        </a>
+        <slot name="bulk-additional" v-bind="{ selectionCount }"></slot>
+    </template>
+
+    <!-- bulk 모달 -->
+    <template #bulk-modals="{ selection }">
+        <slot name="bulk-edit-modal" v-bind="{ selection }"></slot>
+
+        <!-- bulk 삭제 확인 모달 -->
+        <cmh-confirm-modal
+            v-if="showBulkDeleteModal"
+            :title="$t('cmh-global.default.warning')"
+            type="delete"
+            @close="showBulkDeleteModal = false"
+            @cancel="showBulkDeleteModal = false"
+            @confirm="deleteItems"
+        >
+            <slot
+                name="bulk-modal-delete-confirm-text"
+                v-bind="{ selectionCount }"
+            >
+                {{ $t('cmh-global.entityListing.deleteMessage', { count: selectionCount }) }}
+            </slot>
+        </cmh-confirm-modal>
+        <slot name="bulk-modals-additional" v-bind="{ selection, ids: Object.keys(selection) }"></slot>
+    </template>
+
+    <!-- 기본 행 액션 -->
+    <template #actions="{ item }">
+        <slot name="detail-action" v-bind="{ item }">
+            <cmh-context-menu-item
+                v-if="detailRoute"
+                class="cmh-entity-listing__context-menu-edit-action"
+                :disabled="(!allowEdit && !allowView) || undefined"
+                :router-link="{ name: detailRoute, params: { id: item.id } }"
+            >
+                {{ detailPageLinkText }}
+            </cmh-context-menu-item>
+        </slot>
+
+        <slot name="more-actions" v-bind="{ item }"></slot>
+
+        <slot name="delete-action" v-bind="{ item, showDelete, allowDelete }">
+            <cmh-context-menu-item
+                :disabled="!allowDelete || undefined"
+                class="cmh-entity-listing__context-menu-edit-delete"
+                variant="danger"
+                @click="showDelete(item.id)"
+            >
+                {{ $t('cmh-global.default.delete') }}
+            </cmh-context-menu-item>
+        </slot>
+    </template>
+
+    <!-- 행 삭제 확인 모달 -->
+    <template #action-modals="{ item }">
+        <cmh-confirm-modal
+            v-if="deleteId === item.id"
+            :title="$t('cmh-global.default.warning')"
+            type="delete"
+            @close="closeModal"
+            @cancel="closeModal"
+            @confirm="deleteItem(item.id)"
+        >
+            <slot name="delete-confirm-text" v-bind="{ item }">
+                {{ $t('cmh-global.entityListing.deleteMessage') }}
+            </slot>
+        </cmh-confirm-modal>
+        <slot name="action-modals-additional" v-bind="{ item }"></slot>
+    </template>
+
+    <!-- 나머지 슬롯 전달 -->
+    <template v-for="(_, name) in $slots" #[name]="slotProps">
+        <slot :name="name" v-bind="slotProps ?? {}"></slot>
+    </template>
+</cmh-data-grid>

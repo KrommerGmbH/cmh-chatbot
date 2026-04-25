@@ -1,0 +1,20 @@
+﻿<cmh-modal
+  class="cmh-discard-changes-modal"
+  width="480px"
+  :title="$t('cmh-global.discardChanges.title')"
+  :resizable="false"
+  @modal-close="$emit('keep-editing')"
+>
+  <p class="cmh-discard-changes-modal-delete-text">
+    {{ $t('cmh-global.discardChanges.message') }}
+  </p>
+
+  <template #footer>
+    <cmh-button variant="secondary" @click="$emit('keep-editing')">
+      {{ $t('cmh-global.discardChanges.keepEditing') }}
+    </cmh-button>
+    <cmh-button variant="critical" @click="$emit('discard-changes')">
+      {{ $t('cmh-global.discardChanges.discard') }}
+    </cmh-button>
+  </template>
+</cmh-modal>

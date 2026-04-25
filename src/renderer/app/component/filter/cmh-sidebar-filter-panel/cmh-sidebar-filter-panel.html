@@ -1,0 +1,21 @@
+﻿<sw-sidebar-item
+    class="sw-sidebar-filter-panel"
+    icon="regular-filter"
+    :badge="activeFilterNumber"
+    :title="$tc('sw-filter-panel.titleSidebarItemFilter')"
+>
+    <template #headline-content>
+        <a
+            v-if="activeFilterNumber"
+            role="button"
+            tabindex="0"
+            @click="resetAll"
+            @keydown.enter="resetAll"
+        >{{ $tc('sw-sidebar-filter-panel.resetButton') }}</a>
+    </template>
+
+    <sw-filter-panel
+        ref="filterPanel"
+        v-bind="$attrs"
+    />
+</sw-sidebar-item>

@@ -1,0 +1,31 @@
+<cmh-page>
+  <template #smart-bar-actions>
+    <mt-button variant="secondary" size="small" @click="onBack">
+      {{ $t('cmh-global.actions.back') }}
+    </mt-button>
+  </template>
+
+  <template #content>
+    <div v-if="!logEntry" class="cmh-log-detail__empty">
+      {{ $t('cmh-log.detail.notFound') }}
+    </div>
+
+    <div v-else class="cmh-log-detail">
+      <div class="cmh-log-detail__header">
+        <span
+          class="cmh-log-detail__level"
+          :class="`is--${logEntry.level}`"
+        >
+          {{ String(logEntry.level).toUpperCase() }}
+        </span>
+        <span class="cmh-log-detail__time">{{ logEntry.timestamp }}</span>
+      </div>
+
+      <h3 class="cmh-log-detail__title">{{ logEntry.title }}</h3>
+
+      <div class="cmh-log-detail__message">
+        <pre>{{ logEntry.message }}</pre>
+      </div>
+    </div>
+  </template>
+</cmh-page>

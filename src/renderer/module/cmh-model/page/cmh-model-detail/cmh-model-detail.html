@@ -1,0 +1,77 @@
+<cmh-page>
+  <template #content>
+    <div class="cmh-model-detail">
+      <div class="cmh-model-detail__header">
+        <button class="cmh-model-detail__back" @click="$router.back()">← {{ $t('cmh-global.actions.back') }}</button>
+        <h1 class="cmh-model-detail__title">{{ $t('cmh-model.detail.pageTitle') }}</h1>
+      </div>
+
+      <div v-if="isLoading" class="cmh-model-detail__loading">{{ $t('cmh-global.labels.loading') }}</div>
+
+      <form v-else class="cmh-model-detail__form" @submit.prevent="onSave">
+        <div class="cmh-model-detail__row">
+          <div class="cmh-model-detail__field">
+            <label>{{ $t('cmh-model.detail.name') }}</label>
+            <input type="text" v-model="model.name" required />
+          </div>
+          <div class="cmh-model-detail__field">
+            <label>{{ $t('cmh-model.detail.modelId') }}</label>
+            <input type="text" v-model="model.modelId" required />
+          </div>
+        </div>
+
+        <div class="cmh-model-detail__row">
+          <div class="cmh-model-detail__field">
+            <label>{{ $t('cmh-model.detail.provider') }}</label>
+            <select v-model="model.providerId" required>
+              <option v-for="p in providers" :key="p.id" :value="p.id">{{ p.name }}</option>
+            </select>
+          </div>
+          <div class="cmh-model-detail__field">
+            <label>{{ $t('cmh-model.detail.contextLength') }}</label>
+            <input type="number" v-model.number="model.contextLength" />
+          </div>
+        </div>
+
+        <div class="cmh-model-detail__field">
+          <label>{{ $t('cmh-model.detail.description') }}</label>
+          <textarea v-model="model.description" rows="3"></textarea>
+        </div>
+
+        <div class="cmh-model-detail__row">
+          <div class="cmh-model-detail__field is--toggle">
+            <label>{{ $t('cmh-global.labels.active') }}</label>
+            <button
+              type="button"
+              class="cmh-model-detail__toggle"
+              :class="{ 'is--on': model.isActive }"
+              @click="model.isActive = !model.isActive"
+            >
+              <span class="cmh-model-detail__toggle-knob"></span>
+            </button>
+          </div>
+          <div class="cmh-model-detail__field is--toggle">
+            <label>{{ $t('cmh-model.detail.default') }}</label>
+            <button
+              type="button"
+              class="cmh-model-detail__toggle"
+              :class="{ 'is--on': model.isDefault }"
+              @click="model.isDefault = !model.isDefault"
+            >
+              <span class="cmh-model-detail__toggle-knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cmh-model-detail__actions">
+          <button type="button" class="cmh-model-detail__btn is--secondary" @click="$router.back()">
+            {{ $t('cmh-global.actions.cancel') }}
+          </button>
+          <button type="submit" class="cmh-model-detail__btn is--primary" :disabled="isSaving">
+            {{ $t('cmh-global.actions.save') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </template>
+</cmh-page>

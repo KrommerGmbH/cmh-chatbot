@@ -1,0 +1,33 @@
+<div class="cmh-range-slider" :class="{ 'is--disabled': disabled }">
+    <button
+        type="button"
+        class="cmh-range-slider__button"
+        :disabled="disabled || clampedValue <= min"
+        @click="decreaseValue"
+    >
+        −
+    </button>
+
+    <input
+        :value="clampedValue"
+        :min="min"
+        :max="max"
+        :step="step"
+        :disabled="disabled"
+        :aria-label="label"
+        class="cmh-range-slider__input"
+        type="range"
+        :style="progressStyle"
+        @input="onInput"
+        @change="onInput"
+    />
+
+    <button
+        type="button"
+        class="cmh-range-slider__button"
+        :disabled="disabled || clampedValue >= max"
+        @click="increaseValue"
+    >
+        +
+    </button>
+</div>

@@ -1,0 +1,59 @@
+{
+  "cmh-workflow": {
+    "navigation": {
+      "label": "Workflow"
+    },
+    "module": {
+      "title": "Workflow"
+    },
+    "list": {
+      "pageTitle": "Workflow-Liste",
+      "addWorkflow": "Workflow hinzufügen",
+      "empty": "Keine Workflows registriert.",
+      "emptyHint": "Fügen Sie einen Workflow hinzu, um Agenten-Pipelines zu erstellen.",
+      "agents": "Agenten"
+    },
+    "detail": {
+      "pageTitle": "Workflow-Detail",
+      "newWorkflow": "Neuer Workflow",
+      "palette": {
+        "title": "Block-Palette",
+        "agents": "Agenten",
+        "langchain": "LangChain",
+        "mcp": "MCP",
+        "control": "Steuerung",
+        "transform": "Transformation"
+      },
+      "settings": {
+        "title": "Knoten-Einstellungen",
+        "label": "Bezeichnung",
+        "rolePrompt": "Rollen-Prompt",
+        "missionPrompt": "Missions-Prompt",
+        "conditionExpression": "Bedingungsausdruck",
+        "loopMaxIterations": "Max. Iterationen",
+        "mcpServerId": "MCP-Server-ID",
+        "delete": "Löschen",
+        "cancel": "Abbrechen",
+        "save": "Speichern"
+      },
+      "toolbar": {
+        "save": "Speichern",
+        "export": "Exportieren",
+        "monitoring": "Überwachung"
+      },
+      "monitoring": {
+        "title": "Ausführungsüberwachung",
+        "nodeMetrics": "Knotenmetriken",
+        "noData": "Noch keine Ausführungsdaten.",
+        "node": "Knoten",
+        "status": "Status",
+        "duration": "Dauer",
+        "tokens": "Token",
+        "toolHistory": "Tool-Aufrufverlauf",
+        "noToolCalls": "Noch keine Tool-Aufrufe.",
+        "timeTravelTitle": "Ausführungsverlauf (Time Travel)",
+        "noSnapshots": "Noch keine Snapshots."
+      }
+    }
+  }
+}

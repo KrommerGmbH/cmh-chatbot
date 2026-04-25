@@ -1,0 +1,44 @@
+{
+  "cmh-media": {
+    "general": {
+      "pageTitle": "Media",
+      "entityDescription": "Media file objects"
+    },
+    "navigation": {
+      "label": "RAG"
+    },
+    "index": {
+      "rootFolderName": "Media Library",
+      "uploadButton": "Upload",
+      "uploadFromUrl": "Upload from URL",
+      "urlPlaceholder": "Enter file URL (https://...)",
+      "urlUploadSubmit": "Upload",
+      "createFolder": "New Folder",
+      "createFolderCreate": "Create",
+      "folderNamePlaceholder": "Folder name",
+      "emptyState": "No media files yet.",
+      "emptyStateDescription": "Add files using the upload button.",
+      "presentationNormal": "Normal",
+      "presentationLarge": "Large Preview",
+      "presentationList": "List",
+      "sortNameAsc": "Name, A-Z",
+      "sortNameDesc": "Name, Z-A",
+      "sortSizeAsc": "Size, smallest",
+      "sortSizeDesc": "Size, largest",
+      "sortDateAsc": "Date, oldest",
+      "sortDateDesc": "Date, newest",
+      "folderType": "Folder"
+    },
+    "sidebar": {
+      "actionEdit": "Edit",
+      "actionDelete": "Delete",
+      "fileName": "File Name",
+      "fileSize": "File Size",
+      "mimeType": "MIME Type",
+      "hash": "Hash",
+      "uploadedAt": "Uploaded At",
+      "title": "Title",
+      "alt": "Alt Text"
+    }
+  }
+}

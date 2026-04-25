@@ -1,0 +1,136 @@
+﻿/**
+ * cmh-admin-menu-item styles
+ *
+ * cmh-admin-menu.scss 의 CSS 변수와 동일한 토큰 사용.
+ * Level 1 / Level 2 구분, 구분선, chevron 회전 애니메이션.
+ */
+
+// ── Level 1 ──────────────────────────────────────────────────────────
+.navigation-list-item__level-1 {
+  > .cmh-admin-menu__navigation-link {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 12px 30px;
+    width: 100%;
+    color: var(--color-text-nav-secondary, #bcc9dc);
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: var(--font-size-xs, 12px);
+    line-height: 1.5;
+    font-weight: var(--font-weight-base);
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+    transition: background-color 0.35s cubic-bezier(0.5, 0.32, 0.01, 1), color 0.35s cubic-bezier(0.5, 0.32, 0.01, 1);
+
+    &:hover {
+      color: var(--color-text-nav-primary, #ffffff);
+    }
+
+    &.router-link-active {
+      color: #fff;
+      background-color: var(--color-background-nav-active, #172b4f);
+    }
+  }
+
+  // 아이콘
+  .cmh-admin-menu__navigation-link-icon {
+    flex-shrink: 0;
+    color: inherit;
+    width: 20px;
+    margin: 0 20px 0 0;
+    position: relative;
+    top: 4px;
+  }
+
+  // chevron 아이콘
+  .cmh-admin-menu__chevron-icon {
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+
+    &.is--rotated {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+// is--entry-expanded 상태 — level 1 링크 스타일
+.navigation-list-item__level-1.is--entry-expanded {
+  > .cmh-admin-menu__navigation-link--parent {
+    color: var(--color-text-nav-primary, #ffffff);
+    background-color: var(--color-background-nav-hover, #293f65);
+  }
+}
+
+// ── Level 2 children list ─────────────────────────────────────────────
+.cmh-admin-menu__sub-navigation-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  background-color: var(--color-background-nav-sub, #1e3152);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.5, 0.32, 0.01, 1);
+}
+
+// ── Level 2 아이템 ────────────────────────────────────────────────────
+.navigation-list-item__level-2 {
+  > .cmh-admin-menu__navigation-link {
+    display: flex;
+    align-items: baseline;
+    padding: 12px 30px 12px 70px;  // Shopware 동일: 70px 들여쓰기
+    width: 100%;
+    color: var(--color-text-nav-secondary, #bcc9dc);
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: var(--font-size-xs, 12px);
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+    transition: all 0.35s cubic-bezier(0.5, 0.32, 0.01, 1);
+
+    &:hover {
+      color: var(--color-text-nav-primary, #ffffff);
+    }
+
+    &.router-link-active {
+      color: #fff;
+      background-color: var(--color-background-nav-active, #172b4f);
+    }
+  }
+}
+
+// ── 배지 ─────────────────────────────────────────────────────────────
+.cmh-admin-menu__navigation-badge {
+  margin-left: auto;
+  background-color: var(--color-interaction-primary-default, #0870ff);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 0 5px;
+  height: 18px;
+  min-width: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+// ── 구분선 (core ↔ plugin 경계) ───────────────────────────────────────
+.cmh-admin-menu__separator {
+  padding: 4px 16px;
+}
+
+.cmh-admin-menu__separator-line {
+  display: block;
+  height: 1px;
+  background-color: var(--color-border-nav, #344865);
+}

@@ -1,0 +1,25 @@
+﻿<div
+    v-if="showContent"
+    class="cmh-sidebar-item"
+    :class="sidebarItemClasses"
+>
+    <div class="cmh-sidebar-item__headline">
+        <h3 class="cmh-sidebar-item__title">{{ title }}</h3>
+
+        <slot name="headline-content"></slot>
+
+        <button
+            class="cmh-sidebar-item__close-button"
+            :aria-label="$t('cmh-global.sidebar.ariaLabelButtonClose')"
+            @click="closeContent"
+        >
+            <mt-icon name="regular-times-xs" />
+        </button>
+    </div>
+
+    <div class="cmh-sidebar-item__content">
+        <div class="cmh-sidebar-item__scrollable-container">
+            <slot></slot>
+        </div>
+    </div>
+</div>

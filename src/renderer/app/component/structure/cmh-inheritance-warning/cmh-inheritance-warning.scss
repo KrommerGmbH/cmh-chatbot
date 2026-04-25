@@ -1,0 +1,14 @@
+﻿.cmh-inheritance-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: var(--color-background-attention-default, #fff3e3);
+  color: var(--color-text-attention-default, #533600);
+
+  p {
+    margin: 0;
+  }
+}

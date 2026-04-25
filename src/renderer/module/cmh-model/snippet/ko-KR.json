@@ -1,0 +1,39 @@
+{
+  "cmh-model": {
+    "navigation": {
+      "label": "모델"
+    },
+    "module": {
+      "title": "모델"
+    },
+    "list": {
+      "pageTitle": "모델 목록",
+      "addModel": "모델 추가",
+      "syncRemote": "원격 모델 동기화",
+      "syncRemoteSuccess": "원격 모델 동기화가 완료되었습니다.",
+      "syncRemoteError": "원격 모델 동기화에 실패했습니다.",
+      "allProviders": "전체 공급자",
+      "searchPlaceholder": "모델 검색...",
+      "empty": "등록된 모델이 없습니다.",
+      "default": "기본",
+      "columns": {
+        "name": "모델명",
+        "modelId": "모델 ID",
+        "provider": "공급자",
+        "contextLength": "컨텍스트",
+        "status": "상태",
+        "default": "기본"
+      },
+      "loadError": "모델 목록을 불러오지 못했습니다."
+    },
+    "detail": {
+      "pageTitle": "모델 상세",
+      "name": "모델명",
+      "modelId": "모델 ID",
+      "provider": "공급자",
+      "contextLength": "컨텍스트 길이",
+      "description": "설명",
+      "default": "기본 모델"
+    }
+  }
+}

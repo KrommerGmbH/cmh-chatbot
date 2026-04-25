@@ -1,0 +1,44 @@
+.cmh-range-slider {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border-primary-default, #3c3c3c);
+    border-radius: var(--border-radius-button, 6px);
+    background: var(--color-background-primary-default, transparent);
+    color: var(--color-text-primary-default, #cccccc);
+    cursor: pointer;
+    font-size: var(--cmh-font-size-base, 15px);
+    line-height: 1;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--color-interaction-secondary-hover, rgba(255, 255, 255, 0.08));
+      border-color: var(--color-border-brand-default, var(--cmh-accent, #0e639c));
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.45;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--color-border-brand-default, var(--cmh-accent, #0e639c));
+  }
+
+  &.is--disabled {
+    opacity: 0.7;
+  }
+}

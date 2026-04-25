@@ -1,0 +1,85 @@
+<aside class="cmh-admin-menu" :class="menuClasses">
+  <div class="cmh-admin-menu__header">
+    <div class="cmh-admin-menu__logo">
+      <span class="cmh-admin-menu__logo-text">CMH</span>
+    </div>
+    <button
+      class="cmh-admin-menu__toggle"
+      :aria-label="t('cmh-global.menu.toggleMenu')"
+      @click="onToggleSidebar"
+    >
+      <iconify-icon :icon="isExpanded ? 'ph:caret-left' : 'ph:caret-right'" style="font-size:20px" />
+    </button>
+  </div>
+
+  <nav class="cmh-admin-menu__navigation">
+    <ul class="cmh-admin-menu__list">
+      <li
+        v-for="entry in visibleMainMenuEntries"
+        :key="entry.id"
+        class="cmh-admin-menu__item"
+        :class="{ 'is--open': adminMenuStore.isEntryExpanded(entry.id), 'is--active-parent': isActiveParent(entry) }"
+      >
+        <!-- 1레벨: path 없으면 카테고리 → 클릭 시 children 펼침/접힘 -->
+        <button
+          v-if="!entry.path && entry.children && entry.children.length > 0"
+          class="cmh-admin-menu__link cmh-admin-menu__link--parent"
+          @click="onToggleMenuEntry(entry.id)"
+        >
+          <iconify-icon v-if="entry.icon" :icon="entry.icon" style="font-size:20px" />
+          <span v-if="isExpanded" class="cmh-admin-menu__label">{{ t(entry.label) }}</span>
+          <iconify-icon
+            v-if="isExpanded"
+            :icon="adminMenuStore.isEntryExpanded(entry.id) ? 'ph:caret-up' : 'ph:caret-down'"
+            style="font-size:16px"
+            class="cmh-admin-menu__caret"
+          />
+        </button>
+
+        <!-- 1레벨: path 있으면 직접 링크 (children 없는 경우) -->
+        <router-link
+          v-else-if="entry.path"
+          :to="{ name: entry.path }"
+          class="cmh-admin-menu__link"
+          active-class="is--active"
+        >
+          <iconify-icon v-if="entry.icon" :icon="entry.icon" style="font-size:20px" />
+          <span v-if="isExpanded" class="cmh-admin-menu__label">{{ t(entry.label) }}</span>
+        </router-link>
+
+        <!-- 2레벨: children 목록 (펼침 시) -->
+        <ul
+          v-if="entry.children && entry.children.length > 0 && (adminMenuStore.isEntryExpanded(entry.id) || !isExpanded)"
+          v-show="adminMenuStore.isEntryExpanded(entry.id) && isExpanded"
+          class="cmh-admin-menu__children"
+        >
+          <li
+            v-for="child in entry.children"
+            :key="child.id"
+            class="cmh-admin-menu__child-item"
+          >
+            <router-link
+              v-if="child.path"
+              :to="{ name: child.path }"
+              class="cmh-admin-menu__child-link"
+              active-class="is--active"
+            >
+              <span class="cmh-admin-menu__child-label">{{ t(child.label) }}</span>
+            </router-link>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="cmh-admin-menu__footer">
+    <button
+      class="cmh-admin-menu__switch-btn"
+      :aria-label="t('cmh-global.menu.switchToChat')"
+      @click="onSwitchToChat"
+    >
+      <iconify-icon icon="ph:chats-thin" style="font-size:20px" />
+      <span v-if="isExpanded">{{ t('cmh-global.menu.switchToChat') }}</span>
+    </button>
+  </div>
+</aside>

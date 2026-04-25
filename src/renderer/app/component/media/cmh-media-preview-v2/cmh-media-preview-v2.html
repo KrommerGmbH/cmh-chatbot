@@ -1,0 +1,128 @@
+﻿<div
+    class="cmh-media-preview-v2"
+    :class="mediaPreviewClasses"
+>
+    <!-- 소스 없음 -->
+    <template v-if="!source">
+        <mt-icon
+            name="regular-image"
+            size="var(--scale-size-16)"
+        />
+    </template>
+
+    <template v-else>
+        <!-- 이미지 -->
+        <template v-if="mimeTypeGroup === 'image'">
+            <img
+                v-if="!imagePreviewFailed"
+                class="cmh-media-preview-v2__item"
+                :class="transparencyClass"
+                :src="previewUrl"
+                :alt="alt"
+                :srcset="sourceSet"
+                :sizes="`${width}px`"
+                :draggable="false"
+                @click="$emit('click')"
+                @error="showEvent"
+            />
+            <img
+                v-else
+                class="cmh-media-preview-v2__item cmh-media-preview-v2__placeholder"
+                :src="placeholderIconPath"
+                :alt="mimeType"
+            />
+            <mt-icon
+                v-if="mediaIsPrivate && lockIsVisible"
+                class="cmh-media-preview-v2__locked-icon"
+                name="regular-lock"
+            />
+        </template>
+
+        <!-- 비디오 -->
+        <template v-else-if="isPlayable && mimeTypeGroup === 'video'">
+            <img
+                v-if="mediaIsPrivate"
+                class="cmh-media-preview-v2__item cmh-media-preview-v2__placeholder"
+                :src="placeholderIconPath"
+                :alt="mimeType"
+            />
+            <video
+                v-else
+                :controls="showControls"
+                :autoplay="autoplay"
+                controlslist="nodownload"
+                class="cmh-media-preview-v2__item"
+            >
+                <source :src="previewUrl" :type="mimeType" />
+                {{ $t('cmh-global.media.fallbackVideoTagSupport') }}
+            </video>
+            <button
+                v-if="!showControls && !mediaIsPrivate"
+                class="cmh-media-preview-v2__play-button"
+                @click="onPlayClick"
+            >
+                <mt-icon class="cmh-media-preview-v2__play-icon" name="regular-play" />
+            </button>
+            <mt-icon
+                v-if="mediaIsPrivate && lockIsVisible"
+                class="cmh-media-preview-v2__locked-icon"
+                name="regular-lock"
+            />
+        </template>
+
+        <!-- 오디오 -->
+        <template v-else-if="isPlayable && mimeTypeGroup === 'audio'">
+            <img
+                class="cmh-media-preview-v2__item cmh-media-preview-v2__placeholder"
+                :src="placeholderIconPath"
+                :alt="mimeType"
+            />
+            <audio
+                :controls="showControls"
+                :autoplay="autoplay"
+                controlslist="nodownload"
+                class="cmh-media-preview-v2__item cmh-media-preview-v2__item--audio"
+            >
+                <source :src="previewUrl" :type="mimeType" />
+                {{ $t('cmh-global.media.fallbackAudioTagSupport') }}
+            </audio>
+            <button
+                v-if="!showControls"
+                class="cmh-media-preview-v2__play-button"
+                @click="onPlayClick"
+            >
+                <mt-icon class="cmh-media-preview-v2__play-icon" name="regular-play" />
+            </button>
+            <mt-icon
+                v-if="mediaIsPrivate && lockIsVisible"
+                class="cmh-media-preview-v2__locked-icon"
+                name="regular-lock"
+            />
+        </template>
+
+        <!-- URL / 상대경로 (이미지 시도) -->
+        <template v-else-if="(isUrl || isRelativePath) && !urlPreviewFailed">
+            <img
+                :src="previewUrl"
+                class="cmh-media-preview-v2__item"
+                :draggable="false"
+                :alt="mimeType || ''"
+                @error="removeUrlPreview"
+            />
+        </template>
+
+        <!-- 폴백 플레이스홀더 -->
+        <template v-else>
+            <img
+                class="cmh-media-preview-v2__item cmh-media-preview-v2__placeholder"
+                :src="placeholderIconPath"
+                :alt="mimeType || ''"
+            />
+            <mt-icon
+                v-if="mediaIsPrivate && lockIsVisible"
+                class="cmh-media-preview-v2__locked-icon"
+                name="regular-lock"
+            />
+        </template>
+    </template>
+</div>

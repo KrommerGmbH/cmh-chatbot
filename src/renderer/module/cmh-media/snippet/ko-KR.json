@@ -1,0 +1,44 @@
+{
+  "cmh-media": {
+    "general": {
+      "pageTitle": "미디어",
+      "entityDescription": "파일 형태의 미디어 객체"
+    },
+    "navigation": {
+      "label": "RAG"
+    },
+    "index": {
+      "rootFolderName": "미디어 라이브러리",
+      "uploadButton": "업로드",
+      "uploadFromUrl": "URL에서 업로드",
+      "urlPlaceholder": "파일 URL을 입력하세요 (https://...)",
+      "urlUploadSubmit": "업로드",
+      "createFolder": "새 폴더",
+      "createFolderCreate": "만들기",
+      "folderNamePlaceholder": "폴더 이름",
+      "emptyState": "아직 미디어 파일이 없습니다.",
+      "emptyStateDescription": "파일을 업로드 버튼으로 추가하세요.",
+      "presentationNormal": "일반",
+      "presentationLarge": "큰 미리보기",
+      "presentationList": "목록",
+      "sortNameAsc": "이름, A-Z",
+      "sortNameDesc": "이름, Z-A",
+      "sortSizeAsc": "크기, 작은 순",
+      "sortSizeDesc": "크기, 큰 순",
+      "sortDateAsc": "날짜, 오래된 순",
+      "sortDateDesc": "날짜, 최신 순",
+      "folderType": "폴더"
+    },
+    "sidebar": {
+      "actionEdit": "편집",
+      "actionDelete": "삭제",
+      "fileName": "파일 이름",
+      "fileSize": "파일 크기",
+      "mimeType": "MIME 유형",
+      "hash": "해시",
+      "uploadedAt": "업로드 일시",
+      "title": "제목",
+      "alt": "대체 텍스트"
+    }
+  }
+}

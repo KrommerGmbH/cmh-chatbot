@@ -1,0 +1,109 @@
+<div class="cmh-chat-settings">
+  <div class="cmh-chat-settings__header">
+    <h3>{{ $t('cmh-global.settings.appearance') }}</h3>
+    <button class="cmh-chat-settings__icon-btn" @click="$emit('close')">
+      <mt-icon name="regular-times-s" size="18px" />
+    </button>
+  </div>
+
+  <div class="cmh-chat-settings__body">
+    <!-- 타이포그래피 (5단계 폰트 토큰) -->
+    <div class="cmh-chat-settings__section">
+      <div class="cmh-chat-settings__section-header">
+        <h4>{{ $t('cmh-global.settings.typography') }}</h4>
+        <button class="cmh-chat-settings__reset-btn" @click="$emit('reset-font-tokens')">
+          {{ $t('cmh-global.settings.resetFontTokens') }}
+        </button>
+      </div>
+      <p class="cmh-chat-settings__section-desc">{{ $t('cmh-global.settings.typographyDescription') }}</p>
+
+      <div class="cmh-chat-settings__typography-header">
+        <span>{{ $t('cmh-global.settings.typographyLevel') }}</span>
+        <span>{{ $t('cmh-global.settings.typographySize') }}</span>
+        <span>{{ $t('cmh-global.settings.typographyWeight') }}</span>
+      </div>
+
+      <div
+        v-for="level in fontLevels"
+        :key="level"
+        class="cmh-chat-settings__typography-row"
+        :class="{ 'is--base': level === 'base' }"
+      >
+        <span
+          class="cmh-chat-settings__typography-label"
+          :style="{ fontSize: fontTokens[level].size + 'px', fontWeight: fontTokens[level].weight }"
+        >
+          {{ $t('cmh-global.settings.fontLevel.' + level) }}
+        </span>
+
+        <cmh-range-slider
+          :model-value="fontTokens[level].size"
+          :label="$t('cmh-global.settings.typographySize') + ' ' + $t('cmh-global.settings.fontLevel.' + level)"
+          :min="8" :max="48" :step="1"
+          @update:model-value="$emit('update-font-token', level, 'size', $event)"
+        />
+
+        <cmh-range-slider
+          :model-value="fontTokens[level].weight"
+          :label="$t('cmh-global.settings.typographyWeight') + ' ' + $t('cmh-global.settings.fontLevel.' + level)"
+          :min="100" :max="900" :step="100"
+          @update:model-value="$emit('update-font-token', level, 'weight', $event)"
+        />
+      </div>
+    </div>
+
+    <!-- 색상 조합 -->
+    <div class="cmh-chat-settings__section">
+      <h4>{{ $t('cmh-global.settings.colorScheme') }}</h4>
+      <div class="cmh-chat-settings__color-options">
+        <button
+          v-for="scheme in colorSchemeOptions"
+          :key="scheme.value"
+          class="cmh-chat-settings__color-btn"
+          :class="{ 'is--active': currentColorScheme === scheme.value }"
+          @click="$emit('set-color-scheme', scheme.value)"
+        >
+          <span class="cmh-chat-settings__color-swatch" :style="{ background: scheme.color }"></span>
+          <span class="cmh-chat-settings__color-name">{{ scheme.label }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 테마 (Light/Dark) -->
+    <div class="cmh-chat-settings__section">
+      <h4>{{ $t('cmh-global.settings.themeMode') }}</h4>
+      <div class="cmh-chat-settings__theme-options">
+        <button
+          class="cmh-chat-settings__theme-btn"
+          :class="{ 'is--active': currentTheme === 'dark' }"
+          @click="$emit('set-theme', 'dark')"
+        >
+          <span>🌙</span>
+          <span>{{ $t('cmh-global.theme.dark') }}</span>
+        </button>
+        <button
+          class="cmh-chat-settings__theme-btn"
+          :class="{ 'is--active': currentTheme === 'light' }"
+          @click="$emit('set-theme', 'light')"
+        >
+          <span>☀️</span>
+          <span>{{ $t('cmh-global.theme.light') }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 미리보기 -->
+    <div class="cmh-chat-settings__section">
+      <h4>{{ $t('cmh-global.settings.preview') }}</h4>
+      <div class="cmh-chat-settings__preview-box">
+        <div class="cmh-chat-settings__preview-label">{{ $t('cmh-global.settings.preview') }}</div>
+        <div class="cmh-chat-settings__preview-user">
+          <span>{{ $t('cmh-global.settings.previewUser') }}</span>
+        </div>
+        <div class="cmh-chat-settings__preview-assistant">
+          <span>{{ $t('cmh-global.settings.previewAssistant') }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

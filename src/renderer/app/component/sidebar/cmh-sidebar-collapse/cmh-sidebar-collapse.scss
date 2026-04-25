@@ -1,0 +1,61 @@
+﻿.cmh-sidebar-collapse {
+    // cmh-collapse 루트를 오버라이드하여 사이드바 스타일 적용
+
+    .cmh-sidebar-collapse__header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2xs);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            background-color: var(--color-background-primary-disabled);
+        }
+    }
+
+    .cmh-sidebar-collapse__title {
+        flex: 1;
+        margin: 0;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-secondary-default);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+    }
+
+    .cmh-sidebar-collapse__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-3xs);
+    }
+
+    .cmh-sidebar-collapse__indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: var(--border-radius-xs);
+        cursor: pointer;
+        color: var(--color-icon-primary-default);
+        transition: background-color 0.1s ease;
+
+        &:hover {
+            background-color: var(--color-background-primary-disabled);
+        }
+
+        &:focus-visible {
+            outline: var(--border-width-md) solid var(--color-border-brand-selected);
+            outline-offset: 2px;
+        }
+    }
+
+    .cmh-sidebar-collapse__expand-button,
+    .cmh-sidebar-collapse__collapse-button {
+        &.is--hidden {
+            display: none;
+        }
+    }
+}

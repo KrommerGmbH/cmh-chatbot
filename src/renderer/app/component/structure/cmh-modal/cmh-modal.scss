@@ -1,0 +1,195 @@
+﻿/**
+ * cmh-modal — 스타일
+ *
+ * Shopware sw-modal 디자인 시스템 기반.
+ * 모든 색상은 CSS Custom Property 사용.
+ */
+
+.cmh-modal {
+  // backdrop은 teleport로 body에 직접 마운트됨
+
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0 0 0 / 50%);
+    backdrop-filter: blur(4px);
+    animation: cmh-modal-fade-in 0.15s ease-out;
+  }
+
+  &__dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    background-color: var(--color-elevation-surface-raised, var(--color-background-primary-default, #ffffff));
+    border: 1px solid var(--color-border-primary-default, #cdced4);
+    border-radius: 12px;
+    box-shadow:
+      0 8px 32px rgb(0 0 0 / 40%),
+      0 0 0 1px rgb(255 255 255 / 0.04);
+    overflow: hidden;
+    animation: cmh-modal-scale-in 0.18s ease-out;
+  }
+
+  // ── 드래그 핸들 ──────────────────────────────────────────────────
+  &__resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    cursor: ew-resize;
+    z-index: 10;
+    background-color: transparent;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: var(--color-interaction-primary-default, #0870ff);
+      opacity: 0.3;
+    }
+
+    &--left {
+      left: 0;
+      border-radius: 12px 0 0 12px;
+    }
+
+    &--right {
+      right: 0;
+      border-radius: 0 12px 12px 0;
+    }
+  }
+
+  // ── 헤더 ─────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border-primary-default, #cdced4);
+    flex-shrink: 0;
+    background-color: var(--color-background-primary-default, #ffffff);
+  }
+
+  &__header-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  &__header-icon {
+    color: var(--color-interaction-primary-default, #0870ff);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary-default, #1e1e24);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--color-text-tertiary-default, #696a6e);
+    cursor: pointer;
+    transition: color 0.15s, background-color 0.15s;
+    flex-shrink: 0;
+
+    &:hover {
+      color: var(--color-text-primary-default, #1e1e24);
+      background-color: var(--color-background-secondary-default, #fafbfe);
+    }
+
+    &:active {
+      background-color: var(--color-interaction-secondary-pressed, #e2e3e9);
+    }
+  }
+
+  // ── 바디 ─────────────────────────────────────────────────────────
+  &__body {
+    position: relative;
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+
+    // 스크롤바 커스텀
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--color-border-primary-default, #cdced4);
+      border-radius: 3px;
+    }
+  }
+
+  // ── 로딩 오버레이 ─────────────────────────────────────────────────
+  &__loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0 0 0 / 40%);
+    z-index: 5;
+  }
+
+  &__loader-icon {
+    color: var(--color-interaction-primary-default, #0870ff);
+    animation: cmh-modal-spin 1s linear infinite;
+  }
+
+  // ── 푸터 ─────────────────────────────────────────────────────────
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--color-border-primary-default, #cdced4);
+    flex-shrink: 0;
+    background-color: var(--color-background-secondary-default, #fafbfe);
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+@keyframes cmh-modal-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cmh-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cmh-modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

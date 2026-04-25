@@ -1,0 +1,30 @@
+{
+  "cmh-log": {
+    "navigation": {
+      "label": "Logs"
+    },
+    "module": {
+      "title": "Logs"
+    },
+    "list": {
+      "pageTitle": "Log list",
+      "allLevels": "All levels",
+      "levelError": "Error",
+      "levelWarning": "Warning",
+      "levelInfo": "Info",
+      "levelDebug": "Debug",
+      "clearAll": "Clear all",
+      "empty": "No logs available.",
+      "columns": {
+        "level": "Level",
+        "source": "Source",
+        "message": "Message",
+        "createdAt": "Time"
+      }
+    },
+    "detail": {
+      "pageTitle": "Log detail",
+      "notFound": "Log entry not found."
+    }
+  }
+}

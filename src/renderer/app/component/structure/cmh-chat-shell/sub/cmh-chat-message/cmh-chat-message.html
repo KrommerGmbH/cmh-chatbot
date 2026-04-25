@@ -1,0 +1,360 @@
+<div class="cmh-chat-message" :class="['is--' + message.role]">
+  <!-- ── 시스템 메시지 ── -->
+  <cmh-system-message
+    v-if="message.role === 'system'"
+    :text="message.content"
+    :variant="message.systemType || 'info'"
+    :closable="message.systemType !== 'loading'"
+    @close="$emit('remove-system-message', message.id)"
+  />
+
+  <!-- ── 사용자/AI 메시지 ── -->
+  <template v-else>
+    <!-- 아바타 -->
+    <div class="cmh-chat-message__avatar">
+      <iconify-icon
+        :icon="message.role === 'user' ? 'ph:cat-light' : 'ph:dog-light'"
+        class="cmh-chat-message__ph-icon is--avatar"
+      />
+    </div>
+
+    <div class="cmh-chat-message__body">
+      <!-- ✨ Thinking 섹션 — 항상 접이식 (스트리밍 중 자동 open) -->
+      <details v-if="message.thinking" class="cmh-chat-message__thinking" :open="message.isStreaming">
+        <summary>
+          <mt-icon name="regular-check-circle" size="14px" />
+          <span>{{ $t('cmh-global.labels.thinking') }}</span>
+        </summary>
+        <div class="cmh-chat-message__thinking-content">{{ message.thinking }}</div>
+      </details>
+
+      <!-- 💬 메시지 본문 (마크다운 렌더링 — 스트리밍 중에는 plain text) -->
+      <div v-if="message.content" class="cmh-chat-message__content" v-html="renderedContent"></div>
+
+      <!-- 🔧 #10 Tool Event Timeline — 도구 호출 타임라인 -->
+      <details v-if="hasToolEvents" class="cmh-chat-message__tool-timeline">
+        <summary class="cmh-chat-message__tool-timeline-summary">
+          <iconify-icon icon="ph:wrench" />
+          <span>{{ $t('cmh-global.labels.toolCalls') }} ({{ toolEvents.length }})</span>
+          <span v-if="toolTimelineDuration" class="cmh-chat-message__tool-timeline-total">{{ toolTimelineDuration }}</span>
+        </summary>
+        <div class="cmh-chat-message__tool-timeline-list">
+          <div
+            v-for="(evt, idx) in toolEvents"
+            :key="evt.id"
+            class="cmh-chat-message__tool-card"
+            :class="'is--' + evt.status"
+          >
+            <div class="cmh-chat-message__tool-card-header">
+              <span class="cmh-chat-message__tool-card-step">{{ idx + 1 }}</span>
+              <iconify-icon
+                :icon="evt.status === 'running' ? 'ph:spinner' : evt.status === 'error' ? 'ph:warning-circle' : 'ph:check-circle'"
+                class="cmh-chat-message__tool-card-icon"
+              />
+              <span class="cmh-chat-message__tool-card-name">{{ evt.name }}</span>
+              <span v-if="evt.durationMs" class="cmh-chat-message__tool-card-duration">{{ evt.durationMs }}ms</span>
+              <span v-if="evt.startedAt" class="cmh-chat-message__tool-card-time">{{ formatToolTime(evt.startedAt) }}</span>
+            </div>
+            <div v-if="evt.error" class="cmh-chat-message__tool-card-error">{{ evt.error }}</div>
+            <details v-if="evt.input && Object.keys(evt.input).length > 0" class="cmh-chat-message__tool-card-details">
+              <summary>Input</summary>
+              <pre class="cmh-chat-message__tool-card-json">{{ JSON.stringify(evt.input, null, 2) }}</pre>
+            </details>
+            <details v-if="evt.output !== undefined" class="cmh-chat-message__tool-card-details">
+              <summary>Output</summary>
+              <pre class="cmh-chat-message__tool-card-json">{{ typeof evt.output === 'string' ? evt.output : JSON.stringify(evt.output, null, 2) }}</pre>
+            </details>
+          </div>
+        </div>
+      </details>
+
+      <!-- 🧩 AI 구조화 블록 렌더링 -->
+      <div v-if="uiBlocks.length > 0" class="cmh-chat-message__ui-blocks">
+        <mt-card
+          v-for="(block, idx) in uiBlocks"
+          :key="`ui-${message.id}-${idx}`"
+          class="cmh-chat-message__ui-card"
+        >
+          <!-- #1/#9 Artifact Panel — 패널에서 열기 버튼 (대부분의 블록 타입 지원) -->
+          <button
+            v-if="['code', 'image', 'markdown', 'data-grid', 'table', 'text', 'iframe', 'video', 'entity-listing', 'card'].includes(block.type)"
+            class="cmh-chat-message__ui-card-expand"
+            :title="$t('cmh-global.labels.openInPanel')"
+            @click="openInPanel(block)"
+          >
+            <iconify-icon icon="ph:arrow-square-out" />
+          </button>
+          <template v-if="block.type === 'text'">
+            <div class="cmh-chat-message__ui-text" :style="getScrollStyle(block)">{{ block.text }}</div>
+          </template>
+
+          <template v-else-if="block.type === 'markdown'">
+            <div class="cmh-chat-message__ui-markdown" :style="getScrollStyle(block)" v-html="renderMarkdownText(block.text)"></div>
+          </template>
+
+          <template v-else-if="block.type === 'code'">
+            <details v-if="block.collapsible" class="cmh-chat-message__ui-code-details">
+              <summary>{{ block.title || block.language || '⋯' }}</summary>
+              <pre class="cmh-chat-message__ui-code"><code>{{ block.code }}</code></pre>
+            </details>
+            <div v-else>
+              <div v-if="block.title" class="cmh-chat-message__ui-code-title">{{ block.title }}</div>
+              <pre class="cmh-chat-message__ui-code"><code>{{ block.code }}</code></pre>
+            </div>
+          </template>
+
+          <template v-else-if="block.type === 'image'">
+            <img
+              class="cmh-chat-message__ui-image"
+              :src="block.src"
+              :alt="block.alt || ''"
+              loading="lazy"
+            />
+          </template>
+
+          <template v-else-if="block.type === 'video'">
+            <video
+              class="cmh-chat-message__ui-video"
+              :src="block.src"
+              :poster="block.poster"
+              controls
+              preload="metadata"
+            ></video>
+          </template>
+
+          <template v-else-if="block.type === 'iframe'">
+            <iframe
+              class="cmh-chat-message__ui-iframe"
+              :src="block.src"
+              :title="block.title || ''"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+              referrerpolicy="no-referrer"
+            ></iframe>
+          </template>
+
+          <template v-else-if="block.type === 'data-grid'">
+            <cmh-data-grid
+              :data-source="block.rows"
+              :columns="block.columns"
+              :show-selection="false"
+              :show-actions="false"
+              :show-settings="false"
+              :compact-mode="true"
+              :plain-appearance="true"
+            />
+          </template>
+
+          <template v-else-if="block.type === 'table'">
+            <div class="cmh-chat-message__ui-table-wrap">
+              <table class="cmh-chat-message__ui-table">
+                <thead>
+                  <tr>
+                    <th v-for="(col, cIdx) in block.columns" :key="`col-${cIdx}`">{{ col }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, rIdx) in block.rows" :key="`row-${rIdx}`">
+                    <td v-for="(cell, cIdx) in row" :key="`cell-${rIdx}-${cIdx}`">{{ cell }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </template>
+
+          <template v-else-if="block.type === 'button-group'">
+            <div class="cmh-chat-message__ui-buttons">
+              <mt-button
+                v-for="(btn, bIdx) in block.buttons"
+                :key="btn.id || `btn-${bIdx}`"
+                :variant="btn.variant || 'secondary'"
+                size="small"
+                @click="onUiActionButton(btn)"
+              >
+                {{ btn.label }}
+              </mt-button>
+            </div>
+          </template>
+
+          <template v-else-if="block.type === 'collapse'">
+            <details class="cmh-chat-message__ui-collapse" :open="block.open === true">
+              <summary>{{ block.title }}</summary>
+              <div v-if="block.markdown" class="cmh-chat-message__ui-markdown" v-html="renderMarkdownText(block.markdown)"></div>
+              <div v-else-if="block.content" class="cmh-chat-message__ui-text">{{ block.content }}</div>
+            </details>
+          </template>
+
+          <template v-else-if="block.type === 'card'">
+            <div class="cmh-chat-message__ui-card-inner">
+              <h4 v-if="block.title" class="cmh-chat-message__ui-card-title">{{ block.title }}</h4>
+              <div v-if="block.subtitle" class="cmh-chat-message__ui-card-subtitle">{{ block.subtitle }}</div>
+              <div v-if="block.markdown" class="cmh-chat-message__ui-markdown" v-html="renderMarkdownText(block.markdown)"></div>
+              <div v-else-if="block.content" class="cmh-chat-message__ui-text">{{ block.content }}</div>
+            </div>
+          </template>
+
+          <template v-else-if="block.type === 'entity-listing'">
+            <cmh-entity-listing
+              :data-source="block.rows"
+              :columns="block.columns"
+            />
+          </template>
+
+          <template v-else-if="block.type === 'filter'">
+            <component
+              v-if="getFilterComponent(block.kind)"
+              :is="getFilterComponent(block.kind)"
+              v-bind="block.config || {}"
+            />
+          </template>
+
+          <template v-else-if="block.type === 'component'">
+            <component :is="block.is" v-bind="block.props || {}" />
+          </template>
+        </mt-card>
+      </div>
+
+      <!-- 스트리밍 중 content 아직 없을 때 typing indicator -->
+      <div v-else-if="message.role === 'assistant' && message.isStreaming" class="cmh-chat-message__typing-indicator">
+        <span class="cmh-chat-message__typing-dot"></span>
+        <span class="cmh-chat-message__typing-dot"></span>
+        <span class="cmh-chat-message__typing-dot"></span>
+        <span class="cmh-chat-message__typing-status">
+          <span v-if="message.modelName" class="cmh-chat-message__typing-model">{{ message.modelName }}</span>
+          {{ message.streamingStatus === 'connecting' ? $t('cmh-global.chat.statusConnecting') :
+             message.streamingStatus === 'thinking' ? $t('cmh-global.labels.thinking') :
+             $t('cmh-global.chat.statusGenerating') }}
+        </span>
+      </div>
+
+      <!-- 📎 첨부 파일 -->
+      <div v-if="message.attachments && message.attachments.length > 0" class="cmh-chat-message__attachments">
+        <div
+          v-for="file in message.attachments"
+          :key="file.id"
+          class="cmh-chat-message__file-chip is--clickable"
+          @click="onFileChipClick(file)"
+          :title="file.name"
+        >
+          <mt-icon name="regular-paperclip" size="12px" />
+          <span>{{ file.name }}</span>
+        </div>
+      </div>
+
+      <!-- ✅ Todos 섹션 -->
+      <details v-if="message.todos && message.todos.length > 0" class="cmh-chat-message__todos" open>
+        <summary>
+          <mt-icon name="regular-check-square" size="14px" />
+          <span>{{ $t('cmh-global.labels.todos') }} ({{ completedTodoCount }}/{{ message.todos.length }})</span>
+        </summary>
+        <ul class="cmh-chat-message__todo-list">
+          <li
+            v-for="todo in message.todos"
+            :key="todo.id"
+            class="cmh-chat-message__todo-item"
+            :class="'is--' + todo.status"
+          >
+            <span class="cmh-chat-message__todo-check">
+              <mt-icon
+                :name="todo.status === 'completed' ? 'regular-check-circle' : (todo.status === 'in-progress' ? 'regular-circle-download' : 'regular-circle')"
+                size="14px"
+              />
+            </span>
+            <span class="cmh-chat-message__todo-text">{{ todo.title }}</span>
+          </li>
+        </ul>
+      </details>
+
+      <!-- 🎬 액션 버튼 -->
+      <div v-if="message.actionButtons && message.actionButtons.length > 0" class="cmh-chat-message__actions">
+        <button
+          v-for="btn in message.actionButtons"
+          :key="btn.id"
+          class="cmh-chat-message__action-btn"
+          :class="'is--' + (btn.variant || 'secondary')"
+          @click="$emit('action-button', btn)"
+        >
+          <mt-icon v-if="btn.icon" :name="btn.icon" size="14px" />
+          <span>{{ btn.label }}</span>
+        </button>
+      </div>
+
+      <!-- 타임스탬프 + 평가 + TTS + 모델명 -->
+      <div class="cmh-chat-message__footer">
+        <span class="cmh-chat-message__time">{{ formattedTime }}</span>
+
+        <!-- 사용자 메시지 액션: 복사 / 편집 / 재전송 -->
+        <template v-if="message.role === 'user'">
+          <button
+            class="cmh-chat-message__user-action-btn"
+            :title="$t('cmh-global.actions.copy')"
+            @click="copyMessageContent"
+          >
+            <iconify-icon
+              :icon="copied ? 'ph:check' : 'ph:copy'"
+              class="cmh-chat-message__ph-icon is--action"
+            />
+          </button>
+          <button
+            class="cmh-chat-message__user-action-btn"
+            :title="$t('cmh-global.actions.edit')"
+            @click="startEdit"
+          >
+            <iconify-icon icon="ph:pencil-simple" class="cmh-chat-message__ph-icon is--action" />
+          </button>
+          <button
+            class="cmh-chat-message__user-action-btn"
+            :title="$t('cmh-global.actions.resend')"
+            @click="$emit('resend-message', message.content)"
+          >
+            <iconify-icon icon="ph:arrow-clockwise" class="cmh-chat-message__ph-icon is--action" />
+          </button>
+          <!-- #5 Time Travel/Fork — 이 메시지에서 분기 -->
+          <button
+            class="cmh-chat-message__user-action-btn"
+            :title="$t('cmh-global.actions.forkHere')"
+            @click="$emit('fork-from-message', message.id)"
+          >
+            <iconify-icon icon="ph:git-fork" class="cmh-chat-message__ph-icon is--action" />
+          </button>
+        </template>
+
+        <cmh-rating-sads
+          v-if="message.role === 'assistant' && !message.isStreaming"
+          :score="message.rating ?? null"
+          :model-name="message.modelName || null"
+          compact
+          @update:score="$emit('rate-message', { messageId: message.id, score: $event })"
+        />
+
+        <!-- #5 Fork button for assistant messages -->
+        <button
+          v-if="message.role === 'assistant' && !message.isStreaming"
+          class="cmh-chat-message__user-action-btn"
+          :title="$t('cmh-global.actions.forkHere')"
+          @click="$emit('fork-from-message', message.id)"
+        >
+          <iconify-icon icon="ph:git-fork" class="cmh-chat-message__ph-icon is--action" />
+        </button>
+
+        <button
+          v-if="message.role === 'assistant'"
+          class="cmh-chat-message__tts-btn"
+          :class="{ 'is--speaking': isSpeaking }"
+          @click="$emit('speak-message', { messageId: message.id, content: message.content })"
+          :title="isSpeaking ? $t('cmh-global.actions.stop') : $t('cmh-global.labels.tts')"
+        >
+          <iconify-icon
+            :icon="isSpeaking ? 'ph:stop-circle' : 'ph:speaker-high'"
+            class="cmh-chat-message__ph-icon is--tts"
+          />
+        </button>
+
+        <span
+          v-if="message.role === 'assistant' && message.modelName"
+          class="cmh-chat-message__model-name"
+        >{{ message.modelName }}</span>
+      </div>
+    </div>
+  </template>
+</div>

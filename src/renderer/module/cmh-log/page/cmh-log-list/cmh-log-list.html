@@ -1,0 +1,61 @@
+<cmh-page :show-search-bar="false">
+  <template #smart-bar-actions>
+    <div class="cmh-log-list__filters">
+      <select
+        class="cmh-log-list__filter-select"
+        :value="filterLevel"
+        @change="onFilterLevel($event.target.value)"
+      >
+        <option value="">{{ $t('cmh-log.list.allLevels') }}</option>
+        <option value="error">{{ $t('cmh-log.list.levelError') }}</option>
+        <option value="warning">{{ $t('cmh-log.list.levelWarning') }}</option>
+        <option value="info">{{ $t('cmh-log.list.levelInfo') }}</option>
+        <option value="debug">{{ $t('cmh-log.list.levelDebug') }}</option>
+      </select>
+    </div>
+
+    <mt-button variant="secondary" size="small" @click="onClearAll">
+      {{ $t('cmh-log.list.clearAll') }}
+    </mt-button>
+  </template>
+
+  <template #content>
+    <div v-if="isLoading" class="cmh-log-list__loading">
+      <mt-loader size="small" />
+    </div>
+
+    <div v-else-if="filteredLogs.length === 0" class="cmh-log-list__empty">
+      {{ $t('cmh-log.list.empty') }}
+    </div>
+
+    <cmh-entity-listing
+      v-else
+      class="cmh-log-list__grid"
+      :data-source="filteredLogs"
+      :columns="logColumns"
+      :is-loading="isLoading"
+      :current-page="page"
+      :per-page="limit"
+      :total-items="filteredLogs.length"
+      :disable-data-fetching="true"
+      :allow-inline-edit="false"
+      :allow-delete="false"
+      :show-selection="false"
+      detail-route="cmh.log.detail"
+      :sort-by="sortBy"
+      :sort-direction="sortDirection"
+      @column-sort="onColumnSort"
+      @page-change="onPageChange"
+    >
+      <template #column-level="{ item }">
+        <span :class="getLevelClass(item.level)">
+          {{ item.level.toUpperCase() }}
+        </span>
+      </template>
+
+      <template #column-createdAt="{ item }">
+        <span class="cmh-log-list__date">{{ formatDate(item.createdAt) }}</span>
+      </template>
+    </cmh-entity-listing>
+  </template>
+</cmh-page>

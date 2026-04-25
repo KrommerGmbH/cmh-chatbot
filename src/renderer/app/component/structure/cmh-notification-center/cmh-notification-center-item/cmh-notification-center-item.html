@@ -1,0 +1,39 @@
+<div class="cmh-notification-center-item">
+  <div class="cmh-notification-center-item__header" :class="itemHeaderClass">
+    <p class="cmh-notification-center-item__title">
+      {{ notification.title }}
+    </p>
+
+    <p class="cmh-notification-center-item__timestamp">
+      {{ timestampLabel }}
+    </p>
+
+    <mt-icon
+      class="cmh-notification-center-item__delete"
+      name="regular-times-xs"
+      size="12px"
+      @click.stop="handleDelete"
+    />
+  </div>
+
+  <div class="cmh-notification-center-item__content">
+    <p class="cmh-notification-center-item__message">{{ notification.message }}</p>
+  </div>
+
+  <div v-if="notificationActions.length" class="cmh-notification-center-item__actions">
+    <div
+      v-for="action in notificationActions"
+      :key="action.label"
+      class="cmh-notification-center-item__actions-item-container"
+    >
+      <mt-button
+        block
+        size="small"
+        variant="secondary"
+        @click="handleAction(action)"
+      >
+        {{ action.label }}
+      </mt-button>
+    </div>
+  </div>
+</div>

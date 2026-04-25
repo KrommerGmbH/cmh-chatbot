@@ -1,0 +1,109 @@
+﻿.cmh-media-compact-upload-v2 {
+    .cmh-media-compact-upload-v2__label {
+        display: block;
+        margin-bottom: var(--spacing-2xs);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-primary-default);
+    }
+
+    .cmh-media-upload-v2__dropzone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        padding: var(--spacing-sm);
+        border: var(--border-width-sm) dashed var(--color-border-primary-default);
+        border-radius: var(--border-radius-sm);
+        background-color: var(--color-background-primary-default);
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+        cursor: pointer;
+
+        &.is--drag-active {
+            background-color: var(--color-background-brand-default);
+            border-color: var(--color-border-brand-selected);
+        }
+    }
+
+    .cmh-media-compact-upload-v2__preview-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        width: 100%;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .cmh-media-compact-upload-v2__preview-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2xs);
+
+        .cmh-media-upload-v2__preview {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--border-radius-xs);
+            overflow: hidden;
+        }
+    }
+
+    .cmh-media-upload-v2__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        width: 100%;
+
+        &.has--source {
+            justify-content: space-between;
+        }
+    }
+
+    .cmh-media-upload-v2__file-info {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .cmh-media-upload-v2__file-headline {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--font-size-xs);
+        color: var(--color-text-primary-default);
+    }
+
+    .cmh-media-upload-v2__remove-icon {
+        cursor: pointer;
+        color: var(--color-icon-critical-default);
+        flex-shrink: 0;
+
+        &:hover {
+            color: var(--color-icon-critical-hover);
+        }
+    }
+
+    .cmh-media-upload-v2__preview.is--fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        background-color: var(--color-background-primary-disabled);
+        border-radius: var(--border-radius-xs);
+        color: var(--color-icon-primary-default);
+    }
+
+    // 숨김 파일 입력
+    .cmh-media-upload-v2__form {
+        display: none;
+    }
+
+    // compact 버튼 그룹
+    .cmh-button-group {
+        display: flex;
+    }
+}

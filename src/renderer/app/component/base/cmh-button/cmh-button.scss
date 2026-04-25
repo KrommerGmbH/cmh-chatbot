@@ -1,0 +1,12 @@
+﻿.cmh-button {
+  --cmh-button-base-width: 88px;
+  --cmh-button-width-multiplier: 2;
+  min-inline-size: calc(var(--cmh-button-base-width) * var(--cmh-button-width-multiplier));
+  min-height: 2.1rem;
+  justify-content: center;
+
+  &.is--block {
+    display: inline-flex;
+    width: 100%;
+  }
+}

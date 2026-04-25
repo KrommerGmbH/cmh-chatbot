@@ -1,0 +1,10 @@
+﻿.cmh-media-modal-renderer {
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__placeholder {
+    color: var(--color-text-secondary-default, #696a6e);
+  }
+}

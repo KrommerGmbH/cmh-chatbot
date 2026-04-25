@@ -1,0 +1,7 @@
+<div class="cmh-admin" :class="adminClasses">
+  <!-- Chat Mode: 채팅 셸이 메인 -->
+  <cmh-chat-shell v-if="uiPreferencesStore.shellMode === 'chat'" />
+
+  <!-- Admin Mode: 관리 화면 (사이드바 + 컨텐츠) -->
+  <cmh-desktop v-else />
+</div>

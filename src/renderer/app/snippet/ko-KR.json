@@ -1,0 +1,196 @@
+{
+  "cmh-global": {
+    "default": {
+      "warning": "경고",
+      "error": "오류",
+      "info": "알림",
+      "success": "성공"
+    },
+    "actions": {
+      "close": "닫기",
+      "save": "저장",
+      "cancel": "취소",
+      "search": "검색",
+      "refresh": "새로고침",
+      "delete": "삭제",
+      "edit": "편집",
+      "add": "추가",
+      "back": "뒤로",
+      "next": "다음",
+      "previous": "이전",
+      "confirm": "확인",
+      "apply": "적용",
+      "reset": "초기화",
+      "send": "보내기",
+      "stop": "멈추기",
+      "copy": "복사",
+      "resend": "재전송",
+      "forkHere": "여기서 분기"
+    },
+    "labels": {
+      "loading": "로딩 중...",
+      "noResults": "결과가 없습니다.",
+      "total": "총",
+      "date": "날짜",
+      "name": "이름",
+      "description": "설명",
+      "status": "상태",
+      "type": "유형",
+      "yes": "예",
+      "no": "아니오",
+      "newChat": "새 대화",
+      "emptyChat": "메시지를 입력하여 대화를 시작하세요.",
+      "thinking": "생각 중",
+      "toolCalls": "도구 호출",
+      "artifact": "아티팩트",
+      "openInPanel": "패널에서 열기",
+      "attachFile": "파일 첨부",
+      "chatPlaceholder": "메시지를 입력하세요... (Shift+Enter: 줄바꿈)",
+      "searchModels": "모델 검색...",
+      "stt": "음성 인식",
+      "tts": "음성 출력",
+      "showMore": "더 보기",
+      "selectAgent": "에이전트 선택",
+      "todos": "할 일 목록",
+      "active": "활성",
+      "inactive": "비활성"
+    },
+    "languageSwitch": {
+      "label": "언어",
+      "locales": {
+        "ko-KR": "한국어",
+        "en-GB": "English",
+        "de-DE": "Deutsch",
+        "zh-CN": "中文",
+        "ja-JP": "日本語"
+      }
+    },
+    "theme": {
+      "switchToLight": "라이트 모드로 전환",
+      "switchToDark": "다크 모드로 전환",
+      "dark": "다크",
+      "light": "라이트"
+    },
+    "menu": {
+      "toggleMenu": "메뉴 토글",
+      "collapseMenu": "메뉴 접기",
+      "expandMenu": "메뉴 펼치기",
+      "mainNavigation": "메인 네비게이션",
+      "switchToChat": "채팅으로 전환",
+      "switchToAdmin": "관리 화면으로 전환",
+      "chatMode": "CMH Chatbot",
+      "adminMode": "관리 모드"
+    },
+    "navigation": {
+      "chat": "채팅",
+      "workflow": "워크플로우",
+      "provider": "프로바이더",
+      "model": "모델",
+      "settings": "설정",
+      "aiManagement": "AI 관리"
+    },
+    "chat": {
+      "newChat": "새 채팅",
+      "connectionFailed": "LLM 서버 연결 실패 — Mock 응답 모드입니다. llama-server가 실행 중인지 확인하세요.",
+      "generationStopped": "응답 생성이 중단되었습니다.",
+      "sttModelLoading": "음성 인식 모델 다운로드 중... 최초 실행 시 시간이 걸릴 수 있습니다.",
+      "sttTranscribing": "음성을 텍스트로 변환 중...",
+      "serverError": "llama-server 내부 오류",
+      "modelNotFound": "모델을 찾을 수 없습니다",
+      "rateLimited": "요청이 너무 빈번합니다",
+      "networkError": "네트워크 연결 실패",
+      "visionNotSupported": "이미지 처리 미지원",
+      "visionNotSupportedMessage": "{model} 모델은 이미지 처리를 지원하지 않습니다. 텍스트만 전송됩니다.",
+      "imageAttached": "첨부 이미지: {files} (현재 모델이 이미지를 지원하지 않아 처리되지 않았습니다)",
+      "statusConnecting": "연결 중...",
+      "statusGenerating": "생성 중...",
+      "timeoutError": "응답 시간 초과",
+      "timeoutMessage": "모델이 90초 내에 응답하지 않았습니다. 다시 시도해 주세요.",
+      "noModelSelected": "모델이 선택되지 않았습니다",
+      "noModelSelectedMessage": "채팅에 사용할 모델을 먼저 선택해 주세요.",
+      "noApiKey": "API 키가 설정되지 않았습니다",
+      "apiKeyRequiredShort": "API 키 필요",
+      "forkedConversation": "대화가 분기되었습니다."
+    },
+    "settings": {
+      "appearance": "외관 설정",
+      "typography": "타이포그래피",
+      "typographyDescription": "각 폰트 레벨별 크기와 굵기를 개별 설정합니다",
+      "typographyLevel": "레벨",
+      "typographySize": "크기 (px)",
+      "typographyWeight": "굵기",
+      "resetFontTokens": "기본값 초기화",
+      "fontLevel": {
+        "xs": "XS",
+        "sm": "SM",
+        "base": "Base ★",
+        "lg": "LG",
+        "xl": "XL"
+      },
+      "fontSize": "폰트 크기",
+      "colorScheme": "색상 조합",
+      "themeMode": "테마",
+      "preview": "미리보기",
+      "previewUser": "안녕하세요! 이것은 사용자 메시지입니다.",
+      "previewAssistant": "반갑습니다! AI 응답 미리보기입니다.",
+      "colorDefault": "기본",
+      "colorOcean": "오션",
+      "colorForest": "포레스트",
+      "colorSunset": "선셋",
+      "colorLavender": "라벤더"
+    },
+    "agentType": {
+      "title": "에이전트 유형",
+      "orchestrator": "오케스트레이터",
+      "orchestratorDesc": "최상위 조율자 — 사용자 요청을 적절한 매니저에게 라우팅하고 최종 응답을 조합합니다.",
+      "manager": "매니저",
+      "managerDesc": "중간 관리자 — 작업을 분해하여 워커 또는 하위 매니저에게 위임합니다. 재귀적 관리 계층 구성 가능.",
+      "worker": "워커",
+      "workerDesc": "최종 업무 담당자 — 나눌 수 없는 원자적 작업을 처리합니다. 최대 3개 동시 수행.",
+      "profiler": "프로파일러",
+      "profilerDesc": "채팅 후 분석 에이전트 — LangChain 저장 콜백을 후킹하여 사용자 취향, 심리 상태, 행동 패턴을 분석합니다.",
+      "supporter": "서포터",
+      "supporterDesc": "유틸리티 에이전트 — 웹 검색, RAG 검색, 문서 파싱, API 호출 등 도구 기반 작업을 수행합니다."
+    },
+    "agent": {
+      "title": "에이전트",
+      "name": "에이전트 이름",
+      "status": "상태",
+      "idle": "대기 중",
+      "running": "실행 중",
+      "paused": "일시 정지",
+      "error": "오류",
+      "terminated": "종료됨",
+      "parentAgent": "상위 에이전트",
+      "childAgents": "하위 에이전트",
+      "systemPrompt": "시스템 프롬프트",
+      "capabilities": "능력",
+      "maxTasks": "최대 동시 작업 수"
+    },
+    "dataGrid": {
+      "actionsMenu": "작업 메뉴",
+      "columnsActions": "컬럼 작업",
+      "labelSelectAll": "전체 선택",
+      "labelSelected": "선택됨"
+    },
+    "contextButton": {
+      "ariaLabel": "컨텍스트 메뉴"
+    },
+    "searchBar": {
+      "moreResults": "결과 더 보기",
+      "allTypes": "모든 유형",
+      "placeholder": "검색어를 입력하세요",
+      "clearSearch": "검색 초기화",
+      "searching": "검색 중...",
+      "filterByType": "유형별 필터",
+      "noResultsFor": "'{query}'에 대한 결과가 없습니다."
+    },
+    "rating": {
+      "unrated": "미평가",
+      "rateResponse": "불만족 점수 평가",
+      "tooltip": "AI 답변이 내 의도와 다르거나 부정확할 때 눌러주세요. 점수가 높을수록 답변에 대한 불만족도가 높습니다.",
+      "dissatisfactionDef": "불만족 점수: AI 응답이 사용자의 의도·기대와 얼마나 벗어났는지를 나타내는 역점수(0=만족, 100=완전 불만족). 긍정 별점이 아닙니다.",
+      "sadTooltip": "{sad}/{max} — 불만족 점수 {score}점"
+    }
+  }
+}

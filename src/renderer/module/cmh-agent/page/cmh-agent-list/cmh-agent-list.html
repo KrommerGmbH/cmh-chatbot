@@ -1,0 +1,133 @@
+<div class="cmh-agent-list">
+  <div class="cmh-agent-list__header">
+    <h2 class="cmh-agent-list__title">{{ $t('cmh-agent.list.pageTitle') }}</h2>
+    <div class="cmh-agent-list__actions">
+      <input
+        v-model="searchTerm"
+        type="text"
+        class="cmh-agent-list__search"
+        :placeholder="$t('cmh-agent.list.searchPlaceholder')"
+      />
+      <button type="button" class="cmh-agent-list__btn cmh-agent-list__btn--primary" @click="createAgent(orchestrator?.id ?? null)">
+        {{ $t('cmh-agent.list.addAgent') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div v-if="isLoading" class="cmh-agent-list__loading">
+    <p>{{ $t('cmh-global.actions.search') }}...</p>
+  </div>
+
+  <!-- Tree View -->
+  <div v-else class="cmh-agent-list__tree">
+    <template v-for="agent in agentTree" :key="agent.id">
+      <!-- Agent Node (recursive via component) -->
+      <div class="cmh-agent-list__node" :class="{ 'is--inactive': !agent.isActive }">
+        <div class="cmh-agent-list__node-row" @click="openDetail(agent.id)">
+          <!-- Expand/Collapse -->
+          <button
+            v-if="hasChildren(agent.id)"
+            type="button"
+            class="cmh-agent-list__expand-btn"
+            @click.stop="toggleExpand(agent.id)"
+          >
+            {{ isExpanded(agent.id) ? '▼' : '▶' }}
+          </button>
+          <span v-else class="cmh-agent-list__expand-spacer"></span>
+
+          <!-- Status dot -->
+          <span class="cmh-agent-list__status-dot" :style="{ background: getStatusColor(agent.status) }"></span>
+
+          <!-- Icon + Color -->
+          <span class="cmh-agent-list__icon" :style="{ color: agent.color || 'var(--color-text-primary)' }">
+            {{ agent.icon ? '●' : '○' }}
+          </span>
+
+          <!-- Name -->
+          <span class="cmh-agent-list__name">{{ agent.name }}</span>
+
+          <!-- Domain badge -->
+          <span v-if="agent.domain" class="cmh-agent-list__domain-badge" :style="{ background: agent.color || '#666' }">
+            {{ agent.domain }}
+          </span>
+
+          <!-- Actions -->
+          <div class="cmh-agent-list__node-actions" @click.stop>
+            <button type="button" class="cmh-agent-list__action-btn" @click="toggleActive(agent)" :title="agent.isActive ? $t('cmh-agent.list.deactivate') : $t('cmh-agent.list.activate')">
+              {{ agent.isActive ? '⏸' : '▶' }}
+            </button>
+            <button v-if="agent.isDeletable" type="button" class="cmh-agent-list__action-btn cmh-agent-list__action-btn--danger" @click="deleteAgent(agent)" :title="$t('cmh-global.actions.delete')">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Children (Level 1: Managers) -->
+        <div v-if="isExpanded(agent.id) && hasChildren(agent.id)" class="cmh-agent-list__children">
+          <div
+            v-for="child in getChildren(agent.id)"
+            :key="child.id"
+            class="cmh-agent-list__node"
+            :class="{ 'is--inactive': !child.isActive }"
+          >
+            <div class="cmh-agent-list__node-row" @click="openDetail(child.id)">
+              <button
+                v-if="hasChildren(child.id)"
+                type="button"
+                class="cmh-agent-list__expand-btn"
+                @click.stop="toggleExpand(child.id)"
+              >
+                {{ isExpanded(child.id) ? '▼' : '▶' }}
+              </button>
+              <span v-else class="cmh-agent-list__expand-spacer"></span>
+
+              <span class="cmh-agent-list__status-dot" :style="{ background: getStatusColor(child.status) }"></span>
+              <span class="cmh-agent-list__icon" :style="{ color: child.color || 'var(--color-text-primary)' }">●</span>
+              <span class="cmh-agent-list__name">{{ child.name }}</span>
+              <span v-if="child.domain" class="cmh-agent-list__domain-badge" :style="{ background: child.color || '#666' }">
+                {{ child.domain }}
+              </span>
+
+              <div class="cmh-agent-list__node-actions" @click.stop>
+                <button type="button" class="cmh-agent-list__action-btn" @click="toggleActive(child)">
+                  {{ child.isActive ? '⏸' : '▶' }}
+                </button>
+                <button type="button" class="cmh-agent-list__action-btn" @click="createAgent(child.id)" :title="$t('cmh-agent.list.addSubAgent')">
+                  +
+                </button>
+                <button v-if="child.isDeletable" type="button" class="cmh-agent-list__action-btn cmh-agent-list__action-btn--danger" @click="deleteAgent(child)">
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <!-- Children (Level 2: Sub-managers / Workers) -->
+            <div v-if="isExpanded(child.id) && hasChildren(child.id)" class="cmh-agent-list__children">
+              <div
+                v-for="grandchild in getChildren(child.id)"
+                :key="grandchild.id"
+                class="cmh-agent-list__node"
+                :class="{ 'is--inactive': !grandchild.isActive }"
+              >
+                <div class="cmh-agent-list__node-row" @click="openDetail(grandchild.id)">
+                  <span class="cmh-agent-list__expand-spacer"></span>
+                  <span class="cmh-agent-list__status-dot" :style="{ background: getStatusColor(grandchild.status) }"></span>
+                  <span class="cmh-agent-list__name">{{ grandchild.name }}</span>
+                  <div class="cmh-agent-list__node-actions" @click.stop>
+                    <button type="button" class="cmh-agent-list__action-btn" @click="toggleActive(grandchild)">
+                      {{ grandchild.isActive ? '⏸' : '▶' }}
+                    </button>
+                    <button v-if="grandchild.isDeletable" type="button" class="cmh-agent-list__action-btn cmh-agent-list__action-btn--danger" @click="deleteAgent(grandchild)">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>

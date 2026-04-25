@@ -1,0 +1,18 @@
+﻿<li
+  class="cmh-search-bar-item"
+  :class="{ 'is--active': isActive }"
+  role="option"
+  @click="$emit('select', item)"
+  @mouseenter="$emit('mouseenter')"
+>
+  <mt-icon
+    v-if="item.icon"
+    :name="item.icon"
+    class="cmh-search-bar-item__icon"
+  />
+
+  <div class="cmh-search-bar-item__info">
+    <span class="cmh-search-bar-item__name">{{ item.name }}</span>
+    <span v-if="item.description" class="cmh-search-bar-item__description">{{ item.description }}</span>
+  </div>
+</li>

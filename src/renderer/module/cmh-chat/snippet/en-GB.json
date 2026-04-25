@@ -1,0 +1,23 @@
+{
+  "cmh-chat": {
+    "navigation": {
+      "label": "Chat"
+    },
+    "module": {
+      "title": "Chat"
+    },
+    "list": {
+      "pageTitle": "Conversations",
+      "columnTitle": "Title",
+      "columnModel": "Model",
+      "columnUpdatedAt": "Last modified",
+      "emptyState": "No conversations yet. Start a new chat."
+    },
+    "detail": {
+      "pageTitle": "Conversation detail",
+      "messageCount": "Messages",
+      "createdAt": "Created at",
+      "modelUsed": "Model used"
+    }
+  }
+}

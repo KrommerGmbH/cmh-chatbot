@@ -1,0 +1,38 @@
+<div class="cmh-agent-detail">
+  <!-- Loading -->
+  <div v-if="isLoading" class="cmh-agent-detail__loading">
+    <p>{{ $t('cmh-global.actions.search') }}...</p>
+  </div>
+
+  <!-- Not found -->
+  <div v-else-if="!agent" class="cmh-agent-detail__empty">
+    <p>{{ $t('cmh-agent.detail.notFound') }}</p>
+    <button type="button" class="cmh-agent-detail__btn" @click="onCancel">
+      {{ $t('cmh-agent.detail.backToList') }}
+    </button>
+  </div>
+
+  <!-- Agent Core -->
+  <template v-else>
+    <div class="cmh-agent-detail__header">
+      <button type="button" class="cmh-agent-detail__back-btn" @click="onCancel">← {{ $t('cmh-agent.detail.backToList') }}</button>
+      <h2 class="cmh-agent-detail__title">{{ agent.name }}</h2>
+    </div>
+
+    <div class="cmh-agent-detail__body">
+      <cmh-agent-core
+        :agent="agent"
+        @update="onAgentUpdate"
+      />
+    </div>
+
+    <div class="cmh-agent-detail__footer">
+      <button type="button" class="cmh-agent-detail__btn cmh-agent-detail__btn--secondary" @click="onCancel">
+        {{ $t('cmh-global.actions.cancel') }}
+      </button>
+      <button type="button" class="cmh-agent-detail__btn cmh-agent-detail__btn--primary" :disabled="isSaving" @click="onSave">
+        {{ isSaving ? '...' : $t('cmh-global.actions.save') }}
+      </button>
+    </div>
+  </template>
+</div>

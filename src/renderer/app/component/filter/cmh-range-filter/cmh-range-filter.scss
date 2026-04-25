@@ -1,0 +1,17 @@
+﻿
+.sw-range-filter {
+    .sw-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+
+        &--has-divider {
+            grid-template-columns: 1fr 12px 1fr;
+            gap: 4px;
+        }
+    }
+
+    &__divider {
+        border-bottom: 1px solid var(--color-border-primary-default);
+        transform: translateY(calc(-43px / 2));
+    }
+}

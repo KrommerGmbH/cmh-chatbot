@@ -1,0 +1,37 @@
+<div class="cmh-system-message" :class="'is--' + variant">
+    <div class="cmh-system-message__body">
+        <!-- 아이콘 -->
+        <iconify-icon
+            :icon="iconName"
+            class="cmh-system-message__icon"
+            :class="{ 'is--spin': isLoading }"
+        />
+
+        <!-- 텍스트 -->
+        <span class="cmh-system-message__text">
+            <slot>{{ text }}</slot>
+        </span>
+
+        <!-- 진행률 -->
+        <span v-if="progressText" class="cmh-system-message__progress">
+            {{ progressText }}
+        </span>
+
+        <!-- 닫기 버튼 -->
+        <button
+            v-if="closable"
+            class="cmh-system-message__close"
+            @click="onClose"
+        >
+            <iconify-icon icon="ph:x" class="cmh-system-message__close-icon" />
+        </button>
+    </div>
+
+    <!-- 진행률 바 -->
+    <div v-if="isLoading && progress > 0" class="cmh-system-message__progress-bar">
+        <div
+            class="cmh-system-message__progress-fill"
+            :style="{ width: progress + '%' }"
+        ></div>
+    </div>
+</div>

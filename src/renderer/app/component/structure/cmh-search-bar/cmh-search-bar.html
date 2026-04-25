@@ -1,0 +1,175 @@
+﻿<!--
+  cmh-search-bar — 전역 검색바
+
+  Shopware sw-search-bar 대응.
+  EntityDefinition의 searchFields를 읽어 등록된 entity 타입 검색 지원.
+-->
+<div
+  class="cmh-search-bar"
+  :class="searchBarClasses"
+>
+  <div class="cmh-search-bar__container">
+    <div v-if="!isSearchBarShown" class="cmh-search-bar__mobile-controls">
+      <button
+        type="button"
+        class="cmh-search-bar__button"
+        :aria-label="$t('cmh-global.menu.toggleMenu')"
+        @click="toggleOffCanvas"
+      >
+        <mt-icon name="regular-bars-s" />
+      </button>
+
+      <span class="cmh-search-bar__mobile-version">{{ $t('cmh-global.menu.version') }}</span>
+
+      <button
+        type="button"
+        class="cmh-search-bar__button"
+        :aria-label="$t('cmh-global.actions.search')"
+        @click="showSearchBar"
+      >
+        <mt-icon name="regular-search" />
+      </button>
+    </div>
+
+    <div v-if="isSearchBarShown" class="cmh-search-bar__field" :class="searchBarFieldClasses">
+      <div class="cmh-search-bar__type-selector">
+        <button type="button" class="cmh-search-bar__type-button" @click="showTypePicker = !showTypePicker">
+          <span v-if="selectedTypeIcon" class="cmh-search-bar__type-button-icon" :style="{ color: currentTypeColor }">
+            <mt-icon :name="selectedTypeIcon" size="14" />
+          </span>
+          <span>{{ selectedTypeLabel }}</span>
+          <mt-icon name="regular-chevron-down-xxs" size="12" />
+        </button>
+        <div v-if="showTypePicker" class="cmh-search-bar__type-options">
+          <button type="button" class="cmh-search-bar__type-item" @click="selectAllTypes">
+            <span class="cmh-search-bar__type-item-label">{{ $t('cmh-global.searchBar.allTypes') }}</span>
+          </button>
+          <template v-for="def in availableSearchTypes" :key="def.name">
+            <button
+              type="button"
+              class="cmh-search-bar__type-item"
+              :class="{ 'is--active': isTypeSelected(def.name) }"
+              @click="toggleType(def.name)"
+            >
+              <span
+                class="cmh-search-bar__type-icon"
+                v-if="def.icon"
+                :style="{ color: def.color || '#6ad6f0' }"
+              >
+                <mt-icon :name="def.icon" size="14" />
+              </span>
+              <span class="cmh-search-bar__type-item-label">{{ def.label }}</span>
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <input
+        ref="searchInput"
+        v-model="searchTerm"
+        type="text"
+        class="cmh-search-bar__input"
+        :placeholder="resolvedPlaceholder"
+        :aria-label="resolvedPlaceholder"
+        role="searchbox"
+        autocomplete="off"
+        @focus="onFocus"
+        @blur="onBlur"
+        @keydown.esc="onEscape"
+        @keydown.enter="onEnter"
+        @keydown.arrow-down.prevent="onArrowDown"
+        @keydown.arrow-up.prevent="onArrowUp"
+        @input="onInput"
+      />
+
+      <button
+        v-if="searchTerm"
+        type="button"
+        class="cmh-search-bar__clear-btn cmh-search-bar__field-icon cmh-search-bar__field-close"
+        @click="hideSearchBar"
+        :aria-label="$t('cmh-global.searchBar.clearSearch')"
+      >
+        <mt-icon name="regular-times-s" size="16px" />
+      </button>
+
+      <span
+        v-if="!searchTerm"
+        class="cmh-search-bar__search-icon cmh-search-bar__field-icon cmh-search-bar__field-search-icon"
+      >
+        <mt-icon
+          name="regular-search-s"
+          size="16px"
+        />
+      </span>
+    </div>
+  </div>
+
+  <!-- 검색 결과 드롭다운 -->
+  <div
+    v-if="showResultsContainer"
+    class="cmh-search-bar__results"
+  >
+    <div class="cmh-search-bar__results-wrapper-content">
+    <!-- 로딩 상태 -->
+    <div
+      v-if="isLoading"
+      class="cmh-search-bar__loading"
+    >
+      <mt-loader size="small" />
+      <span>{{ $t('cmh-global.searchBar.searching') }}</span>
+    </div>
+
+    <!-- Entity 타입별 그룹 -->
+    <template v-else>
+      <div
+        v-for="group in groupedResults"
+        :key="group.type"
+        class="cmh-search-bar__result-group"
+      >
+        <!-- 그룹 헤더 -->
+        <div class="cmh-search-bar__result-group-header">
+          <mt-icon
+            v-if="group.icon"
+            :name="group.icon"
+          />
+          <span>{{ group.label }}</span>
+          <button
+            type="button"
+            class="cmh-search-bar__type-filter-btn"
+            @click="setSearchType(group.type)"
+          >{{ $t('cmh-global.searchBar.filterByType') }}</button>
+        </div>
+
+        <!-- 결과 아이템 -->
+        <ul class="cmh-search-bar__result-list">
+          <cmh-search-bar-item
+            v-for="(item, idx) in group.items"
+            :key="item.id"
+            :item="item"
+            :is-active="isActiveItem(group.type, idx)"
+            @select="onSelectResult"
+            @mouseenter="setActiveItem(group.type, idx)"
+          />
+
+          <li class="cmh-search-bar__result-item cmh-search-bar__result-item--more">
+            <cmh-search-more-results
+              :entity="group.type"
+              :term="searchTerm"
+              @open="onOpenMoreResults"
+            />
+          </li>
+        </ul>
+      </div>
+    </template>
+
+    <!-- 결과 없음 -->
+    <div
+      v-if="!isLoading && results.length === 0 && searchTerm"
+      class="cmh-search-bar__no-results"
+    >
+      <mt-icon name="regular-search" />
+      <span>{{ $t('cmh-global.searchBar.noResultsFor', { term: searchTerm }) }}</span>
+    </div>
+    </div>
+  </div>
+</div>

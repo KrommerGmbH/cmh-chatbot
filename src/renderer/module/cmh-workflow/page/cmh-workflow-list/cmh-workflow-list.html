@@ -1,0 +1,44 @@
+<cmh-page>
+  <template #content>
+    <div class="cmh-workflow-list">
+      <div class="cmh-workflow-list__header">
+        <h1 class="cmh-workflow-list__title">{{ $t('cmh-workflow.list.pageTitle') }}</h1>
+        <button class="cmh-workflow-list__add-btn" @click="onAdd">
+          + {{ $t('cmh-workflow.list.addWorkflow') }}
+        </button>
+      </div>
+
+      <div v-if="isLoading" class="cmh-workflow-list__loading">
+        {{ $t('cmh-global.labels.loading') }}
+      </div>
+
+      <div v-else-if="workflows.length === 0" class="cmh-workflow-list__empty">
+        <p>{{ $t('cmh-workflow.list.empty') }}</p>
+        <p class="cmh-workflow-list__empty-hint">{{ $t('cmh-workflow.list.emptyHint') }}</p>
+      </div>
+
+      <div v-else class="cmh-workflow-list__grid">
+        <div
+          v-for="wf in workflows"
+          :key="wf.id"
+          class="cmh-workflow-list__card"
+          @click="openDetail(wf.id)"
+        >
+          <div class="cmh-workflow-list__card-header">
+            <span class="cmh-workflow-list__card-name">{{ wf.name }}</span>
+            <span
+              class="cmh-workflow-list__badge"
+              :class="wf.isActive ? 'is--active' : 'is--inactive'"
+            >
+              {{ wf.isActive ? $t('cmh-global.labels.active') : $t('cmh-global.labels.inactive') }}
+            </span>
+          </div>
+          <p v-if="wf.description" class="cmh-workflow-list__card-desc">{{ wf.description }}</p>
+          <div class="cmh-workflow-list__card-meta">
+            <span>{{ $t('cmh-workflow.list.agents') }}: {{ wf.agentCount || 0 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</cmh-page>

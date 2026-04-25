@@ -1,0 +1,281 @@
+﻿// truncate mixin (inline — ~scss/mixins 제거됨)
+@mixin truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cmh-data-grid {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background-color: var(--color-elevation-surface-default);
+
+    &.cmh-data-grid--full-page {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .cmh-data-grid__wrapper {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+        overflow-y: auto;
+        min-height: 0;
+    }
+
+    .cmh-data-grid__table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .cmh-data-grid__cell {
+        padding: 0;
+        margin: 0;
+        font-size: var(--font-size-xs);
+        color: var(--color-text-primary-default);
+        border-right: 1px solid var(--color-border-primary-default);
+        overflow: hidden;
+        background-color: var(--color-elevation-surface-default);
+
+        &:last-child { border-right: 0; }
+    }
+
+    &.cmh-data-grid--actions .cmh-data-grid__cell {
+        border-right: 1px solid var(--color-border-primary-default);
+
+        &:last-child,
+        &:nth-last-child(2) { border-right: 0; }
+    }
+
+    .cmh-data-grid__cell-content {
+        @include truncate;
+        min-width: 0;
+        padding: var(--scale-size-20);
+        height: var(--scale-size-64);
+        font-size: var(--font-size-xs);
+        line-height: var(--font-size-xs);
+        display: flex;
+        align-items: center;
+    }
+
+    .cmh-data-grid__cell-value { @include truncate; }
+
+    &.is--compact .cmh-data-grid__cell-content {
+        padding: var(--scale-size-8) var(--scale-size-20);
+        height: var(--scale-size-48);
+    }
+
+    // 헤더
+    .cmh-data-grid__cell--header {
+        background-color: var(--color-elevation-surface-raised);
+        font-weight: var(--font-weight-semibold);
+        border-bottom: 1px solid var(--color-border-primary-default);
+        position: relative;
+        user-select: none;
+
+        .cmh-data-grid__cell-content {
+            height: var(--scale-size-48);
+            cursor: pointer;
+            gap: var(--scale-size-4);
+        }
+
+        &.cmh-data-grid__cell--sortable .cmh-data-grid__cell-content {
+            cursor: pointer;
+            &:hover { color: var(--color-text-brand-default); }
+        }
+    }
+
+    .cmh-data-grid__cell--selection .cmh-data-grid__cell-content {
+        justify-content: center;
+        cursor: default;
+        width: 52px;
+
+        // Meteor mt-checkbox 내부 패딩 제거 (기본값 20px → 0)
+        .mt-field--checkbox__container {
+            padding-top: 0;
+        }
+    }
+
+    .cmh-data-grid__cell--selection {
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background-color: var(--color-elevation-surface-default);
+    }
+
+    .cmh-data-grid__cell--actions .cmh-data-grid__cell-content {
+        justify-content: flex-end;
+        gap: var(--scale-size-4);
+    }
+
+    .cmh-data-grid__cell--align-center .cmh-data-grid__cell-content { justify-content: center; }
+    .cmh-data-grid__cell--align-right .cmh-data-grid__cell-content { justify-content: flex-end; }
+    .cmh-data-grid__cell--multi-line .cmh-data-grid__cell-content {
+        white-space: normal;
+        overflow: visible;
+        height: auto;
+        min-height: var(--scale-size-64);
+    }
+
+    .cmh-data-grid__cell--header {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        overflow: visible;
+        background-clip: padding-box;
+        box-shadow: inset 0 -1px 0 var(--color-border-primary-default);
+        background-color: var(--color-elevation-surface-default);
+
+        .cmh-data-grid__cell-content {
+            position: relative;
+            overflow: hidden;
+        }
+    }
+
+    .cmh-data-grid__cell--header.cmh-data-grid__cell--selection {
+        z-index: 7;
+    }
+
+    // 리사이즈 핸들
+    .cmh-data-grid__cell-resize {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        height: 100%;
+        cursor: ew-resize;
+        background-color: var(--color-border-primary-default);
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+
+        &:hover,
+        &.is--column-resizing { background-color: var(--color-border-brand-default); }
+    }
+
+    .cmh-data-grid__header:hover {
+        .cmh-data-grid__cell-resize {
+            opacity: 1;
+            width: 4px;
+        }
+    }
+
+    .cmh-data-grid__cell-spacer {
+        width: 0;
+        min-width: 0;
+        max-width: 0;
+        padding: 0;
+        border: 0;
+
+        .cmh-data-grid__cell-content {
+            width: 0;
+            min-width: 0;
+            padding: 0;
+        }
+    }
+
+    // 행
+    .cmh-data-grid__row {
+        border-bottom: 1px solid var(--color-border-primary-default);
+
+        &:last-child { border-bottom: 0; }
+        &:hover .cmh-data-grid__cell { background-color: var(--color-elevation-surface-overlay); }
+        &.is--selected .cmh-data-grid__cell { background-color: color-mix(in srgb, var(--color-background-brand-default) 10%, transparent); }
+        &.is--inline-edit .cmh-data-grid__cell { background-color: var(--color-elevation-surface-overlay); }
+        &.is--disabled .cmh-data-grid__cell { opacity: 0.5; pointer-events: none; }
+    }
+
+    // bulk 선택 바
+    .cmh-data-grid__bulk {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-16);
+        padding: var(--scale-size-8) var(--scale-size-20);
+        background-color: var(--color-background-brand-default);
+        color: var(--color-text-inverted-default);
+        font-size: var(--font-size-xs);
+        flex-shrink: 0;
+
+        .bulk-link {
+            display: flex;
+            align-items: center;
+            gap: var(--scale-size-20);
+            margin-left: auto;
+        }
+
+        .link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--scale-size-4, 4px);
+            color: var(--color-text-inverted-default);
+            text-decoration: none;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: var(--border-radius-xs, 4px);
+            font-weight: 500;
+            font-size: var(--font-size-xs);
+            line-height: 1;
+            white-space: nowrap;
+            transition: background-color 0.15s ease, color 0.15s ease;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+            }
+        }
+        
+        .link-danger {
+            color: var(--color-feedback-danger-default);
+        }
+
+        .link-primary {
+            color: var(--color-text-brand-inverted-default);
+        }
+
+        .link-warning {
+            color: var(--color-text-on-color-default);
+        }
+    }
+
+    // 정렬 애니메이션
+    .sort-indicator-enter-active,
+    .sort-indicator-leave-active { transition: opacity 0.2s; }
+    .sort-indicator-enter-from,
+    .sort-indicator-leave-to { opacity: 0; }
+
+    // 스켈레톤
+    .cmh-data-grid__skeleton-box {
+        height: var(--scale-size-16);
+        width: 70%;
+        border-radius: var(--border-radius-xs);
+        background: linear-gradient(
+            90deg,
+            var(--color-border-primary-default) 25%,
+            var(--color-elevation-surface-raised) 50%,
+            var(--color-border-primary-default) 75%
+        );
+        background-size: 200% 100%;
+        animation: cmh-skeleton-shimmer 1.4s infinite;
+
+        &--small { width: 24px; }
+    }
+
+    @keyframes cmh-skeleton-shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    // 페이지네이션
+    .cmh-data-grid__pagination {
+        position: relative;
+        z-index: 3;
+        min-height: 0;
+        padding: var(--scale-size-12) var(--scale-size-20);
+        border-top: 1px solid var(--color-border-primary-default);
+        background-color: var(--color-elevation-surface-default);
+    }
+}

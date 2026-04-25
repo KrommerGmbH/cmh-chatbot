@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # ── Redis ────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  # ── cmh-chatbot Server (Hub mode) ──────────────────
+  chatbot:
+    build: .
+    ports:
+      - '4000:4000'
+      - '8080:8080'
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./models:/models:ro
+    command:
+      - --port
+      - '4000'
+      - --binary
+      - /usr/local/bin/llama-server
+      - --model
+      - /models/model.gguf
+      - --redis-host
+      - redis
+      - --redis-port
+      - '6379'
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis-data:

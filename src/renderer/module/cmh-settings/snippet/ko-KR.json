@@ -1,0 +1,59 @@
+{
+  "cmh-settings": {
+    "navigation": {
+      "general": "일반 설정"
+    },
+    "module": {
+      "title": "설정"
+    },
+    "list": {
+      "pageTitle": "설정",
+      "description": "챗봇 기능 및 모델 설정을 관리합니다.",
+      "tts": {
+        "title": "음성 합성 (TTS)",
+        "description": "텍스트를 음성으로 변환하는 모델 선택 및 설정"
+      },
+      "stt": {
+        "title": "음성 인식 (STT)",
+        "description": "음성을 텍스트로 변환하는 모델 선택 및 설정"
+      },
+      "general": {
+        "title": "일반 설정",
+        "description": "언어, 테마 등 일반 환경설정"
+      }
+    },
+    "detail": {
+      "pageTitle": "설정 상세",
+      "backToSettings": "설정으로 돌아가기",
+      "default": "기본",
+      "localModel": "로컬 모델",
+      "cloudModel": "클라우드",
+      "tts": {
+        "title": "음성 합성 (TTS) 설정",
+        "description": "AI 응답을 음성으로 읽어주는 모델과 옵션을 설정합니다.",
+        "modelLabel": "TTS 모델 선택",
+        "rateLabel": "읽기 속도",
+        "autoReadLabel": "자동 읽기"
+      },
+      "stt": {
+        "title": "음성 인식 (STT) 설정",
+        "description": "마이크로 음성 입력을 텍스트로 변환하는 모델을 설정합니다.",
+        "modelLabel": "STT 모델 선택",
+        "statusLabel": "모델 상태",
+        "status": {
+          "idle": "대기 중",
+          "loadingModel": "모델 로딩 중...",
+          "ready": "준비 완료",
+          "recording": "녹음 중...",
+          "transcribing": "변환 중...",
+          "error": "오류 발생"
+        }
+      },
+      "general": {
+        "title": "일반 설정",
+        "description": "챗봇의 일반 환경설정을 관리합니다.",
+        "comingSoon": "추가 설정이 곧 제공됩니다."
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+﻿.cmh-in-app-purchase-checkout {
+  &__body {
+    display: grid;
+    gap: 12px;
+  }
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  p {
+    color: var(--color-text-secondary-default, #696a6e);
+  }
+}

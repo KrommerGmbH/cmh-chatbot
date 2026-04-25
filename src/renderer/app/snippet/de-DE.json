@@ -1,0 +1,196 @@
+{
+  "cmh-global": {
+    "default": {
+      "warning": "Warnung",
+      "error": "Fehler",
+      "info": "Information",
+      "success": "Erfolg"
+    },
+    "actions": {
+      "close": "Schließen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "search": "Suchen",
+      "refresh": "Aktualisieren",
+      "delete": "Löschen",
+      "edit": "Bearbeiten",
+      "add": "Hinzufügen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "previous": "Zurück",
+      "confirm": "Bestätigen",
+      "apply": "Anwenden",
+      "reset": "Zurücksetzen",
+      "send": "Senden",
+      "stop": "Stoppen",
+      "copy": "Kopieren",
+      "resend": "Erneut senden",
+      "forkHere": "Von hier abzweigen"
+    },
+    "labels": {
+      "loading": "Laden…",
+      "noResults": "Keine Ergebnisse gefunden.",
+      "total": "Gesamt",
+      "date": "Datum",
+      "name": "Name",
+      "description": "Beschreibung",
+      "status": "Status",
+      "type": "Typ",
+      "yes": "Ja",
+      "no": "Nein",
+      "newChat": "Neuer Chat",
+      "emptyChat": "Geben Sie eine Nachricht ein, um eine Unterhaltung zu starten.",
+      "thinking": "Denkt nach",
+      "toolCalls": "Werkzeugaufrufe",
+      "artifact": "Artefakt",
+      "openInPanel": "Im Panel öffnen",
+      "attachFile": "Datei anhängen",
+      "chatPlaceholder": "Nachricht eingeben... (Shift+Enter: neue Zeile)",
+      "searchModels": "Modelle suchen...",
+      "stt": "Sprache zu Text",
+      "tts": "Text zu Sprache",
+      "showMore": "Mehr anzeigen",
+      "selectAgent": "Agent auswählen",
+      "todos": "Aufgaben",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "languageSwitch": {
+      "label": "Sprache",
+      "locales": {
+        "ko-KR": "한국어",
+        "en-GB": "English",
+        "de-DE": "Deutsch",
+        "zh-CN": "中文",
+        "ja-JP": "日本語"
+      }
+    },
+    "theme": {
+      "switchToLight": "Zum hellen Modus wechseln",
+      "switchToDark": "Zum dunklen Modus wechseln",
+      "dark": "Dunkel",
+      "light": "Hell"
+    },
+    "menu": {
+      "toggleMenu": "Menü umschalten",
+      "collapseMenu": "Menü einklappen",
+      "expandMenu": "Menü ausklappen",
+      "mainNavigation": "Hauptnavigation",
+      "switchToChat": "Zum Chat wechseln",
+      "switchToAdmin": "Zur Verwaltung wechseln",
+      "chatMode": "CMH Chatbot",
+      "adminMode": "Verwaltungsmodus"
+    },
+    "navigation": {
+      "chat": "Chat",
+      "workflow": "Workflow",
+      "provider": "Anbieter",
+      "model": "Modelle",
+      "settings": "Einstellungen",
+      "aiManagement": "KI-Verwaltung"
+    },
+    "chat": {
+      "newChat": "Neuer Chat",
+      "connectionFailed": "LLM-Serververbindung fehlgeschlagen — Mock-Antwortmodus. Bitte prüfen Sie, ob llama-server läuft.",
+      "generationStopped": "Antwortgenerierung wurde gestoppt.",
+      "sttModelLoading": "Spracherkennungsmodell wird heruntergeladen... Beim ersten Start kann es etwas dauern.",
+      "sttTranscribing": "Sprache wird in Text umgewandelt...",
+      "serverError": "Interner Serverfehler",
+      "modelNotFound": "Modell nicht gefunden",
+      "rateLimited": "Zu viele Anfragen",
+      "networkError": "Netzwerkfehler",
+      "visionNotSupported": "Bildverarbeitung nicht unterstützt",
+      "visionNotSupportedMessage": "Das Modell {model} unterstützt keine Bildverarbeitung. Nur Text wird gesendet.",
+      "imageAttached": "Angehängte Bilder: {files} (nicht verarbeitet — aktuelles Modell unterstützt keine Bilderkennung)",
+      "statusConnecting": "Verbindung wird hergestellt...",
+      "statusGenerating": "Wird generiert...",
+      "timeoutError": "Antwort-Timeout",
+      "timeoutMessage": "Das Modell hat innerhalb von 90 Sekunden nicht geantwortet. Bitte versuchen Sie es erneut.",
+      "noModelSelected": "Kein Modell ausgewählt",
+      "noModelSelectedMessage": "Bitte wählen Sie zuerst ein Modell aus.",
+      "noApiKey": "API-Schlüssel ist nicht konfiguriert",
+      "apiKeyRequiredShort": "API-Schlüssel erforderlich",
+      "forkedConversation": "Konversation wurde abgezweigt."
+    },
+    "settings": {
+      "appearance": "Darstellung",
+      "typography": "Typografie",
+      "typographyDescription": "Schriftgröße und -stärke für jede Ebene individuell einstellen",
+      "typographyLevel": "Ebene",
+      "typographySize": "Größe (px)",
+      "typographyWeight": "Stärke",
+      "resetFontTokens": "Standardwerte",
+      "fontLevel": {
+        "xs": "XS",
+        "sm": "SM",
+        "base": "Base ★",
+        "lg": "LG",
+        "xl": "XL"
+      },
+      "fontSize": "Schriftgröße",
+      "colorScheme": "Farbschema",
+      "themeMode": "Thema",
+      "preview": "Vorschau",
+      "previewUser": "Hallo! Das ist eine Benutzernachricht.",
+      "previewAssistant": "Hallo! Das ist eine KI-Antwortvorschau.",
+      "colorDefault": "Standard",
+      "colorOcean": "Ozean",
+      "colorForest": "Wald",
+      "colorSunset": "Sonnenuntergang",
+      "colorLavender": "Lavendel"
+    },
+    "agentType": {
+      "title": "Agententyp",
+      "orchestrator": "Orchestrator",
+      "orchestratorDesc": "Koordinator der obersten Ebene — leitet Benutzeranfragen an die entsprechenden Manager-Agenten weiter und stellt die endgültige Antwort zusammen.",
+      "manager": "Manager",
+      "managerDesc": "Koordinator der mittleren Ebene — zerlegt Aufgaben und delegiert an Worker- oder Sub-Manager-Agenten. Unterstützt rekursive Hierarchie.",
+      "worker": "Worker",
+      "workerDesc": "Endausführender — bearbeitet atomare, unteilbare Aufgaben. Kann bis zu 3 gleichzeitige Aufgaben verarbeiten.",
+      "profiler": "Profiler",
+      "profilerDesc": "Post-Chat-Analyseagent — nutzt LangChain-Speicher-Callbacks zur Analyse von Benutzerpräferenzen, Psychologie und Verhaltensmustern.",
+      "supporter": "Supporter",
+      "supporterDesc": "Hilfsagent — Websuche, RAG-Retrieval, Dokumentenanalyse, API-Aufrufe und andere werkzeugbasierte Operationen."
+    },
+    "agent": {
+      "title": "Agent",
+      "name": "Agentenname",
+      "status": "Status",
+      "idle": "Bereit",
+      "running": "Läuft",
+      "paused": "Pausiert",
+      "error": "Fehler",
+      "terminated": "Beendet",
+      "parentAgent": "Übergeordneter Agent",
+      "childAgents": "Untergeordnete Agenten",
+      "systemPrompt": "System-Prompt",
+      "capabilities": "Fähigkeiten",
+      "maxTasks": "Max. gleichzeitige Aufgaben"
+    },
+    "dataGrid": {
+      "actionsMenu": "Aktionsmenü",
+      "columnsActions": "Spaltenaktionen",
+      "labelSelectAll": "Alle auswählen",
+      "labelSelected": "Ausgewählt"
+    },
+    "contextButton": {
+      "ariaLabel": "Kontextmenü"
+    },
+    "searchBar": {
+      "moreResults": "Mehr Ergebnisse",
+      "allTypes": "Alle Typen",
+      "placeholder": "Suche",
+      "clearSearch": "Suche zurücksetzen",
+      "searching": "Suche läuft...",
+      "filterByType": "Nach Typ filtern",
+      "noResultsFor": "Keine Ergebnisse für '{query}'."
+    },
+    "rating": {
+      "unrated": "Nicht bewertet",
+      "rateResponse": "Unzufriedenheit bewerten",
+      "tooltip": "Klicken Sie, wenn die KI-Antwort nicht Ihrer Absicht entspricht oder ungenau ist. Höhere Punktzahl = unzufriedener.",
+      "dissatisfactionDef": "Unzufriedenheitswert: Eine umgekehrte Bewertung, die anzeigt, wie weit die KI-Antwort von der Benutzerabsicht abweicht (0=zufrieden, 100=völlig unzufrieden). Dies ist KEINE positive Sternebewertung.",
+      "sadTooltip": "{sad}/{max} — Unzufriedenheit: {score} Punkte"
+    }
+  }
+}

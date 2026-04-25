@@ -1,0 +1,58 @@
+{
+  "cmh-agent": {
+    "general": {
+      "pageTitle": "エージェント"
+    },
+    "navigation": {
+      "label": "エージェント"
+    },
+    "list": {
+      "pageTitle": "エージェント管理",
+      "searchPlaceholder": "エージェント検索...",
+      "addAgent": "エージェント追加",
+      "addSubAgent": "サブエージェント追加",
+      "newAgent": "新規エージェント",
+      "activate": "有効化",
+      "deactivate": "無効化"
+    },
+    "detail": {
+      "notFound": "エージェントが見つかりません。",
+      "backToList": "一覧に戻る"
+    },
+    "core": {
+      "basicInfo": "基本情報",
+      "prompts": "プロンプト",
+      "langchainFlow": "LangChain フロー",
+      "agentType": "エージェントタイプ",
+      "agentName": "エージェント名",
+      "typeOrchestrator": "オーケストレーター",
+      "typeManager": "マネージャー",
+      "typeWorker": "ワーカー",
+      "typeProfiler": "プロファイラー",
+      "typeSupporter": "サポーター",
+      "rolePrompt": "ロールプロンプト",
+      "rolePromptPlaceholder": "このエージェントの役割を定義してください...",
+      "missionPrompt": "ミッションプロンプト",
+      "missionPromptPlaceholder": "このエージェントのミッション/目標を定義してください...",
+      "userPrompt": "ユーザープロンプト",
+      "userPromptPlaceholder": "ユーザーに表示するデフォルトプロンプト...",
+      "mainModel": "メインモデル",
+      "subModel": "サブモデル",
+      "selectModel": "モデル選択...",
+      "langchainConfig": "LangChain設定",
+      "langchainBlocks": "LangChainブロック",
+      "dragBlocksHere": "パレットからキャンバスにブロックをドラッグしてください",
+      "flowHint": "ブロックをキャンバスにドラッグし、ハンドルで接続します。ノードをダブルクリックで削除。",
+      "block": {
+        "messages": "メッセージ",
+        "tools": "ツール",
+        "outputParsers": "出力パーサー",
+        "embeddings": "エンベディング",
+        "callbacks": "コールバック",
+        "tracing": "トレーシング"
+      },
+      "temperature": "温度",
+      "maxTokens": "最大トークン数"
+    }
+  }
+}

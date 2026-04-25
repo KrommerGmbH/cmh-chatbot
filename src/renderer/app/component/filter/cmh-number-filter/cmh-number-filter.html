@@ -1,0 +1,31 @@
+﻿<sw-range-filter
+    class="sw-number-filter"
+    :title="filter.label"
+    :filter="filter"
+    :active="active"
+    :value="numberValue"
+    :property="filter.property"
+    :show-reset-button="!!numberValue.from || !!numberValue.to"
+    @filter-update="updateFilter"
+    @filter-reset="resetFilter"
+>
+    <template #from-field>
+        <mt-number-field
+            v-model="numberValue.from"
+            v-bind="$attrs"
+            class="sw-number-filter__from"
+            :label="fromToFieldLabel('from')"
+            :placeholder="filter.fromPlaceholder"
+        />
+    </template>
+
+    <template #to-field>
+        <mt-number-field
+            v-model="numberValue.to"
+            v-bind="$attrs"
+            class="sw-number-filter__to"
+            :label="fromToFieldLabel('to')"
+            :placeholder="filter.toPlaceholder"
+        />
+    </template>
+</sw-range-filter>

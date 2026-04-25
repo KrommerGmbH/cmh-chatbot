@@ -1,0 +1,59 @@
+{
+  "cmh-workflow": {
+    "navigation": {
+      "label": "ワークフロー"
+    },
+    "module": {
+      "title": "ワークフロー"
+    },
+    "list": {
+      "pageTitle": "ワークフロー一覧",
+      "addWorkflow": "ワークフロー追加",
+      "empty": "登録されたワークフローがありません。",
+      "emptyHint": "ワークフローを追加してエージェントパイプラインを構築してください。",
+      "agents": "エージェント"
+    },
+    "detail": {
+      "pageTitle": "ワークフロー詳細",
+      "newWorkflow": "新規ワークフロー",
+      "palette": {
+        "title": "ブロックパレット",
+        "agents": "エージェント",
+        "langchain": "LangChain",
+        "mcp": "MCP",
+        "control": "制御",
+        "transform": "変換"
+      },
+      "settings": {
+        "title": "ノード設定",
+        "label": "ラベル",
+        "rolePrompt": "ロールプロンプト",
+        "missionPrompt": "ミッションプロンプト",
+        "conditionExpression": "条件式",
+        "loopMaxIterations": "最大繰り返し回数",
+        "mcpServerId": "MCPサーバーID",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "save": "保存"
+      },
+      "toolbar": {
+        "save": "保存",
+        "export": "エクスポート",
+        "monitoring": "モニタリング"
+      },
+      "monitoring": {
+        "title": "実行モニタリング",
+        "nodeMetrics": "ノードメトリクス",
+        "noData": "実行データがありません。",
+        "node": "ノード",
+        "status": "ステータス",
+        "duration": "実行時間",
+        "tokens": "トークン",
+        "toolHistory": "ツール呼び出し履歴",
+        "noToolCalls": "ツール呼び出し履歴がありません。",
+        "timeTravelTitle": "実行履歴（Time Travel）",
+        "noSnapshots": "スナップショットがありません。"
+      }
+    }
+  }
+}

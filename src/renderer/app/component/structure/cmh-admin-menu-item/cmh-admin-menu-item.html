@@ -1,0 +1,114 @@
+﻿<!--
+  cmh-admin-menu-item — 재귀 네비게이션 메뉴 아이템
+
+  Shopware sw-admin-menu-item 패턴 포팅.
+  - entry.children 재귀 렌더링
+  - showMenuItem: children > 0 OR path 있을 때만 표시
+  - Level 1 + children: expand/collapse 버튼
+  - Level 1 without children / Level 2+: router-link
+-->
+<li
+  v-if="showMenuItem"
+  class="cmh-admin-menu__navigation-list-item"
+  :class="itemClasses"
+  @mouseenter="onMouseEnter"
+  @mouseleave="onMouseLeave"
+>
+  <!-- ── Level 1 with children: expand/collapse 버튼 ── -->
+  <button
+    v-if="hasChildren && entry.level === 1"
+    type="button"
+    class="cmh-admin-menu__navigation-link cmh-admin-menu__navigation-link--parent"
+    @click.stop="onToggleExpand"
+  >
+    <mt-icon
+      v-if="entry.icon"
+      :name="entry.icon"
+      size="20px"
+      class="cmh-admin-menu__navigation-link-icon"
+      :style="entry.color ? { color: entry.color } : {}"
+    />
+    <span class="cmh-admin-menu__navigation-link-label collapsible-text">
+      {{ resolvedLabel }}
+    </span>
+    <mt-icon
+      name="regular-chevron-down-xs"
+      size="12px"
+      class="cmh-admin-menu__chevron-icon collapsible-text"
+      :class="{ 'is--rotated': isExpanded }"
+    />
+  </button>
+
+  <!-- ── router-link: Level 1 no children, or Level 2+ ── -->
+  <router-link
+    v-else-if="entry.path"
+    :to="{ name: entry.path }"
+    class="cmh-admin-menu__navigation-link"
+    active-class="router-link-active"
+    @click="onNavigate"
+  >
+    <mt-icon
+      v-if="entry.icon && entry.level === 1"
+      :name="entry.icon"
+      size="20px"
+      class="cmh-admin-menu__navigation-link-icon"
+      :style="entry.color ? { color: entry.color } : {}"
+    />
+    <span class="cmh-admin-menu__navigation-link-label collapsible-text">
+      {{ resolvedLabel }}
+    </span>
+    <!-- 배지 -->
+    <span
+      v-if="entry.badge && entry.badge() > 0"
+      class="cmh-admin-menu__navigation-badge"
+    >{{ entry.badge() }}</span>
+  </router-link>
+
+  <!-- ── 2레벨 children 목록 ── -->
+  <ul
+    v-if="hasChildren && isExpanded && sidebarExpanded"
+    class="cmh-admin-menu__sub-navigation-list"
+    role="menu"
+  >
+    <!-- plugin 구분선 -->
+    <template
+      v-for="(child, idx) in entry.children"
+      :key="child.id"
+    >
+      <li
+        v-if="isFirstPlugin(child, idx)"
+        class="cmh-admin-menu__separator"
+        role="separator"
+      >
+        <span class="cmh-admin-menu__separator-line" />
+      </li>
+      <cmh-admin-menu-item
+        :entry="child"
+        :sidebar-expanded="sidebarExpanded"
+      />
+    </template>
+  </ul>
+
+  <ul
+    v-if="showFlyout"
+    class="cmh-admin-menu__flyout-holder"
+    role="menu"
+  >
+    <template
+      v-for="(child, idx) in entry.children"
+      :key="`${entry.id}-${child.id}-flyout`"
+    >
+      <li
+        v-if="isFirstPlugin(child, idx)"
+        class="cmh-admin-menu__separator"
+        role="separator"
+      >
+        <span class="cmh-admin-menu__separator-line" />
+      </li>
+      <cmh-admin-menu-item
+        :entry="child"
+        :sidebar-expanded="true"
+      />
+    </template>
+  </ul>
+</li>

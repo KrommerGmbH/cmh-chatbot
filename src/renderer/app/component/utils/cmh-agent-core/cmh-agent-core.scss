@@ -1,0 +1,253 @@
+/* cmh-agent-core — Mobile-first agent configuration + LangChain block composer */
+
+.cmh-agent-core {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+
+  /* ── Palette toggle (mobile only) ── */
+  &__palette-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: var(--cmh-font-size-sm, 13px);
+    color: var(--color-text-primary);
+    min-height: 44px;
+    align-self: flex-start;
+  }
+
+  /* ── Palette sidebar ── */
+  &__palette {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+
+    &.is--open {
+      display: flex;
+    }
+  }
+
+  &__palette-title {
+    font-size: var(--cmh-font-size-sm, 13px);
+    font-weight: var(--cmh-font-weight-lg, 600);
+    color: var(--color-text-primary);
+    margin: 0 0 4px;
+  }
+
+  &__palette-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px dashed var(--color-border);
+    border-radius: 6px;
+    cursor: grab;
+    font-size: var(--cmh-font-size-sm, 13px);
+    color: var(--color-text-primary);
+    min-height: 44px;
+    transition: background 0.15s, border-color 0.15s;
+
+    &:active {
+      cursor: grabbing;
+      border-color: var(--color-accent, #189EFF);
+      background: rgba(24, 158, 255, 0.08);
+    }
+  }
+
+  &__palette-icon {
+    font-size: var(--cmh-font-size-base, 15px);
+  }
+
+  &__palette-label {
+    flex: 1;
+  }
+
+  /* ── Main form ── */
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Collapsible sections ── */
+  &__section {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+
+    &[open] > .cmh-agent-core__section-header::after {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--color-bg-secondary);
+    cursor: pointer;
+    font-size: var(--cmh-font-size-sm, 13px);
+    font-weight: var(--cmh-font-weight-lg, 600);
+    color: var(--color-text-primary);
+    list-style: none;
+    min-height: 44px;
+    user-select: none;
+
+    &::-webkit-details-marker { display: none; }
+
+    &::after {
+      content: '▶';
+      font-size: 10px;
+      margin-left: auto;
+      transition: transform 0.2s;
+      color: var(--color-text-secondary);
+    }
+
+    &:hover {
+      background: var(--color-bg-hover);
+    }
+  }
+
+  &__section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__label {
+    font-size: var(--cmh-font-size-sm, 13px);
+    font-weight: var(--cmh-font-weight-sm, 400);
+    color: var(--color-text-secondary);
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-size: 16px; /* iOS zoom prevention */
+    font-family: inherit;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  /* ── Vue Flow Mini-Editor Canvas ── */
+  &__hint {
+    margin: 0;
+    font-size: var(--cmh-font-size-xs, 11px);
+    color: var(--color-text-secondary);
+  }
+
+  &__flow-canvas {
+    position: relative;
+    height: 560px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-bg-primary);
+
+    /* Vue Flow 기본 스타일 오버라이드 */
+    .vue-flow {
+      width: 100%;
+      height: 100%;
+    }
+
+    .vue-flow__edge-path {
+      stroke: var(--color-accent, #189EFF);
+      stroke-width: 2;
+    }
+
+    .vue-flow__connection-line {
+      stroke: var(--color-accent, #189EFF);
+      stroke-dasharray: 5;
+    }
+  }
+
+  &__flow-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: var(--cmh-font-size-sm, 13px);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* ── Desktop: side-by-side layout ── */
+@media (min-width: 1024px) {
+  .cmh-agent-core {
+    flex-direction: row;
+
+    &__palette-toggle {
+      display: none;
+    }
+
+    &__palette {
+      display: flex;
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+
+    &__main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__row--two-col {
+      flex-direction: row;
+
+      > .cmh-agent-core__field {
+        flex: 1;
+      }
+    }
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .cmh-agent-core__row--two-col {
+    flex-direction: row;
+    > .cmh-agent-core__field {
+      flex: 1;
+    }
+  }
+}

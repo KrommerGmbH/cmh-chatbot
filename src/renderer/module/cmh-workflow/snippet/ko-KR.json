@@ -1,0 +1,59 @@
+{
+  "cmh-workflow": {
+    "navigation": {
+      "label": "워크플로우"
+    },
+    "module": {
+      "title": "워크플로우"
+    },
+    "list": {
+      "pageTitle": "워크플로우 목록",
+      "addWorkflow": "워크플로우 추가",
+      "empty": "등록된 워크플로우가 없습니다.",
+      "emptyHint": "워크플로우를 추가하여 에이전트 파이프라인을 구성하세요.",
+      "agents": "에이전트"
+    },
+    "detail": {
+      "pageTitle": "워크플로우 상세",
+      "newWorkflow": "새 워크플로우",
+      "palette": {
+        "title": "블록 팔레트",
+        "agents": "에이전트",
+        "langchain": "LangChain",
+        "mcp": "MCP",
+        "control": "제어",
+        "transform": "변환"
+      },
+      "settings": {
+        "title": "노드 설정",
+        "label": "라벨",
+        "rolePrompt": "역할 프롬프트",
+        "missionPrompt": "미션 프롬프트",
+        "conditionExpression": "조건 표현식",
+        "loopMaxIterations": "최대 반복 횟수",
+        "mcpServerId": "MCP 서버 ID",
+        "delete": "삭제",
+        "cancel": "취소",
+        "save": "저장"
+      },
+      "toolbar": {
+        "save": "저장",
+        "export": "내보내기",
+        "monitoring": "모니터링"
+      },
+      "monitoring": {
+        "title": "실행 모니터링",
+        "nodeMetrics": "노드 메트릭",
+        "noData": "실행 데이터가 없습니다.",
+        "node": "노드",
+        "status": "상태",
+        "duration": "실행 시간",
+        "tokens": "토큰",
+        "toolHistory": "도구 호출 이력",
+        "noToolCalls": "도구 호출 이력이 없습니다.",
+        "timeTravelTitle": "실행 히스토리 (Time Travel)",
+        "noSnapshots": "스냅샷이 없습니다."
+      }
+    }
+  }
+}

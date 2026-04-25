@@ -1,0 +1,17 @@
+﻿.cmh-search-more-results {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary-default, #696a6e);
+  cursor: pointer;
+  border-radius: 8px;
+
+  &:hover {
+    color: var(--color-interaction-primary-default, #0870ff);
+    background: color-mix(in srgb, var(--color-interaction-primary-default, #0870ff) 8%, transparent);
+  }
+}

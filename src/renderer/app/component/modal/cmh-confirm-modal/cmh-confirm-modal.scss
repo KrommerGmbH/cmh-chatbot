@@ -1,0 +1,12 @@
+﻿.cmh-confirm-modal {
+    &__text {
+        margin: 0;
+        font-size: var(--font-size-sm);
+        color: var(--color-text-primary-default);
+        line-height: 1.6;
+    }
+
+    &__button-cancel {
+        margin-right: 8px;
+    }
+}

@@ -1,0 +1,228 @@
+<cmh-page>
+  <template #smart-bar-actions>
+    <mt-button variant="ghost" size="small" @click="exportWorkflow">
+      <iconify-icon icon="ph:export" width="16" height="16" />
+      {{ $t('cmh-workflow.detail.toolbar.export') }}
+    </mt-button>
+    <mt-button variant="primary" size="small" :disabled="!isDirty" @click="saveWorkflow">
+      <iconify-icon icon="ph:floppy-disk" width="16" height="16" />
+      {{ $t('cmh-workflow.detail.toolbar.save') }}
+    </mt-button>
+    <mt-button variant="ghost" size="small" @click="toggleMonitoring" :class="{ 'is--active': showMonitoringPanel }">
+      <iconify-icon icon="ph:chart-line" width="16" height="16" />
+      {{ $t('cmh-workflow.detail.toolbar.monitoring') }}
+    </mt-button>
+  </template>
+
+  <template #content>
+    <div class="cmh-workflow-detail">
+      <!-- ── 1) 사이드바 팔레트 ── -->
+      <aside class="cmh-workflow-detail__palette">
+        <div class="cmh-workflow-detail__palette-header">
+          <span class="cmh-workflow-detail__palette-title">
+            {{ $t('cmh-workflow.detail.palette.title') }}
+          </span>
+        </div>
+
+        <div
+          v-for="cat in paletteCategories"
+          :key="cat.key"
+          class="cmh-workflow-detail__palette-category"
+        >
+          <div
+            class="cmh-workflow-detail__palette-category-header"
+            @click="toggleCategory(cat.key)"
+          >
+            <iconify-icon :icon="cat.icon" width="14" height="14" />
+            <span>{{ $t(cat.label) }}</span>
+            <iconify-icon
+              :icon="isCategoryCollapsed(cat.key) ? 'ph:caret-right' : 'ph:caret-down'"
+              width="12"
+              height="12"
+              class="cmh-workflow-detail__palette-caret"
+            />
+          </div>
+
+          <div v-show="!isCategoryCollapsed(cat.key)" class="cmh-workflow-detail__palette-blocks">
+            <div
+              v-for="block in getBlocksByCategory(cat.key)"
+              :key="block.type"
+              class="cmh-workflow-detail__palette-block"
+              draggable="true"
+              @dragstart="onDragStart($event, block)"
+            >
+              <iconify-icon :icon="block.icon" width="16" height="16" />
+              <span>{{ block.label }}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── 2) Vue Flow 캔버스 ── -->
+      <div
+        class="cmh-workflow-detail__canvas"
+        @dragover="onDragOver"
+        @drop="onDrop"
+      >
+        <VueFlow
+          ref="vueFlowRef"
+          :nodes="nodes"
+          :edges="edges"
+          :default-viewport="{ x: 0, y: 0, zoom: 1 }"
+          fit-view-on-init
+          @node-click="onNodeClick"
+          @pane-click="onPaneClick"
+          @connect="onConnect"
+          @node-drag-stop="onNodeDragStop"
+        >
+          <Background />
+          <Controls />
+        </VueFlow>
+      </div>
+
+      <!-- ── 3) Settings Panel ── -->
+      <aside
+        v-if="showSettingsPanel && editingNodeData"
+        class="cmh-workflow-detail__settings"
+      >
+        <div class="cmh-workflow-detail__settings-header">
+          <span>{{ $t('cmh-workflow.detail.settings.title') }}</span>
+          <mt-button variant="ghost" size="small" @click="cancelNodeSettings">
+            <iconify-icon icon="ph:x" width="16" height="16" />
+          </mt-button>
+        </div>
+
+        <div class="cmh-workflow-detail__settings-body">
+          <!-- Label -->
+          <mt-text-field
+            v-model:value="editingNodeData.label"
+            :label="$t('cmh-workflow.detail.settings.label')"
+          />
+
+          <!-- Role Prompt (agent only) -->
+          <mt-textarea
+            v-if="editingNodeData.blockType === 'agent'"
+            v-model:value="editingNodeData.rolePrompt"
+            :label="$t('cmh-workflow.detail.settings.rolePrompt')"
+            :rows="3"
+          />
+
+          <!-- Mission Prompt (agent only) -->
+          <mt-textarea
+            v-if="editingNodeData.blockType === 'agent'"
+            v-model:value="editingNodeData.missionPrompt"
+            :label="$t('cmh-workflow.detail.settings.missionPrompt')"
+            :rows="3"
+          />
+
+          <!-- Condition expression -->
+          <mt-textarea
+            v-if="editingNodeData.blockType === 'control' && editingNodeData.agentTypeId === 'condition'"
+            v-model:value="editingNodeData.conditionExpression"
+            :label="$t('cmh-workflow.detail.settings.conditionExpression')"
+            :rows="2"
+          />
+
+          <!-- Loop max iterations -->
+          <mt-number-field
+            v-if="editingNodeData.blockType === 'control' && editingNodeData.agentTypeId === 'loop'"
+            v-model:value="editingNodeData.loopMaxIterations"
+            :label="$t('cmh-workflow.detail.settings.loopMaxIterations')"
+            :min="1"
+            :max="100"
+          />
+
+          <!-- MCP Server -->
+          <mt-text-field
+            v-if="editingNodeData.blockType === 'mcp'"
+            v-model:value="editingNodeData.mcpServerId"
+            :label="$t('cmh-workflow.detail.settings.mcpServerId')"
+          />
+        </div>
+
+        <div class="cmh-workflow-detail__settings-footer">
+          <mt-button variant="critical" size="small" @click="deleteSelectedNode">
+            {{ $t('cmh-workflow.detail.settings.delete') }}
+          </mt-button>
+          <mt-button variant="ghost" size="small" @click="cancelNodeSettings">
+            {{ $t('cmh-workflow.detail.settings.cancel') }}
+          </mt-button>
+          <mt-button variant="primary" size="small" @click="saveNodeSettings">
+            {{ $t('cmh-workflow.detail.settings.save') }}
+          </mt-button>
+        </div>
+      </aside>
+
+      <!-- ── 4) Monitoring Panel (Phase 10) ── -->
+      <div v-if="showMonitoringPanel" class="cmh-workflow-detail__monitoring">
+        <div class="cmh-workflow-detail__monitoring-tabs">
+          <span class="cmh-workflow-detail__monitoring-title">{{ $t('cmh-workflow.detail.monitoring.title') }}</span>
+        </div>
+
+        <!-- Node Metrics -->
+        <div class="cmh-workflow-detail__monitoring-section">
+          <h4>{{ $t('cmh-workflow.detail.monitoring.nodeMetrics') }}</h4>
+          <div v-if="nodeMetrics.size === 0" class="cmh-workflow-detail__monitoring-empty">
+            {{ $t('cmh-workflow.detail.monitoring.noData') }}
+          </div>
+          <table v-else class="cmh-workflow-detail__metrics-table">
+            <thead>
+              <tr>
+                <th>{{ $t('cmh-workflow.detail.monitoring.node') }}</th>
+                <th>{{ $t('cmh-workflow.detail.monitoring.status') }}</th>
+                <th>{{ $t('cmh-workflow.detail.monitoring.duration') }}</th>
+                <th>{{ $t('cmh-workflow.detail.monitoring.tokens') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="[nodeId, m] in nodeMetrics" :key="nodeId">
+                <td>{{ nodeId }}</td>
+                <td><span class="cmh-workflow-detail__status-badge" :data-status="m.status">{{ m.status }}</span></td>
+                <td>{{ formatDuration(m.duration) }}</td>
+                <td>{{ formatTokens(m.totalTokens) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tool Call History -->
+        <div class="cmh-workflow-detail__monitoring-section">
+          <div class="cmh-workflow-detail__monitoring-section-header">
+            <h4>{{ $t('cmh-workflow.detail.monitoring.toolHistory') }}</h4>
+            <button type="button" class="cmh-workflow-detail__clear-btn" @click="clearToolHistory">{{ $t('cmh-global.actions.delete') }}</button>
+          </div>
+          <div v-if="toolCallHistory.length === 0" class="cmh-workflow-detail__monitoring-empty">
+            {{ $t('cmh-workflow.detail.monitoring.noToolCalls') }}
+          </div>
+          <div v-else class="cmh-workflow-detail__tool-list">
+            <div v-for="(tc, i) in toolCallHistory" :key="i" class="cmh-workflow-detail__tool-item">
+              <span class="cmh-workflow-detail__tool-name">{{ tc.toolName }}</span>
+              <span class="cmh-workflow-detail__tool-duration">{{ formatDuration(tc.duration) }}</span>
+              <span v-if="tc.error" class="cmh-workflow-detail__tool-error">{{ tc.error }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Time Travel -->
+        <div class="cmh-workflow-detail__monitoring-section">
+          <h4>{{ $t('cmh-workflow.detail.monitoring.timeTravelTitle') }}</h4>
+          <div v-if="executionSnapshots.length === 0" class="cmh-workflow-detail__monitoring-empty">
+            {{ $t('cmh-workflow.detail.monitoring.noSnapshots') }}
+          </div>
+          <div v-else class="cmh-workflow-detail__timeline">
+            <button
+              v-for="(snap, idx) in executionSnapshots"
+              :key="idx"
+              type="button"
+              class="cmh-workflow-detail__timeline-dot"
+              :class="{ 'is--selected': selectedSnapshotIndex === idx }"
+              @click="selectSnapshot(idx)"
+              :title="new Date(snap.timestamp).toLocaleTimeString()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</cmh-page>
+

@@ -1,0 +1,91 @@
+﻿<div
+    v-if="images.length > 0"
+    class="cmh-image-slider"
+    :style="wrapperStyles"
+>
+    <!-- 이미지 컨테이너 -->
+    <div
+        class="cmh-image-slider__image-container"
+        :style="containerStyles"
+    >
+        <!-- 스크롤 가능 컨테이너 -->
+        <div
+            class="cmh-image-slider__image-scrollable"
+            :style="scrollableContainerStyles"
+        >
+            <div
+                v-for="(image, index) in images"
+                :key="index"
+                class="cmh-image-slider__element-wrapper"
+                :aria-hidden="isHiddenItem(index) || undefined"
+                :style="componentStyles"
+            >
+                <div
+                    class="cmh-image-slider__element-container"
+                    :class="elementClasses(index)"
+                    :style="elementStyles(image, index)"
+                    role="button"
+                    tabindex="0"
+                    @click="onSetCurrentItem(index)"
+                    @keydown.enter="onSetCurrentItem(index)"
+                >
+                    <img
+                        class="cmh-image-slider__element-image"
+                        :class="imageClasses(index)"
+                        :style="[borderStyles(image), imageStyles]"
+                        :src="getImage(image)"
+                        :alt="imageAlt(index)"
+                    />
+                </div>
+
+                <div
+                    v-if="hasValidDescription(image)"
+                    class="cmh-image-slider__element-description"
+                    :style="componentStyles"
+                >
+                    {{ (image as any).description }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 화살표 네비게이션 -->
+        <template v-if="showArrows">
+            <div
+                class="cmh-image-slider__arrow arrow-left"
+                role="button"
+                tabindex="0"
+                @click="goToPreviousImage"
+                @keydown.enter="goToPreviousImage"
+            >
+                <mt-icon name="regular-chevron-left" />
+            </div>
+
+            <div
+                class="cmh-image-slider__arrow arrow-right"
+                role="button"
+                tabindex="0"
+                @click="goToNextImage"
+                @keydown.enter="goToNextImage"
+            >
+                <mt-icon name="regular-chevron-right" />
+            </div>
+        </template>
+    </div>
+
+    <!-- 버튼 네비게이션 -->
+    <div
+        v-if="showButtons"
+        class="cmh-image-slider__buttons"
+        :class="buttonClasses"
+    >
+        <button
+            v-for="(item, index) in buttonList"
+            :key="index"
+            class="cmh-image-slider__buttons-element"
+            :class="{ 'is--active': index === currentPageNumber }"
+            @click="setCurrentPageNumber(index)"
+        >
+            {{ imageAlt(index) }}
+        </button>
+    </div>
+</div>

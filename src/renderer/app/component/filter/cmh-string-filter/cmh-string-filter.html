@@ -1,0 +1,12 @@
+﻿<cmh-base-filter
+    :title="filter.label"
+    :show-reset-button="!!filter.value"
+    :active="active"
+    @filter-reset="resetFilter"
+>
+    <mt-text-field
+        :model-value="filter.value"
+        :placeholder="filter.placeholder"
+        @change="updateFilter"
+    />
+</cmh-base-filter>

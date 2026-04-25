@@ -1,0 +1,60 @@
+﻿<div
+    v-if="shouldBeVisible"
+    class="cmh-pagination"
+>
+    <button
+        :disabled="currentPage === 1"
+        :aria-label="$t('cmh-global.pagination.previousPage')"
+        class="cmh-pagination__page-button cmh-pagination__page-button-prev"
+        @click="prevPage"
+    >
+        <mt-icon name="regular-chevron-left-xs" />
+    </button>
+
+    <ul class="cmh-pagination__list">
+        <li
+            v-for="(pageNum, index) in displayedPages"
+            :key="index"
+            class="cmh-pagination__list-item"
+        >
+            <button
+                v-if="typeof pageNum === 'number'"
+                :aria-label="$t('cmh-global.pagination.page', { page: pageNum })"
+                class="cmh-pagination__list-button"
+                :class="{ 'is-active': currentPage === pageNum }"
+                @click="changePageByPageNumber(pageNum)"
+            >
+                {{ pageNum }}
+            </button>
+            <span
+                v-else
+                class="cmh-pagination__list-separator"
+            >
+                {{ pageNum }}
+            </span>
+        </li>
+    </ul>
+
+    <button
+        :disabled="currentPage === maxPage"
+        :aria-label="$t('cmh-global.pagination.nextPage')"
+        class="cmh-pagination__page-button cmh-pagination__page-button-next"
+        @click="nextPage"
+    >
+        <mt-icon name="regular-chevron-right-xs" size="16px" />
+    </button>
+
+    <div
+        v-if="steps.length > 1"
+        class="cmh-pagination__per-page"
+    >
+        <mt-select
+            size="small"
+            name="perPage"
+            :model-value="String(perPage)"
+            :options="possibleStepsOptions"
+            hide-clearable-button
+            @update:model-value="onPageSizeChange"
+        />
+    </div>
+</div>

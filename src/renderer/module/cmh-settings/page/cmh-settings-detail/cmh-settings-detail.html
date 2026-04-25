@@ -1,0 +1,156 @@
+<cmh-page :show-search-bar="false">
+  <template #content>
+    <div class="cmh-settings-detail">
+      <!-- Back button -->
+      <div class="cmh-settings-detail__nav">
+        <div
+          class="cmh-settings-detail__back"
+          role="button"
+          tabindex="0"
+          @click="navigateBack"
+          @keydown.enter="navigateBack"
+        >
+          <iconify-icon icon="ph:arrow-left" width="20" height="20"></iconify-icon>
+          <span>{{ $t('cmh-settings.detail.backToSettings') }}</span>
+        </div>
+      </div>
+
+      <!-- TTS Section -->
+      <div v-if="section === 'tts'" class="cmh-settings-detail__section">
+        <h2 class="cmh-settings-detail__section-title">
+          <iconify-icon icon="ph:speaker-high" width="24" height="24"></iconify-icon>
+          {{ $t('cmh-settings.detail.tts.title') }}
+        </h2>
+        <p class="cmh-settings-detail__section-desc">{{ $t('cmh-settings.detail.tts.description') }}</p>
+
+        <!-- TTS 모델 선택 -->
+        <div class="cmh-settings-detail__field">
+          <label class="cmh-settings-detail__label">{{ $t('cmh-settings.detail.tts.modelLabel') }}</label>
+          <div class="cmh-settings-detail__model-list">
+            <div
+              v-for="model in ttsModels"
+              :key="model.id"
+              class="cmh-settings-detail__model-card"
+              :class="{ 'cmh-settings-detail__model-card--selected': model.id === selectedTtsModelId }"
+              role="button"
+              tabindex="0"
+              @click="selectTtsModel(model.id)"
+              @keydown.enter="selectTtsModel(model.id)"
+            >
+              <div class="cmh-settings-detail__model-card-header">
+                <iconify-icon icon="ph:speaker-high" width="20" height="20"></iconify-icon>
+                <span class="cmh-settings-detail__model-name">{{ model.name }}</span>
+                <span v-if="model.isDefault" class="cmh-settings-detail__badge">{{ $t('cmh-settings.detail.default') }}</span>
+              </div>
+              <p class="cmh-settings-detail__model-desc">{{ model.description || model.modelId }}</p>
+              <div class="cmh-settings-detail__model-meta">
+                <span v-if="model.filePath" class="cmh-settings-detail__meta-tag">
+                  <iconify-icon icon="ph:hard-drives" width="14" height="14"></iconify-icon>
+                  {{ $t('cmh-settings.detail.localModel') }}
+                </span>
+                <span v-else class="cmh-settings-detail__meta-tag">
+                  <iconify-icon icon="ph:cloud" width="14" height="14"></iconify-icon>
+                  {{ $t('cmh-settings.detail.cloudModel') }}
+                </span>
+              </div>
+              <div v-if="model.id === selectedTtsModelId" class="cmh-settings-detail__model-check">
+                <iconify-icon icon="ph:check-circle-fill" width="22" height="22"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TTS 파라미터 -->
+        <div class="cmh-settings-detail__field">
+          <label class="cmh-settings-detail__label">{{ $t('cmh-settings.detail.tts.rateLabel') }}</label>
+          <input
+            type="range"
+            min="0.5"
+            max="2.0"
+            step="0.1"
+            :value="ttsRate"
+            class="cmh-settings-detail__range"
+            @input="onTtsRateChange"
+          />
+          <span class="cmh-settings-detail__range-value">{{ ttsRate }}x</span>
+        </div>
+
+        <div class="cmh-settings-detail__field">
+          <label class="cmh-settings-detail__label">{{ $t('cmh-settings.detail.tts.autoReadLabel') }}</label>
+          <div
+            class="cmh-settings-detail__toggle"
+            :class="{ 'cmh-settings-detail__toggle--on': ttsAutoRead }"
+            role="switch"
+            :aria-checked="ttsAutoRead"
+            tabindex="0"
+            @click="toggleAutoRead"
+            @keydown.enter="toggleAutoRead"
+          >
+            <div class="cmh-settings-detail__toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STT Section -->
+      <div v-if="section === 'stt'" class="cmh-settings-detail__section">
+        <h2 class="cmh-settings-detail__section-title">
+          <iconify-icon icon="ph:microphone" width="24" height="24"></iconify-icon>
+          {{ $t('cmh-settings.detail.stt.title') }}
+        </h2>
+        <p class="cmh-settings-detail__section-desc">{{ $t('cmh-settings.detail.stt.description') }}</p>
+
+        <!-- STT 모델 선택 -->
+        <div class="cmh-settings-detail__field">
+          <label class="cmh-settings-detail__label">{{ $t('cmh-settings.detail.stt.modelLabel') }}</label>
+          <div class="cmh-settings-detail__model-list">
+            <div
+              v-for="model in sttModels"
+              :key="model.id"
+              class="cmh-settings-detail__model-card"
+              :class="{ 'cmh-settings-detail__model-card--selected': model.id === selectedSttModelId }"
+              role="button"
+              tabindex="0"
+              @click="selectSttModel(model.id)"
+              @keydown.enter="selectSttModel(model.id)"
+            >
+              <div class="cmh-settings-detail__model-card-header">
+                <iconify-icon icon="ph:microphone" width="20" height="20"></iconify-icon>
+                <span class="cmh-settings-detail__model-name">{{ model.name }}</span>
+                <span v-if="model.isDefault" class="cmh-settings-detail__badge">{{ $t('cmh-settings.detail.default') }}</span>
+              </div>
+              <p class="cmh-settings-detail__model-desc">{{ model.description || model.modelId }}</p>
+              <div class="cmh-settings-detail__model-meta">
+                <span class="cmh-settings-detail__meta-tag">
+                  <iconify-icon icon="ph:hard-drives" width="14" height="14"></iconify-icon>
+                  ONNX / WASM
+                </span>
+              </div>
+              <div v-if="model.id === selectedSttModelId" class="cmh-settings-detail__model-check">
+                <iconify-icon icon="ph:check-circle-fill" width="22" height="22"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STT 상태 -->
+        <div class="cmh-settings-detail__field">
+          <label class="cmh-settings-detail__label">{{ $t('cmh-settings.detail.stt.statusLabel') }}</label>
+          <div class="cmh-settings-detail__status">
+            <span class="cmh-settings-detail__status-dot" :class="'cmh-settings-detail__status-dot--' + sttStatus"></span>
+            <span>{{ sttStatusText }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- General Section -->
+      <div v-if="section === 'general'" class="cmh-settings-detail__section">
+        <h2 class="cmh-settings-detail__section-title">
+          <iconify-icon icon="ph:gear" width="24" height="24"></iconify-icon>
+          {{ $t('cmh-settings.detail.general.title') }}
+        </h2>
+        <p class="cmh-settings-detail__section-desc">{{ $t('cmh-settings.detail.general.description') }}</p>
+        <p class="cmh-settings-detail__placeholder">{{ $t('cmh-settings.detail.general.comingSoon') }}</p>
+      </div>
+    </div>
+  </template>
+</cmh-page>

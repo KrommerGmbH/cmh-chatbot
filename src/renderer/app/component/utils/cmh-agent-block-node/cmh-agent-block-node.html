@@ -1,0 +1,8 @@
+<div :class="['cmh-agent-block-node', `cmh-agent-block-node--${data.category || 'core'}`]">
+  <Handle type="target" :position="Position.Left" class="cmh-agent-block-node__handle" />
+
+  <span class="cmh-agent-block-node__icon">{{ data.icon || '?' }}</span>
+  <span class="cmh-agent-block-node__label">{{ data.label ? $t(data.label) : data.blockId }}</span>
+
+  <Handle type="source" :position="Position.Right" class="cmh-agent-block-node__handle" />
+</div>

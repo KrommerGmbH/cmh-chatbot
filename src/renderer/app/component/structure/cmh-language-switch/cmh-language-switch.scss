@@ -1,0 +1,21 @@
+﻿.cmh-language-switch {
+  display: inline-flex;
+  align-items: center;
+
+  &__select {
+    min-width: 120px;
+    height: 36px;
+    padding: 0 30px 0 10px;
+    border: 1px solid var(--color-border-primary-default, #cdced4);
+    border-radius: 8px;
+    background: var(--color-elevation-surface-default, #ffffff);
+    color: var(--color-text-primary-default, #1e1e24);
+    font-size: var(--font-size-sm, 13px);
+    outline: none;
+
+    &:focus,
+    &:hover {
+      border-color: var(--color-interaction-primary-default, #0870ff);
+    }
+  }
+}

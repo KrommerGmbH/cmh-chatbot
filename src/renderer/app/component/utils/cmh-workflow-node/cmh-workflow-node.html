@@ -1,0 +1,23 @@
+<div
+  :class="['cmh-workflow-node', blockTypeClass, statusClass, { 'cmh-workflow-node--selected': selected }]"
+>
+  <Handle type="target" :position="Position.Top" class="cmh-workflow-node__handle cmh-workflow-node__handle--target" />
+
+  <div class="cmh-workflow-node__header">
+    <span class="cmh-workflow-node__icon">
+      <iconify-icon :icon="nodeIcon" width="18" height="18" />
+    </span>
+    <span class="cmh-workflow-node__label">{{ nodeLabel }}</span>
+  </div>
+
+  <div v-if="data.rolePrompt" class="cmh-workflow-node__meta">
+    <span class="cmh-workflow-node__meta-text">{{ data.rolePrompt.substring(0, 40) }}…</span>
+  </div>
+
+  <div v-if="data.status && data.status !== 'idle'" class="cmh-workflow-node__status-badge">
+    <span class="cmh-workflow-node__status-dot"></span>
+    {{ data.status }}
+  </div>
+
+  <Handle type="source" :position="Position.Bottom" class="cmh-workflow-node__handle cmh-workflow-node__handle--source" />
+</div>

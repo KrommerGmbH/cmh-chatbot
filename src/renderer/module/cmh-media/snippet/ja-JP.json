@@ -1,0 +1,44 @@
+{
+  "cmh-media": {
+    "general": {
+      "pageTitle": "メディア",
+      "entityDescription": "ファイル形式のメディアオブジェクト"
+    },
+    "navigation": {
+      "label": "RAG"
+    },
+    "index": {
+      "rootFolderName": "メディアライブラリ",
+      "uploadButton": "アップロード",
+      "uploadFromUrl": "URLからアップロード",
+      "urlPlaceholder": "ファイルURLを入力 (https://...)",
+      "urlUploadSubmit": "アップロード",
+      "createFolder": "新しいフォルダ",
+      "createFolderCreate": "作成",
+      "folderNamePlaceholder": "フォルダ名",
+      "emptyState": "メディアファイルはまだありません。",
+      "emptyStateDescription": "アップロードボタンでファイルを追加してください。",
+      "presentationNormal": "通常",
+      "presentationLarge": "大きいプレビュー",
+      "presentationList": "リスト",
+      "sortNameAsc": "名前, A-Z",
+      "sortNameDesc": "名前, Z-A",
+      "sortSizeAsc": "サイズ, 小さい順",
+      "sortSizeDesc": "サイズ, 大きい順",
+      "sortDateAsc": "日付, 古い順",
+      "sortDateDesc": "日付, 新しい順",
+      "folderType": "フォルダ"
+    },
+    "sidebar": {
+      "actionEdit": "編集",
+      "actionDelete": "削除",
+      "fileName": "ファイル名",
+      "fileSize": "ファイルサイズ",
+      "mimeType": "MIMEタイプ",
+      "hash": "ハッシュ",
+      "uploadedAt": "アップロード日時",
+      "title": "タイトル",
+      "alt": "代替テキスト"
+    }
+  }
+}

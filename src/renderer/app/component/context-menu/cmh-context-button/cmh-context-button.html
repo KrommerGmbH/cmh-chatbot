@@ -1,0 +1,37 @@
+﻿<div
+    ref="awContextButtonRoot"
+    class="cmh-context-button"
+    v-bind="$attrs"
+    :class="contextClass"
+>
+    <button
+        class="cmh-context-button__trigger"
+        :class="contextButtonClass"
+        :aria-label="ariaLabel ? (ariaLabel.includes('.') ? $t(ariaLabel) : ariaLabel) : $t('cmh-global.contextButton.ariaLabel')"
+        :disabled="disabled"
+        @click="onClickButton"
+        @keydown.enter="onClickButton"
+    >
+        <slot name="button">
+            <div class="cmh-context-button__icon" tabindex="-1">
+                <mt-icon :name="icon" :size="iconSize" decorative />
+            </div>
+        </slot>
+    </button>
+
+    <teleport to="body">
+        <div
+            v-if="showMenu"
+            ref="awContextMenu"
+            class="cmh-context-button__menu-wrapper"
+            :style="menuPositionStyle"
+        >
+            <cmh-context-menu
+                :class="contextMenuClass"
+                :style="menuStyles"
+            >
+                <slot></slot>
+            </cmh-context-menu>
+        </div>
+    </teleport>
+</div>

@@ -1,0 +1,44 @@
+{
+  "cmh-media": {
+    "general": {
+      "pageTitle": "媒体",
+      "entityDescription": "文件形式的媒体对象"
+    },
+    "navigation": {
+      "label": "RAG"
+    },
+    "index": {
+      "rootFolderName": "媒体库",
+      "uploadButton": "上传",
+      "uploadFromUrl": "从URL上传",
+      "urlPlaceholder": "输入文件URL (https://...)",
+      "urlUploadSubmit": "上传",
+      "createFolder": "新建文件夹",
+      "createFolderCreate": "创建",
+      "folderNamePlaceholder": "文件夹名称",
+      "emptyState": "暂无媒体文件。",
+      "emptyStateDescription": "使用上传按钮添加文件。",
+      "presentationNormal": "普通",
+      "presentationLarge": "大预览",
+      "presentationList": "列表",
+      "sortNameAsc": "名称, A-Z",
+      "sortNameDesc": "名称, Z-A",
+      "sortSizeAsc": "大小, 最小",
+      "sortSizeDesc": "大小, 最大",
+      "sortDateAsc": "日期, 最旧",
+      "sortDateDesc": "日期, 最新",
+      "folderType": "文件夹"
+    },
+    "sidebar": {
+      "actionEdit": "编辑",
+      "actionDelete": "删除",
+      "fileName": "文件名",
+      "fileSize": "文件大小",
+      "mimeType": "MIME类型",
+      "hash": "哈希",
+      "uploadedAt": "上传时间",
+      "title": "标题",
+      "alt": "替代文字"
+    }
+  }
+}

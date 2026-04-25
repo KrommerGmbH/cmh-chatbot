@@ -1,0 +1,48 @@
+{
+  "cmh-provider": {
+    "navigation": {
+      "label": "프로바이더"
+    },
+    "module": {
+      "title": "프로바이더"
+    },
+    "list": {
+      "pageTitle": "프로바이더 목록",
+      "addProvider": "프로바이더 추가",
+      "empty": "등록된 프로바이더가 없습니다.",
+      "priority": "우선순위",
+      "models": "모델",
+      "columns": {
+        "name": "이름",
+        "type": "유형",
+        "baseUrl": "Base URL",
+        "priority": "우선순위",
+        "modelCount": "모델 수",
+        "status": "상태"
+      },
+      "loadError": "프로바이더 목록을 불러오지 못했습니다."
+    },
+    "detail": {
+      "pageTitle": "프로바이더 상세",
+      "newProvider": "새 프로바이더",
+      "name": "이름",
+      "description": "설명",
+      "type": "유형",
+      "priority": "우선순위",
+      "baseUrl": "Base URL",
+      "baseUrlPlaceholder": "https://api.example.com/v1",
+      "apiKey": "API 키",
+      "apiKeyPlaceholder": "API 키를 입력하세요",
+      "isActive": "활성",
+      "typeOptions": {
+        "localGguf": "로컬 (GGUF)",
+        "cloudApi": "클라우드 API",
+        "selfHosted": "셀프 호스팅"
+      },
+      "saveError": "프로바이더 저장에 실패했습니다.",
+      "engineUnavailable": "Engine server(127.0.0.1:4000)에 연결할 수 없습니다. 먼저 엔진을 실행한 뒤 다시 저장하세요.",
+      "syncModelsSuccess": "프로바이더 저장 후 모델 목록이 동기화되었습니다.",
+      "syncModelsError": "프로바이더 저장은 완료되었지만 모델 동기화에 실패했습니다."
+    }
+  }
+}

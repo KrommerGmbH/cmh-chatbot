@@ -1,0 +1,194 @@
+{
+  "cmh-global": {
+    "default": {
+      "warning": "警告",
+      "error": "エラー",
+      "info": "お知らせ",
+      "success": "成功"
+    },
+    "actions": {
+      "close": "閉じる",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "search": "検索",
+      "refresh": "更新",
+      "delete": "削除",
+      "edit": "編集",
+      "add": "追加",
+      "back": "戻る",
+      "next": "次へ",
+      "previous": "前へ",
+      "confirm": "確認",
+      "apply": "適用",
+      "reset": "リセット",
+      "send": "送信",
+      "stop": "停止",
+      "copy": "コピー",
+      "resend": "再送信",
+      "forkHere": "ここから分岐"
+    },
+    "labels": {
+      "loading": "読み込み中…",
+      "noResults": "結果が見つかりません。",
+      "total": "合計",
+      "date": "日付",
+      "name": "名前",
+      "description": "説明",
+      "status": "ステータス",
+      "type": "タイプ",
+      "yes": "はい",
+      "no": "いいえ",
+      "newChat": "新しいチャット",
+      "emptyChat": "メッセージを入力して会話を始めましょう。",
+      "thinking": "考え中",
+      "toolCalls": "ツール呼び出し",
+      "artifact": "アーティファクト",
+      "openInPanel": "パネルで開く",
+      "attachFile": "ファイルを添付",
+      "chatPlaceholder": "メッセージを入力... (Shift+Enter: 改行)",
+      "searchModels": "モデル検索...",
+      "stt": "音声認識",
+      "tts": "音声出力",
+      "showMore": "もっと見る",
+      "selectAgent": "エージェント選択",
+      "todos": "タスク一覧",
+      "active": "有効",
+      "inactive": "無効"
+    },    "languageSwitch": {
+      "label": "言語",
+      "locales": {
+        "ko-KR": "한국어",
+        "en-GB": "English",
+        "de-DE": "Deutsch",
+        "zh-CN": "中文",
+        "ja-JP": "日本語"
+      }
+    },    "theme": {
+      "switchToLight": "ライトモードに切り替え",
+      "switchToDark": "ダークモードに切り替え",
+      "dark": "ダーク",
+      "light": "ライト"
+    },
+    "menu": {
+      "toggleMenu": "メニュー切替",
+      "collapseMenu": "メニューを折りたたむ",
+      "expandMenu": "メニューを展開",
+      "mainNavigation": "メインナビゲーション",
+      "switchToChat": "チャットに切り替え",
+      "switchToAdmin": "管理画面に切り替え",
+      "chatMode": "CMH Chatbot",
+      "adminMode": "管理モード"
+    },
+    "navigation": {
+      "chat": "チャット",
+      "workflow": "ワークフロー",
+      "provider": "プロバイダー",
+      "model": "モデル",
+      "settings": "設定",
+      "aiManagement": "AI 管理"
+    },
+    "chat": {
+      "newChat": "新しいチャット",
+      "connectionFailed": "LLM サーバー接続失敗 — Mock 応答モードです。llama-server が実行中か確認してください。",
+      "generationStopped": "応答の生成が中断されました。",
+      "sttModelLoading": "音声認識モデルをダウンロード中... 初回は時間がかかる場合があります。",
+      "sttTranscribing": "音声をテキストに変換中...",
+      "serverError": "サーバー内部エラー",
+      "modelNotFound": "モデルが見つかりません",
+      "rateLimited": "リクエスト過多",
+      "networkError": "ネットワーク接続失敗",
+      "visionNotSupported": "画像処理非対応",
+      "visionNotSupportedMessage": "{model} モデルは画像処理に対応していません。テキストのみ送信されます。",
+      "imageAttached": "添付画像：{files}（現在のモデルは画像に対応していないため処理されませんでした）",
+      "statusConnecting": "接続中...",
+      "statusGenerating": "生成中...",
+      "timeoutError": "応答タイムアウト",
+      "timeoutMessage": "モデルが90秒以内に応答しませんでした。もう一度お試しください。",
+      "noModelSelected": "モデルが選択されていません",
+      "noModelSelectedMessage": "メッセージを送信する前にモデルを選択してください。",
+      "noApiKey": "API キーが設定されていません",
+      "apiKeyRequiredShort": "APIキー必須",
+      "forkedConversation": "会話が分岐されました。"
+    },
+    "settings": {
+      "appearance": "外観設定",
+      "typography": "タイポグラフィ",
+      "typographyDescription": "各フォントレベルのサイズと太さを個別に設定します",
+      "typographyLevel": "レベル",
+      "typographySize": "サイズ (px)",
+      "typographyWeight": "太さ",
+      "resetFontTokens": "デフォルトに戻す",
+      "fontLevel": {
+        "xs": "XS",
+        "sm": "SM",
+        "base": "Base ★",
+        "lg": "LG",
+        "xl": "XL"
+      },
+      "fontSize": "フォントサイズ",
+      "colorScheme": "カラースキーム",
+      "themeMode": "テーマ",
+      "preview": "プレビュー",
+      "previewUser": "こんにちは！これはユーザーメッセージです。",
+      "previewAssistant": "こんにちは！AI応答のプレビューです。",
+      "colorDefault": "デフォルト",
+      "colorOcean": "オーシャン",
+      "colorForest": "フォレスト",
+      "colorSunset": "サンセット",
+      "colorLavender": "ラベンダー"
+    },
+    "agentType": {
+      "title": "エージェントタイプ",
+      "orchestrator": "オーケストレーター",
+      "orchestratorDesc": "最上位の調整役 — ユーザーリクエストを適切なマネージャーエージェントにルーティングし、最終応答を組み立てます。",
+      "manager": "マネージャー",
+      "managerDesc": "中間管理者 — タスクを分解し、ワーカーまたはサブマネージャーエージェントに委任します。再帰的階層構造をサポート。",
+      "worker": "ワーカー",
+      "workerDesc": "末端実行者 — 分割不可能なアトミックタスクを処理します。最大3件の同時実行が可能。",
+      "profiler": "プロファイラー",
+      "profilerDesc": "チャット後分析エージェント — LangChainの保存コールバックをフックし、ユーザーの好み、心理状態、行動パターンを分析します。",
+      "supporter": "サポーター",
+      "supporterDesc": "ユーティリティエージェント — Web検索、RAG検索、ドキュメント解析、API呼び出しなどのツール操作を提供します。"
+    },
+    "agent": {
+      "title": "エージェント",
+      "name": "エージェント名",
+      "status": "ステータス",
+      "idle": "待機中",
+      "running": "実行中",
+      "paused": "一時停止",
+      "error": "エラー",
+      "terminated": "終了",
+      "parentAgent": "親エージェント",
+      "childAgents": "子エージェント",
+      "systemPrompt": "システムプロンプト",
+      "capabilities": "能力",
+      "maxTasks": "最大同時タスク数"
+    },
+    "dataGrid": {
+      "actionsMenu": "アクションメニュー",
+      "columnsActions": "列アクション",
+      "labelSelectAll": "すべて選択",
+      "labelSelected": "選択済み"
+    },
+    "contextButton": {
+      "ariaLabel": "コンテキストメニュー"
+    },
+    "searchBar": {
+      "moreResults": "さらに結果を表示",
+      "allTypes": "すべてのタイプ",
+      "placeholder": "検索",
+      "clearSearch": "検索をクリア",
+      "searching": "検索中...",
+      "filterByType": "タイプで絞り込み",
+      "noResultsFor": "'{query}'の結果が見つかりません。"
+    },
+    "rating": {
+      "unrated": "未評価",
+      "rateResponse": "不満度を評価",
+      "tooltip": "AI回答が意図と異なる、または不正確な場合にクリックしてください。スコアが高いほど不満度が高いです。",
+      "dissatisfactionDef": "不満足スコア：AI応答がユーザーの意図からどれだけ逸脱したかを示す逆スコア（0=満足、100=完全に不満足）。肯定的な星評価ではありません。",
+      "sadTooltip": "{sad}/{max} — 不満足スコア：{score}点"
+    }
+  }
+}

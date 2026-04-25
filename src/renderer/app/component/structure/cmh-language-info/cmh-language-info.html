@@ -1,0 +1,13 @@
+﻿<p v-if="infoText" class="cmh-language-info">
+  <span class="cmh-language-info__info">{{ infoText }}</span>
+  <span
+    v-if="infoParent"
+    class="cmh-language-info__link-parent"
+    role="link"
+    tabindex="0"
+    @click="$emit('click-parent-language')"
+    @keydown.enter="$emit('click-parent-language')"
+  >
+    "{{ infoParent }}".
+  </span>
+</p>

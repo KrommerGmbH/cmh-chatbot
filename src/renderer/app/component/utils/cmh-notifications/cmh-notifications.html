@@ -1,0 +1,36 @@
+﻿<transition name="cmh-notifications-slide-fade">
+    <div
+        v-if="notifications.length"
+        class="cmh-notifications"
+        :style="notificationsStyle"
+    >
+        <transition-group name="cmh-notifications-slide-fade">
+            <mt-banner
+                v-for="(notification, index) in notifications"
+                :key="notification.uuid"
+                :class="[`cmh-notifications__notification--${index}`, 'cmh-notification__alert']"
+                :title="notification.title"
+                :variant="getBannerVariant(notification)"
+                :closable="true"
+                @close="onClose(notification)"
+            >
+                <div class="cmh-notifications__message">{{ notification.message }}</div>
+
+                <div
+                    v-if="notification.actions && notification.actions.length"
+                    class="cmh-notifications__actions"
+                >
+                    <mt-button
+                        v-for="action in notification.actions"
+                        :key="action.label"
+                        :disabled="action.disabled"
+                        variant="secondary"
+                        @click="handleAction(action, notification)"
+                    >
+                        {{ action.label }}
+                    </mt-button>
+                </div>
+            </mt-banner>
+        </transition-group>
+    </div>
+</transition>

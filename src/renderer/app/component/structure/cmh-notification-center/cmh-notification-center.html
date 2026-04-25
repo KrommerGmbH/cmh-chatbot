@@ -1,0 +1,48 @@
+﻿<div ref="rootRef" class="cmh-notification-center" :class="{ 'is--open': isOpen }">
+  <button
+    type="button"
+    class="cmh-notification-center__context-button"
+    :class="{
+      'is--active': isOpen,
+      'cmh-notification-center__context-button--new-available': hasUnread,
+    }"
+    :aria-label="$t('cmh-global.notificationCenter.open')"
+    :title="$t('cmh-global.notificationCenter.open')"
+    @click="toggleOpen"
+  >
+    <mt-icon name="regular-bell" size="20px" />
+  </button>
+
+  <transition name="cmh-notification-center-fade">
+    <div v-if="isOpen" class="cmh-notification-center__context-container">
+      <div class="cmh-notification-center__content">
+        <div class="cmh-notification-center__header">
+          <h3 class="cmh-notification-center__title">{{ $t('cmh-global.notificationCenter.title') }}</h3>
+
+          <mt-button
+            size="small"
+            variant="secondary"
+            @click="clearAllNotifications"
+          >
+            {{ $t('cmh-global.notificationCenter.clearAll') }}
+          </mt-button>
+        </div>
+
+        <div class="cmh-notification-center__notification-container">
+          <div v-if="notifications.length">
+            <cmh-notification-center-item
+              v-for="notification in notifications"
+              :key="notification.uuid"
+              :notification="notification"
+              @center-close="closePanel"
+            />
+          </div>
+
+          <div v-else class="cmh-notification-center__empty-text">
+            {{ $t('cmh-global.notificationCenter.empty') }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</div>

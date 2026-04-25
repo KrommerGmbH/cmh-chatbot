@@ -1,0 +1,62 @@
+.cmh-workflow-list {
+  padding: 24px;
+}
+
+.cmh-workflow-list__header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+
+.cmh-workflow-list__title {
+  font-size: var(--cmh-font-size-xl, 24px); font-weight: var(--cmh-font-weight-xl, 700);
+  color: var(--color-text-primary, #ccc); margin: 0;
+}
+
+.cmh-workflow-list__add-btn {
+  padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;
+  background: var(--color-accent, #0e639c); color: var(--color-text-on-accent, #fff);
+  font-size: var(--cmh-font-size-sm, 13px);
+  &:hover { background: var(--color-accent-hover, #1177bb); }
+}
+
+.cmh-workflow-list__loading,
+.cmh-workflow-list__empty {
+  padding: 60px; text-align: center; color: var(--color-text-muted, #666);
+}
+
+.cmh-workflow-list__empty-hint {
+  font-size: var(--cmh-font-size-xs, 11px); margin-top: 8px; color: var(--color-text-secondary, #999);
+}
+
+.cmh-workflow-list__grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+}
+
+.cmh-workflow-list__card {
+  background: var(--color-bg-secondary, #252526); border: 1px solid var(--color-border, #333);
+  border-radius: 8px; padding: 16px; cursor: pointer; transition: border-color 150ms;
+  &:hover { border-color: var(--color-accent, #0e639c); }
+}
+
+.cmh-workflow-list__card-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+
+.cmh-workflow-list__card-name {
+  font-size: var(--cmh-font-size-base, 15px); font-weight: 600; color: var(--color-text-primary, #ccc);
+}
+
+.cmh-workflow-list__badge {
+  font-size: var(--cmh-font-size-xs, 11px); padding: 2px 8px; border-radius: 10px;
+  &.is--active { background: var(--color-success-bg, rgba(78,201,176,0.15)); color: var(--color-success, #4ec9b0); }
+  &.is--inactive { background: var(--color-warning-bg, rgba(206,145,52,0.15)); color: var(--color-warning, #ce9134); }
+}
+
+.cmh-workflow-list__card-desc {
+  font-size: var(--cmh-font-size-sm, 13px); color: var(--color-text-secondary, #999);
+  margin: 0 0 8px; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.cmh-workflow-list__card-meta {
+  font-size: var(--cmh-font-size-xs, 11px); color: var(--color-text-muted, #666);
+}

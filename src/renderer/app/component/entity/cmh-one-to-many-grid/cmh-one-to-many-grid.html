@@ -1,0 +1,38 @@
+﻿<cmh-data-grid
+    v-bind="$props"
+    :data-source="records"
+    :is-loading="loading"
+>
+    <!-- 페이지네이션 -->
+    <template #pagination>
+        <cmh-pagination
+            :page="page"
+            :limit="limit"
+            :total="total"
+            :total-visible="7"
+            @page-change="paginate"
+        />
+    </template>
+
+    <!-- 행 액션 -->
+    <template #actions="{ item }">
+        <slot name="more-actions" v-bind="{ item }"></slot>
+
+        <slot name="delete-action" :item="item">
+            <cmh-context-menu-item
+                v-tooltip.bottom="tooltipDelete"
+                class="cmh-one-to-many-grid__delete-action"
+                variant="danger"
+                :disabled="!allowDelete || undefined"
+                @click="deleteItem((item.id as string))"
+            >
+                {{ $t('cmh-global.default.delete') }}
+            </cmh-context-menu-item>
+        </slot>
+    </template>
+
+    <!-- 나머지 슬롯 전달 -->
+    <template v-for="(_, name) in $slots" #[name]="slotProps">
+        <slot :name="name" v-bind="slotProps ?? {}"></slot>
+    </template>
+</cmh-data-grid>

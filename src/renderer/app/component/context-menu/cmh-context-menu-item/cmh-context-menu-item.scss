@@ -1,0 +1,60 @@
+﻿.cmh-context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--color-text-primary-default);
+    font-size: var(--font-size-sm);
+    text-align: left;
+    transition: background 0.1s;
+
+    &:hover:not(.is--disabled) {
+        background: var(--color-background-primary-hover);
+    }
+
+    &.is--disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    &--danger {
+        color: var(--color-text-critical-default);
+    }
+
+    &--success {
+        color: var(--color-text-success-default);
+    }
+
+    &--warning {
+        color: var(--color-text-attention-default);
+    }
+
+    &--headline {
+        font-weight: var(--font-weight-medium);
+        font-size: 12px;
+        color: var(--color-text-secondary-default);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: default;
+        pointer-events: none;
+        padding-top: 12px;
+        padding-bottom: 4px;
+
+        &:hover {
+            background: transparent;
+        }
+    }
+
+    &__text {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

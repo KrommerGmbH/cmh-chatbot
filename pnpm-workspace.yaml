@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: false
+  keytar: true
+  msgpackr-extract: false
+  node-llama-cpp: false

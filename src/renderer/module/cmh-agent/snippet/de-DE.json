@@ -1,0 +1,58 @@
+{
+  "cmh-agent": {
+    "general": {
+      "pageTitle": "Agenten"
+    },
+    "navigation": {
+      "label": "Agenten"
+    },
+    "list": {
+      "pageTitle": "Agentenverwaltung",
+      "searchPlaceholder": "Agenten suchen...",
+      "addAgent": "Agent hinzufügen",
+      "addSubAgent": "Unter-Agent hinzufügen",
+      "newAgent": "Neuer Agent",
+      "activate": "Aktivieren",
+      "deactivate": "Deaktivieren"
+    },
+    "detail": {
+      "notFound": "Agent nicht gefunden.",
+      "backToList": "Zurück zur Liste"
+    },
+    "core": {
+      "basicInfo": "Grundinformationen",
+      "prompts": "Prompts",
+      "langchainFlow": "LangChain-Fluss",
+      "agentType": "Agent-Typ",
+      "agentName": "Agent-Name",
+      "typeOrchestrator": "Orchestrator",
+      "typeManager": "Manager",
+      "typeWorker": "Worker",
+      "typeProfiler": "Profiler",
+      "typeSupporter": "Supporter",
+      "rolePrompt": "Rollen-Prompt",
+      "rolePromptPlaceholder": "Definieren Sie die Rolle dieses Agenten...",
+      "missionPrompt": "Missions-Prompt",
+      "missionPromptPlaceholder": "Definieren Sie die Mission/das Ziel dieses Agenten...",
+      "userPrompt": "Benutzer-Prompt",
+      "userPromptPlaceholder": "Standard-Prompt für den Benutzer...",
+      "mainModel": "Hauptmodell",
+      "subModel": "Nebenmodell",
+      "selectModel": "Modell auswählen...",
+      "langchainConfig": "LangChain-Konfiguration",
+      "langchainBlocks": "LangChain-Blöcke",
+      "dragBlocksHere": "Blöcke aus der Palette auf die Leinwand ziehen",
+      "flowHint": "Ziehen Sie Blöcke auf die Leinwand, verbinden Sie sie über Handles. Doppelklick auf einen Knoten zum Entfernen.",
+      "block": {
+        "messages": "Nachrichten",
+        "tools": "Werkzeuge",
+        "outputParsers": "Ausgabe-Parser",
+        "embeddings": "Embeddings",
+        "callbacks": "Callbacks",
+        "tracing": "Tracing"
+      },
+      "temperature": "Temperatur",
+      "maxTokens": "Max Tokens"
+    }
+  }
+}

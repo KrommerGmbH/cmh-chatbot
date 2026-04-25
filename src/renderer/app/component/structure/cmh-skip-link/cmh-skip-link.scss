@@ -1,0 +1,19 @@
+﻿.cmh-skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1200;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--color-interaction-primary-default, #0870ff);
+  color: var(--color-text-static-default, #ffffff);
+  text-decoration: none;
+  transform: translate(-9999px, -9999px);
+  transition: transform 0.15s ease;
+
+  &:focus {
+    top: 12px;
+    left: 12px;
+    transform: translate(0, 0);
+  }
+}

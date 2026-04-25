@@ -1,0 +1,59 @@
+{
+  "cmh-settings": {
+    "navigation": {
+      "general": "General settings"
+    },
+    "module": {
+      "title": "Settings"
+    },
+    "list": {
+      "pageTitle": "Settings",
+      "description": "Manage chatbot features and model settings.",
+      "tts": {
+        "title": "Text-to-Speech (TTS)",
+        "description": "Select and configure text-to-speech models"
+      },
+      "stt": {
+        "title": "Speech-to-Text (STT)",
+        "description": "Select and configure speech recognition models"
+      },
+      "general": {
+        "title": "General Settings",
+        "description": "Language, theme, and general preferences"
+      }
+    },
+    "detail": {
+      "pageTitle": "Settings Detail",
+      "backToSettings": "Back to Settings",
+      "default": "Default",
+      "localModel": "Local model",
+      "cloudModel": "Cloud",
+      "tts": {
+        "title": "Text-to-Speech (TTS) Settings",
+        "description": "Configure the model and options for reading AI responses aloud.",
+        "modelLabel": "Select TTS Model",
+        "rateLabel": "Speech Rate",
+        "autoReadLabel": "Auto-read"
+      },
+      "stt": {
+        "title": "Speech-to-Text (STT) Settings",
+        "description": "Configure the model for converting microphone input to text.",
+        "modelLabel": "Select STT Model",
+        "statusLabel": "Model Status",
+        "status": {
+          "idle": "Idle",
+          "loadingModel": "Loading model...",
+          "ready": "Ready",
+          "recording": "Recording...",
+          "transcribing": "Transcribing...",
+          "error": "Error"
+        }
+      },
+      "general": {
+        "title": "General Settings",
+        "description": "Manage general chatbot preferences.",
+        "comingSoon": "More settings coming soon."
+      }
+    }
+  }
+}

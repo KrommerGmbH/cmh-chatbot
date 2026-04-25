@@ -1,0 +1,30 @@
+{
+  "cmh-log": {
+    "navigation": {
+      "label": "로그"
+    },
+    "module": {
+      "title": "로그"
+    },
+    "list": {
+      "pageTitle": "로그 목록",
+      "allLevels": "전체 레벨",
+      "levelError": "에러",
+      "levelWarning": "경고",
+      "levelInfo": "정보",
+      "levelDebug": "디버그",
+      "clearAll": "전체 삭제",
+      "empty": "로그가 없습니다.",
+      "columns": {
+        "level": "레벨",
+        "source": "소스",
+        "message": "메시지",
+        "createdAt": "시간"
+      }
+    },
+    "detail": {
+      "pageTitle": "로그 상세",
+      "notFound": "로그를 찾을 수 없습니다."
+    }
+  }
+}

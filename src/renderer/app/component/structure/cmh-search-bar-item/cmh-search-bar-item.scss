@@ -1,0 +1,42 @@
+﻿.cmh-search-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover,
+  &.is--active {
+    background: var(--color-interaction-secondary-hover, #f2f3f8);
+  }
+
+  &__icon {
+    color: var(--color-icon-secondary-default, #696a6e);
+    flex-shrink: 0;
+  }
+
+  &__info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name,
+  &__description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__name {
+    color: var(--color-text-primary-default, #1e1e24);
+    font-size: var(--font-size-sm);
+  }
+
+  &__description {
+    color: var(--color-text-secondary-default, #696a6e);
+    font-size: 12px;
+  }
+}

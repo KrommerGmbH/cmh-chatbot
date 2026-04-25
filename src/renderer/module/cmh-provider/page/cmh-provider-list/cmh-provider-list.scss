@@ -1,0 +1,53 @@
+// ── cmh-provider-list (entity-listing 패턴) ──
+
+.cmh-provider-list__add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-accent, #0e639c);
+  color: var(--color-text-on-accent, #fff);
+  font-size: var(--cmh-font-size-sm, 13px);
+  cursor: pointer;
+  transition: background 150ms ease;
+
+  &:hover { background: var(--color-accent-hover, #1177bb); }
+}
+
+.cmh-provider-list__grid {
+  flex: 1;
+  min-height: 0;
+}
+
+.cmh-provider-list__url {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  color: var(--color-text-secondary, #999);
+  font-size: var(--cmh-font-size-xs, 11px);
+}
+
+.cmh-provider-list__priority {
+  font-weight: 600;
+}
+
+.cmh-provider-list__badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: var(--cmh-font-size-xs, 11px);
+
+  &.is--active {
+    background: rgba(78, 201, 176, 0.15);
+    color: var(--color-success, #4ec9b0);
+  }
+
+  &.is--inactive {
+    background: rgba(102, 102, 102, 0.15);
+    color: var(--color-text-muted, #666);
+  }
+}

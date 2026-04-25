@@ -1,0 +1,645 @@
+@use '../../_variables' as *;
+
+// ── 단일 메시지 ────────────────────────────────────
+.cmh-chat-message {
+  display: flex;
+  gap: 12px;
+  padding: 8px 24px;
+  transition: background $transition-fast;
+
+  &:hover { background: rgba(255, 255, 255, 0.02); }
+
+  &.is--user {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+
+    .cmh-chat-message__avatar {
+      background: $accent;
+      color: var(--color-text-on-accent, #fff);
+    }
+
+    .cmh-chat-message__body {
+      align-items: flex-end;
+    }
+
+    .cmh-chat-message__content {
+      background: var(--color-background-user-message, $accent);
+      color: var(--cmh-user-text, #fff);
+      border-radius: $radius-lg $radius-lg 4px $radius-lg;
+      padding: 8px 14px;
+      max-width: min(85%, 720px);
+      display: inline-block;
+    }
+
+    .cmh-chat-message__time { text-align: right; }
+  }
+
+  &.is--assistant {
+    .cmh-chat-message__avatar {
+      background: var(--color-avatar-assistant, #2c6b2f);
+      color: var(--color-text-on-accent, #fff);
+    }
+
+    .cmh-chat-message__content {
+      background: var(--color-background-user-message, $bg-secondary);
+      border-radius: $radius-lg $radius-lg $radius-lg 4px;
+      padding: 8px 14px;
+      max-width: 100%;
+    }
+  }
+
+  &.is--system {
+    justify-content: center;
+    padding: 2px 12px;
+  }
+}
+
+.cmh-chat-message__avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.cmh-chat-message__ph-icon {
+  font-size: 18px;
+  line-height: 1;
+
+  &.is--avatar { font-size: 18px; }
+  &.is--tts { font-size: 28px; }
+}
+
+.cmh-chat-message__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+// ── Thinking (접이식) ──────────────────────────────
+.cmh-chat-message__thinking {
+  margin-bottom: 8px;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: $bg-tertiary;
+    cursor: pointer;
+    font-size: var(--cmh-font-size-xs, 11px);
+    color: $success;
+    user-select: none;
+    list-style: none;
+
+    &::-webkit-details-marker { display: none; }
+
+    &::before {
+      content: '▶';
+      font-size: 8px; /* decorative icon — keep fixed */
+      transition: transform $transition-fast;
+    }
+  }
+
+  &[open] summary::before { content: '▼'; }
+}
+
+.cmh-chat-message__thinking-content {
+  padding: 8px 10px;
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: $text-secondary;
+  line-height: 1.6;
+  background: rgba(78, 201, 176, 0.04);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+// ── 메시지 본문 (마크다운) ──────────────────────────
+.cmh-chat-message__content {
+  margin-bottom: 4px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: var(--cmh-font-size-base, 15px);
+  font-weight: var(--cmh-font-weight-base, 400);
+
+  p { margin: 0 0 8px; &:last-child { margin-bottom: 0; } }
+
+  strong { font-weight: 600; color: var(--color-text-emphasis, #e0e0e0); }
+  em { font-style: italic; color: $text-secondary; }
+
+  code {
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: $bg-tertiary;
+    color: var(--color-code-inline, #d7ba7d);
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: var(--cmh-font-code, 12px);
+  }
+
+  pre {
+    margin: 8px 0;
+    padding: 10px 12px;
+    border-radius: $radius-md;
+    background: var(--color-bg-code-block, #1a1a1a);
+    overflow-x: auto;
+    code { padding: 0; background: transparent; color: var(--color-text-code, #d4d4d4); }
+  }
+
+  table {
+    width: 100%; margin: 8px 0; border-collapse: collapse;
+    font-size: var(--cmh-font-size-xs, 11px);
+    th, td { padding: 6px 10px; border: 1px solid $border-color; text-align: left; }
+    th { background: $bg-tertiary; font-weight: 600; color: $text-primary; }
+    td { background: $bg-secondary; }
+    tr:hover td { background: $bg-hover; }
+  }
+
+  ol, ul { margin: 4px 0; padding-left: 20px; }
+  li { margin-bottom: 2px; }
+
+  blockquote {
+    margin: 8px 0; padding: 6px 12px;
+    border-left: 3px solid $accent;
+    color: $text-secondary; background: rgba(14, 99, 156, 0.06);
+    border-radius: 0 $radius-sm $radius-sm 0;
+  }
+
+  a { color: var(--color-link, #4fc1ff); text-decoration: none; &:hover { text-decoration: underline; } }
+  hr { margin: 12px 0; border: none; border-top: 1px solid $border-color; }
+}
+
+// ── 구조화 UI 블록 (image/video/iframe/data-grid) ───────────
+.cmh-chat-message__ui-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.cmh-chat-message__ui-card {
+  width: min(100%, 920px);
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+// #1 Artifact Panel — 패널 열기 버튼
+.cmh-chat-message__ui-card-expand {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: var(--color-background-secondary, rgba(0, 0, 0, 0.3));
+  color: var(--cmh-color-text-muted, #888);
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 2;
+
+  .cmh-chat-message__ui-card:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background: var(--color-background-tertiary, rgba(0, 0, 0, 0.5));
+    color: var(--cmh-color-text-primary, #e0e0e0);
+  }
+}
+
+.cmh-chat-message__ui-image,
+.cmh-chat-message__ui-video,
+.cmh-chat-message__ui-iframe {
+  width: 100%;
+  max-width: 100%;
+  border: 0;
+  border-radius: $radius-sm;
+  background: var(--color-background-surface, #0f0f0f);
+}
+
+.cmh-chat-message__ui-image {
+  height: auto;
+  display: block;
+}
+
+.cmh-chat-message__ui-video {
+  max-height: min(60vh, 520px);
+}
+
+.cmh-chat-message__ui-iframe {
+  min-height: 320px;
+}
+
+.cmh-chat-message__ui-text,
+.cmh-chat-message__ui-markdown {
+  font-size: var(--cmh-font-size-sm, 13px);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.cmh-chat-message__ui-markdown {
+  :deep(p) {
+    margin: 0 0 8px;
+  }
+}
+
+.cmh-chat-message__ui-code-title {
+  margin-bottom: 6px;
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: var(--color-text-secondary, #aaa);
+}
+
+.cmh-chat-message__ui-code-details {
+  summary {
+    cursor: pointer;
+    font-size: var(--cmh-font-size-xs, 11px);
+    margin-bottom: 6px;
+  }
+}
+
+.cmh-chat-message__ui-code {
+  margin: 0;
+  padding: 10px;
+  border-radius: $radius-sm;
+  background: var(--color-bg-code-block, #1a1a1a);
+  overflow: auto;
+  font-size: var(--cmh-font-size-xs, 11px);
+}
+
+.cmh-chat-message__ui-table-wrap {
+  overflow-x: auto;
+}
+
+.cmh-chat-message__ui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--cmh-font-size-xs, 11px);
+
+  th,
+  td {
+    padding: 6px 8px;
+    border: 1px solid $border-color;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    background: $bg-tertiary;
+  }
+}
+
+.cmh-chat-message__ui-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cmh-chat-message__ui-collapse {
+  summary {
+    cursor: pointer;
+    font-size: var(--cmh-font-size-sm, 13px);
+    margin-bottom: 8px;
+  }
+}
+
+.cmh-chat-message__ui-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cmh-chat-message__ui-card-title {
+  margin: 0;
+  font-size: var(--cmh-font-size-lg, 18px);
+  font-weight: var(--cmh-font-weight-lg, 600);
+}
+
+.cmh-chat-message__ui-card-subtitle {
+  font-size: var(--cmh-font-size-sm, 13px);
+  color: var(--color-text-secondary, #aaa);
+}
+
+@media (min-width: 640px) {
+  .cmh-chat-message__ui-iframe {
+    min-height: 420px;
+  }
+}
+
+// ── 첨부 파일 칩 ──────────────────────────────────
+.cmh-chat-message__attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.cmh-chat-message__file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: $radius-sm;
+  border: 1px solid $border-color;
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: $text-secondary;
+
+  &.is--clickable {
+    cursor: pointer;
+    transition: background $transition-fast, border-color $transition-fast;
+    @media (hover: hover) {
+      &:hover { background: rgba(255, 255, 255, 0.06); border-color: var(--cmh-color-primary); }
+    }
+  }
+}
+
+// ── Todos (접이식) ─────────────────────────────────
+.cmh-chat-message__todos {
+  margin: 8px 0;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  summary {
+    display: flex; align-items: center; gap: 6px; padding: 6px 10px;
+    background: $bg-tertiary; cursor: pointer;
+    font-size: var(--cmh-font-size-xs, 11px); font-weight: 600;
+    color: $text-primary; user-select: none; list-style: none;
+    &::-webkit-details-marker { display: none; }
+    &::before { content: '▶'; font-size: 8px; /* decorative icon — keep fixed */ transition: transform $transition-fast; }
+  }
+
+  &[open] summary::before { content: '▼'; }
+}
+
+.cmh-chat-message__todo-list { list-style: none; margin: 0; padding: 0; }
+
+.cmh-chat-message__todo-item {
+  display: flex; align-items: center; gap: 8px; padding: 5px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: var(--cmh-font-size-xs, 11px);
+
+  &.is--completed {
+    .cmh-chat-message__todo-text { text-decoration: line-through; color: $text-muted; }
+    .cmh-chat-message__todo-check { color: $success; }
+  }
+  &.is--in-progress { .cmh-chat-message__todo-check { color: $warning; } }
+  &.is--not-started { .cmh-chat-message__todo-check { color: $text-muted; } }
+}
+
+.cmh-chat-message__todo-check { flex-shrink: 0; display: flex; align-items: center; }
+.cmh-chat-message__todo-text { flex: 1; }
+
+// ── 액션 버튼 ──────────────────────────────────────
+.cmh-chat-message__actions {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0;
+}
+
+.cmh-chat-message__action-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: $radius-lg;
+  font-size: var(--cmh-font-size-xs, 11px); font-weight: 500;
+  cursor: pointer; transition: background $transition-fast, border-color $transition-fast;
+
+  &.is--primary { background: $accent; color: #fff; border: 1px solid $accent; &:hover { background: $accent-hover; } }
+  &.is--secondary { background: transparent; color: $text-primary; border: 1px solid $border-color; &:hover { background: $bg-hover; border-color: $text-muted; } }
+  &.is--ghost { background: transparent; color: $text-secondary; border: 1px solid transparent; &:hover { background: $bg-hover; color: $text-primary; } }
+}
+
+// ── 메시지 푸터 ────────────────────────────────────
+.cmh-chat-message__footer {
+  display: flex; align-items: center; gap: 6px; margin-top: 4px;
+}
+
+.cmh-chat-message__model-name {
+  margin-left: auto;
+  font-size: var(--cmh-font-size-xs, 11px); font-weight: var(--cmh-font-weight-xs, 300);
+  color: $text-muted; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+}
+
+.cmh-chat-message__time {
+  display: block; font-size: var(--cmh-font-size-xs, 11px); color: $text-muted;
+}
+
+.cmh-chat-message__tts-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border: none; border-radius: $radius-sm;
+  background: transparent; cursor: pointer; opacity: 0;
+  transition: opacity $transition-fast, color $transition-fast;
+
+  .cmh-chat-message:hover & { opacity: 0.6; }
+  &:hover { opacity: 1 !important; }
+  &.is--speaking { opacity: 1; .cmh-chat-message__ph-icon { color: var(--color-text-brand-default, $accent); } }
+}
+
+// ── User message action buttons ─────────────────────
+.cmh-chat-message__user-action-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; min-width: 26px;
+  border: none; border-radius: $radius-sm;
+  background: transparent; cursor: pointer; opacity: 0;
+  transition: opacity $transition-fast, background $transition-fast;
+  color: var(--cmh-color-text-muted, #{$text-muted});
+
+  .cmh-chat-message:hover & { opacity: 0.6; }
+  &:hover { opacity: 1 !important; background: rgba(255, 255, 255, 0.08); }
+
+  .cmh-chat-message__ph-icon.is--action {
+    font-size: 15px;
+  }
+}
+
+// ── Typing indicator ────────────────────────────────
+.cmh-chat-message__typing-indicator {
+  display: flex; align-items: center; gap: 5px; padding: 10px 14px; min-height: 24px;
+  flex-wrap: wrap;
+}
+
+.cmh-chat-message__typing-status {
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: var(--cmh-color-text-muted, #{$text-muted});
+  margin-left: 4px;
+  animation: cmh-typing-fade 2s ease-in-out infinite;
+}
+
+.cmh-chat-message__typing-model {
+  font-weight: 500;
+  color: var(--cmh-color-accent, #{$accent});
+  margin-right: 4px;
+}
+
+@keyframes cmh-typing-fade {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.cmh-chat-message__typing-dot {
+  display: block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--cmh-color-text-muted, #{$text-muted});
+  animation: cmh-typing 1.2s infinite;
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes cmh-typing {
+  0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+  30% { opacity: 1; transform: scale(1.2); }
+}
+
+// ── #6 Tool Call Card ───────────────────────────────
+.cmh-chat-message__tool-events {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  max-width: min(85%, 720px);
+}
+
+.cmh-chat-message__tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--color-background-secondary, rgba(255, 255, 255, 0.04));
+  border-left: 3px solid var(--cmh-color-text-muted, #888);
+  font-size: var(--cmh-font-size-xs, 11px);
+
+  &.is--running {
+    border-left-color: var(--color-warning-500, #f59e0b);
+  }
+
+  &.is--success {
+    border-left-color: var(--color-success-500, #22c55e);
+  }
+
+  &.is--error {
+    border-left-color: var(--color-error-500, #ef4444);
+  }
+}
+
+.cmh-chat-message__tool-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cmh-chat-message__tool-card-icon {
+  font-size: 14px;
+}
+
+.cmh-chat-message__tool-card-name {
+  font-weight: var(--cmh-font-weight-sm, 400);
+  color: var(--cmh-color-text-primary, #e0e0e0);
+}
+
+.cmh-chat-message__tool-card-duration {
+  margin-left: auto;
+  color: var(--cmh-color-text-muted, #888);
+}
+
+.cmh-chat-message__tool-card-error {
+  color: var(--color-error-500, #ef4444);
+  font-size: var(--cmh-font-size-xs, 11px);
+}
+
+// ── #10 Tool Event Timeline ──────────────────────
+.cmh-chat-message__tool-timeline {
+  margin-top: 8px;
+  max-width: min(85%, 720px);
+  border-radius: 8px;
+  background: var(--color-background-secondary, rgba(255, 255, 255, 0.04));
+  overflow: hidden;
+
+  &[open] > .cmh-chat-message__tool-timeline-summary {
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  }
+}
+
+.cmh-chat-message__tool-timeline-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: var(--cmh-font-size-xs, 11px);
+  color: var(--cmh-color-text-secondary, #aaa);
+  user-select: none;
+
+  &:hover {
+    color: var(--cmh-color-text-primary, #e0e0e0);
+  }
+}
+
+.cmh-chat-message__tool-timeline-total {
+  margin-left: auto;
+  color: var(--cmh-color-text-muted, #888);
+}
+
+.cmh-chat-message__tool-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 8px 8px;
+}
+
+.cmh-chat-message__tool-card-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-background-tertiary, rgba(255, 255, 255, 0.08));
+  font-size: 10px; /* decorative icon — keep fixed */
+  color: var(--cmh-color-text-muted, #888);
+  flex-shrink: 0;
+}
+
+.cmh-chat-message__tool-card-time {
+  color: var(--cmh-color-text-muted, #888);
+  font-size: var(--cmh-font-size-xs, 11px);
+}
+
+.cmh-chat-message__tool-card-details {
+  margin-top: 2px;
+  font-size: var(--cmh-font-size-xs, 11px);
+
+  summary {
+    cursor: pointer;
+    color: var(--cmh-color-text-muted, #888);
+    user-select: none;
+    &:hover { color: var(--cmh-color-text-secondary, #aaa); }
+  }
+}
+
+.cmh-chat-message__tool-card-json {
+  margin: 4px 0 0;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: var(--color-background-tertiary, rgba(0, 0, 0, 0.2));
+  color: var(--cmh-color-text-secondary, #aaa);
+  font-size: var(--cmh-font-size-xs, 11px);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  overflow-x: auto;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+

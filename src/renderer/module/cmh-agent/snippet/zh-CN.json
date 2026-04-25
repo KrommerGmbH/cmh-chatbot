@@ -1,0 +1,58 @@
+{
+  "cmh-agent": {
+    "general": {
+      "pageTitle": "代理"
+    },
+    "navigation": {
+      "label": "代理"
+    },
+    "list": {
+      "pageTitle": "代理管理",
+      "searchPlaceholder": "搜索代理...",
+      "addAgent": "添加代理",
+      "addSubAgent": "添加子代理",
+      "newAgent": "新代理",
+      "activate": "激活",
+      "deactivate": "停用"
+    },
+    "detail": {
+      "notFound": "未找到代理。",
+      "backToList": "返回列表"
+    },
+    "core": {
+      "basicInfo": "基本信息",
+      "prompts": "提示词",
+      "langchainFlow": "LangChain 流程",
+      "agentType": "代理类型",
+      "agentName": "代理名称",
+      "typeOrchestrator": "编排器",
+      "typeManager": "管理器",
+      "typeWorker": "工作器",
+      "typeProfiler": "分析器",
+      "typeSupporter": "支持器",
+      "rolePrompt": "角色提示",
+      "rolePromptPlaceholder": "定义此代理的角色...",
+      "missionPrompt": "任务提示",
+      "missionPromptPlaceholder": "定义此代理的任务/目标...",
+      "userPrompt": "用户提示",
+      "userPromptPlaceholder": "显示给用户的默认提示...",
+      "mainModel": "主模型",
+      "subModel": "副模型",
+      "selectModel": "选择模型...",
+      "langchainConfig": "LangChain 配置",
+      "langchainBlocks": "LangChain 模块",
+      "dragBlocksHere": "将模块从面板拖拽到画布",
+      "flowHint": "将模块拖到画布上，通过拖动端口连接。双击节点可删除。",
+      "block": {
+        "messages": "消息",
+        "tools": "工具",
+        "outputParsers": "输出解析器",
+        "embeddings": "嵌入",
+        "callbacks": "回调",
+        "tracing": "追踪"
+      },
+      "temperature": "温度",
+      "maxTokens": "最大令牌数"
+    }
+  }
+}

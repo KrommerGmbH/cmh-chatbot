@@ -1,0 +1,199 @@
+﻿.cmh-sidebar-renderer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-background-primary, #fff);
+
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 30%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 999;
+  }
+
+  &.is--panel-open &__backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // ── 탭 버튼 영역 (좌측 아이콘 열) ─────────────────────────────
+  &__tabs {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    padding: 20px 0 12px;
+    border-left: 1px solid var(--color-border-primary, #e0e0e0);
+    gap: 8px;
+    flex-shrink: 0;
+    background-color: var(--color-elevation-surface-default, #fff);
+  }
+
+  &__tab-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--color-icon-secondary-default, #696a6e);
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-interaction-secondary-hover, #f2f3f8);
+      color: var(--color-icon-primary-default, #1e1e24);
+    }
+
+    &.is--active {
+      background-color: color-mix(in srgb, var(--color-interaction-primary-default, #0870ff) 10%, transparent);
+      color: var(--color-interaction-primary-default, #0870ff);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  // ── 배지 ───────────────────────────────────────────────────────
+  &__badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background-color: var(--color-interaction-primary-default, #0870ff);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+  }
+
+  // ── 패널 영역 ──────────────────────────────────────────────────
+  &__panel {
+    position: relative;
+    z-index: 1000;
+    display: block;
+    width: 340px;
+    flex-shrink: 0;
+  }
+
+  &__overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 1px solid var(--color-border-primary-default, #cdced4);
+    height: 100%;
+    max-width: 90vw;
+    overflow: hidden;
+    background-color: var(--color-elevation-surface-overlay, #fff);
+    box-shadow: -4px 0 16px rgb(0 0 0 / 15%);
+    border-radius: 8px 0 0 8px;
+  }
+
+  &__resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 10;
+
+    &:hover {
+      background: var(--color-interaction-primary-default, #0870ff);
+      opacity: 0.3;
+    }
+
+    &:active {
+      background: var(--color-interaction-primary-default, #0870ff);
+      opacity: 0.5;
+    }
+  }
+
+  &__panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 81px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border-primary, #cdced4);
+    flex-shrink: 0;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  &__panel-title {
+    font-size: 20px;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary, #1e1e24);
+  }
+
+  &__panel-collapse {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--color-border-primary-default, #cdced4);
+    border-radius: 8px;
+    background: var(--color-elevation-surface-default, #ffffff);
+    color: var(--color-text-secondary-default, #696a6e);
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-interaction-primary-default, #0870ff);
+      color: var(--color-interaction-primary-default, #0870ff);
+    }
+  }
+
+  &__panel-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--color-icon-secondary-default, #696a6e);
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--color-interaction-secondary-hover, #f2f3f8);
+      color: var(--color-icon-primary-default, #1e1e24);
+    }
+  }
+
+  &__panel-content {
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px;
+  }
+}

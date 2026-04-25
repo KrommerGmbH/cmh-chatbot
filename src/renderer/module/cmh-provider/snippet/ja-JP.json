@@ -1,0 +1,48 @@
+{
+  "cmh-provider": {
+    "navigation": {
+      "label": "プロバイダー"
+    },
+    "module": {
+      "title": "プロバイダー"
+    },
+    "list": {
+      "pageTitle": "プロバイダー一覧",
+      "addProvider": "プロバイダー追加",
+      "empty": "登録されたプロバイダーがありません。",
+      "priority": "優先度",
+      "models": "モデル",
+      "columns": {
+        "name": "名前",
+        "type": "タイプ",
+        "baseUrl": "ベースURL",
+        "priority": "優先度",
+        "modelCount": "モデル数",
+        "status": "ステータス"
+      },
+      "loadError": "プロバイダー一覧の読み込みに失敗しました。"
+    },
+    "detail": {
+      "pageTitle": "プロバイダー詳細",
+      "newProvider": "新規プロバイダー",
+      "name": "名前",
+      "description": "説明",
+      "type": "タイプ",
+      "priority": "優先度",
+      "baseUrl": "ベースURL",
+      "baseUrlPlaceholder": "https://api.example.com/v1",
+      "apiKey": "APIキー",
+      "apiKeyPlaceholder": "APIキーを入力",
+      "isActive": "有効",
+      "typeOptions": {
+        "localGguf": "ローカル (GGUF)",
+        "cloudApi": "クラウド API",
+        "selfHosted": "セルフホスト"
+      },
+      "saveError": "プロバイダーの保存に失敗しました。",
+      "engineUnavailable": "Engine server (127.0.0.1:4000) に接続できません。Engine を起動して再保存してください。",
+      "syncModelsSuccess": "プロバイダー保存後にモデル一覧を同期しました。",
+      "syncModelsError": "プロバイダーの保存は完了しましたが、モデル同期に失敗しました。"
+    }
+  }
+}

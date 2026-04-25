@@ -1,0 +1,17 @@
+﻿<div class="cmh-split-pane" ref="container">
+  <template v-for="(pane, index) in panes" :key="index">
+    <div
+      class="cmh-split-pane__pane"
+      :class="{ 'cmh-split-pane__pane--last': isLastVisiblePane(index) }"
+      :style="paneStyle(index)"
+    >
+      <slot :name="`pane-${index}`" />
+    </div>
+    <div
+      v-if="index < panes.length - 1 && !(hiddenPanes ?? []).includes(index + 1)"
+      class="cmh-split-pane__divider"
+      :class="{ 'cmh-split-pane__divider--active': draggingIndex === index }"
+      @mousedown.prevent="startDrag(index, $event)"
+    />
+  </template>
+</div>

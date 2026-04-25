@@ -1,0 +1,111 @@
+﻿<mt-card :title="cardTitle" class="cmh-many-to-many-assignment-card">
+  <!-- 검색 영역 -->
+  <div class="cmh-many-to-many-assignment-card__search">
+    <mt-text-field
+      v-model="searchTerm"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      size="small"
+      @focus="onSearchFocus"
+      @blur="onSearchBlur"
+    />
+
+    <!-- 검색 결과 드롭다운 -->
+    <div
+      v-if="showResults && searchResults.length > 0"
+      class="cmh-many-to-many-assignment-card__results"
+    >
+      <ul class="cmh-many-to-many-assignment-card__results-list">
+        <li
+          v-for="item in searchResults"
+          :key="String(item.id)"
+          class="cmh-many-to-many-assignment-card__result-item"
+          :class="{ 'is--selected': isSelected(item) }"
+          @mousedown.prevent="onSelectItem(item)"
+        >
+          <span class="cmh-many-to-many-assignment-card__result-label">
+            {{ getItemLabel(item) }}
+          </span>
+          <mt-icon
+            v-if="isSelected(item)"
+            name="regular-checkmark-xs"
+            size="16"
+          />
+        </li>
+      </ul>
+    </div>
+
+    <!-- 결과 없음 -->
+    <div
+      v-if="showResults && searchResults.length === 0 && !isSearching && searchTerm.length >= 1"
+      class="cmh-many-to-many-assignment-card__no-results"
+    >
+      {{ $t('cmh-global.labels.noResults') }}
+    </div>
+  </div>
+
+  <!-- 할당된 항목 그리드 -->
+  <div
+    v-if="assignedItems.length > 0"
+    class="cmh-many-to-many-assignment-card__grid"
+  >
+    <table class="cmh-many-to-many-assignment-card__table">
+      <thead>
+        <tr>
+          <th
+            v-for="col in columns"
+            :key="col.property"
+          >
+            {{ col.label }}
+          </th>
+          <th class="cmh-many-to-many-assignment-card__actions-header"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in paginatedItems"
+          :key="String(item.id)"
+          class="cmh-many-to-many-assignment-card__row"
+        >
+          <td
+            v-for="col in columns"
+            :key="col.property"
+          >
+            {{ item[col.property] }}
+          </td>
+          <td class="cmh-many-to-many-assignment-card__actions-cell">
+            <cmh-button
+              v-if="!disabled"
+              variant="critical-bare"
+              size="small"
+              @click="onRemoveItem(item)"
+            >
+              <mt-icon name="regular-times-xs" size="14" />
+            </cmh-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 페이지네이션 (10개 초과 시) -->
+    <div
+      v-if="totalAssigned > gridLimit"
+      class="cmh-many-to-many-assignment-card__pagination"
+    >
+      <span class="cmh-many-to-many-assignment-card__pagination-info">
+        {{ (gridPage - 1) * gridLimit + 1 }}–{{ Math.min(gridPage * gridLimit, totalAssigned) }}
+        / {{ totalAssigned }}
+      </span>
+    </div>
+  </div>
+
+  <!-- 비어있는 상태 -->
+  <div
+    v-else
+    class="cmh-many-to-many-assignment-card__empty"
+  >
+    <slot name="empty-state">
+      <p>{{ $t('cmh-global.labels.noItems') }}</p>
+    </slot>
+  </div>
+</mt-card>

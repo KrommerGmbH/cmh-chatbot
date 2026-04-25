@@ -1,0 +1,17 @@
+.cmh-desktop {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  &--no-nav {
+    .cmh-desktop__content {
+      width: 100%;
+    }
+  }
+}

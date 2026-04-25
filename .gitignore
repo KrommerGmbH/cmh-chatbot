@@ -1,0 +1,18 @@
+node_modules/
+dist/
+*.tgz
+.env
+.env.*
+!.env.example
+coverage/
+.turbo/
+tmp-*
+.copilot-temp-*
+.serena/
+*.tsbuildinfo
+*.log
+bin/
+models/
+
+# SQLite data
+data/*.sqlite
