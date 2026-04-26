@@ -10,6 +10,10 @@ import { resolve } from 'node:path'
 import { existsSync, createReadStream, statSync } from 'node:fs'
 import { edgeTtsPlugin } from './vite-plugin-edge-tts'
 
+const DEV_LLM_PORT = Number.parseInt(process.env.CMH_LLM_PORT ?? '8080', 10)
+const DEV_ENGINE_PORT = Number.parseInt(process.env.CMH_ENGINE_PORT ?? '4000', 10)
+const DEV_UI_PORT = Number.parseInt(process.env.CMH_UI_PORT ?? '5200', 10)
+
 /**
  * meteor-component-library CSS 파일이 존재하지 않는 main.css.map을 참조하는 문제 억제.
  * sourceMappingURL 주석을 제거하여 Vite가 map 파일을 찾지 않게 한다.
@@ -73,12 +77,12 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 5200,
+    port: DEV_UI_PORT,
     strictPort: true,
     open: true,
     proxy: {
       '/llm': {
-        target: 'http://127.0.0.1:8080',
+        target: `http://127.0.0.1:${DEV_LLM_PORT}`,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/llm/, ''),
         // SSE 스트리밍 응답 버퍼링 비활성화 — llama-server 응답이 즉시 클라이언트에 도달
@@ -90,7 +94,7 @@ export default defineConfig({
         },
       },
       '/api': {
-        target: 'http://127.0.0.1:4000',
+        target: `http://127.0.0.1:${DEV_ENGINE_PORT}`,
         changeOrigin: true,
         configure: (proxy) => {
           proxy.on('proxyRes', (proxyRes) => {

@@ -477,6 +477,10 @@ export default defineComponent({
       this.chatStore.selectModel(modelId)
     },
 
+    onOpenModelPicker(): void {
+      void this.chatStore.loadModels()
+    },
+
     onSelectAgent(agentId: string): void {
       this.selectedAgentId = agentId
       this.agentStore.selectedAgentId = agentId

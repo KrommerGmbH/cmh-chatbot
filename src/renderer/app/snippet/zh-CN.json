@@ -95,6 +95,7 @@
       "generationStopped": "响应生成已停止。",
       "sttModelLoading": "正在下载语音识别模型... 首次使用可能需要一些时间。",
       "sttTranscribing": "正在将语音转换为文本...",
+      "localModelLoading": "正在加载模型：{model}...",
       "serverError": "服务器内部错误",
       "modelNotFound": "未找到模型",
       "rateLimited": "请求过多",
@@ -109,6 +110,7 @@
       "noModelSelected": "未选择模型",
       "noModelSelectedMessage": "请先选择一个模型再发送消息。",
       "noApiKey": "API 密钥未配置",
+      "providerApiKeyMissingHint": "要使用该提供商的云模型，请先在 Provider 设置中填写 API 密钥。",
       "apiKeyRequiredShort": "需要 API 密钥",
       "forkedConversation": "对话已分支。"
     },

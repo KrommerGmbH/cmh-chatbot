@@ -95,6 +95,7 @@
       "generationStopped": "응답 생성이 중단되었습니다.",
       "sttModelLoading": "음성 인식 모델 다운로드 중... 최초 실행 시 시간이 걸릴 수 있습니다.",
       "sttTranscribing": "음성을 텍스트로 변환 중...",
+      "localModelLoading": "{model} 모델 로딩 중...",
       "serverError": "llama-server 내부 오류",
       "modelNotFound": "모델을 찾을 수 없습니다",
       "rateLimited": "요청이 너무 빈번합니다",
@@ -109,6 +110,7 @@
       "noModelSelected": "모델이 선택되지 않았습니다",
       "noModelSelectedMessage": "채팅에 사용할 모델을 먼저 선택해 주세요.",
       "noApiKey": "API 키가 설정되지 않았습니다",
+      "providerApiKeyMissingHint": "이 프로바이더의 클라우드 모델을 사용하려면 Provider 설정에서 API 키를 입력하세요.",
       "apiKeyRequiredShort": "API 키 필요",
       "forkedConversation": "대화가 분기되었습니다."
     },

@@ -394,44 +394,16 @@ export async function isModelLoadedOnServer(modelId: string): Promise<boolean> {
 }
 
 /**
- * llama-server에서 현재 로드된 모델을 언로드한다.
- * 모델 전환 시 RAM을 확보하기 위해 사용.
+ * llama-server에서 현재 로드된 모델 언로드를 시도한다.
  *
- * llama-server multi-model 모드: POST /v1/models/stop 으로 개별 모델 프로세스 종료.
- * 지원되지 않는 버전은 DELETE /v1/models/{id} 시도 후 폴백.
+ * 주의:
+ * - 일부 llama-server(router) 빌드는 `/v1/models/stop`, `DELETE /v1/models/{id}`를 지원하지 않아
+ *   브라우저 콘솔에 404를 남긴다.
+ * - 현재 프로젝트는 router의 자동 모델 전환(요청 시 ensure_model)에 의존하므로,
+ *   프론트엔드에서 강제 stop/delete 호출을 하지 않는다.
  */
 export async function unloadCurrentModel(): Promise<void> {
-  try {
-    const res = await fetch('/llm/v1/models', { signal: AbortSignal.timeout(3_000) })
-    if (!res.ok) return
-    const json = await res.json().catch(() => ({ data: [] }))
-    const loadedModels = (json?.data ?? []).filter(
-      (m: { status?: { value?: string } }) => m?.status?.value === 'loaded',
-    )
-    for (const m of loadedModels) {
-      // 방법 1: POST /v1/models/stop (llama-server multi-model)
-      const stopRes = await fetch('/llm/v1/models/stop', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: AbortSignal.timeout(5_000),
-        body: JSON.stringify({ id: m.id }),
-      }).catch(() => null)
-
-      if (!stopRes || !stopRes.ok) {
-        // 방법 2: DELETE /v1/models/{id}
-        await fetch(`/llm/v1/models/${encodeURIComponent(m.id)}`, {
-          method: 'DELETE',
-          signal: AbortSignal.timeout(5_000),
-        }).catch(() => {})
-      }
-    }
-    if (loadedModels.length > 0) {
-      console.log('[ai-client] unload requested for %d model(s), waiting 2s for RAM release', loadedModels.length)
-      await new Promise(r => setTimeout(r, 2_000))
-    }
-  } catch {
-    // 무시 — 언로드 실패해도 로드 시도는 진행
-  }
+  return
 }
 
 /** 모델 warm-up (1-token ping) — 필요 시 기존 모델 언로드 후 로드 */
@@ -441,28 +413,6 @@ export async function warmupModelOnServer(modelId: string, timeoutMs = 35_000): 
 
   // 다른 모델이 로드되어 있으면 먼저 언로드하여 RAM 확보
   await unloadCurrentModel()
-
-  // llama-server multi-model 모드: /v1/models/load API로 no-warmup 로드 시도
-  // (지원하는 버전에서는 내부 empty-run warmup을 건너뜀)
-  try {
-    const loadRes = await fetch('/llm/v1/models/load', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(5_000),
-      body: JSON.stringify({ id: modelId, no_warmup: true }),
-    })
-    // 성공 시 로드 완료 대기 (최대 30초)
-    if (loadRes.ok) {
-      console.log('[ai-client] model load API called with no_warmup=true, waiting...')
-      const waitStart = Date.now()
-      while (Date.now() - waitStart < Math.min(timeoutMs, 30_000)) {
-        await new Promise(r => setTimeout(r, 1_000))
-        if (await isModelLoadedOnServer(modelId)) return true
-      }
-    }
-  } catch {
-    // /v1/models/load 미지원 버전 — 폴백으로 ping 방식 사용
-  }
 
   // 폴백: 1-token ping으로 모델 로드 트리거 (기존 방식)
   const ctrl = new AbortController()

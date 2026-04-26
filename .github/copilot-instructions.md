@@ -223,9 +223,14 @@ font-size: 1.2rem;
 
 ### 7.6 개발 서버 실행 기준
 
-- Renderer(`/api/*`)는 Engine(4000) 프록시에 의존한다.
-- 채팅 개발은 `dev:chat` 실행 시 `llm(8080)+engine(4000)+ui(5200)` 3개 프로세스가 함께 올라와야 한다.
-- Engine 미기동 상태의 Vite proxy `ECONNREFUSED 127.0.0.1:4000`는 코드 버그가 아니라 런타임 프로세스 누락이다.
+- Renderer(`/api/*`)는 Engine 프록시에 의존한다.
+- 채팅 개발은 `dev:chat` 실행 시 `llm+engine+ui` 3개 프로세스가 함께 올라와야 한다.
+- 기본 포트는 `llm(8080)+engine(4000)+ui(5200)`이며, 포트 충돌 시 환경변수로 오버라이드한다.
+   - `CMH_LLM_PORT`
+   - `CMH_ENGINE_PORT`
+   - `CMH_UI_PORT`
+- `dev-cleanup`은 현재 설정된 포트 조합을 정리해야 하며(기본 또는 env override), 점유 프로세스가 없어도 실패로 처리하지 않는다.
+- Engine 미기동 상태의 Vite proxy `ECONNREFUSED`는 코드 버그가 아니라 런타임 프로세스 누락이다.
 
 ### 7.7 Google Provider 가시성 보장
 
@@ -253,9 +258,23 @@ font-size: 1.2rem;
 
 ### 7.10 엔진 단위 테스트 위치 규칙
 
-- 현재 Vitest root는 `src/renderer` 이므로 엔진 테스트도 아래 경로에 둔다.
-   - `src/renderer/tests/engine/**`
+- 테스트 소스는 `tests/**` 단일 경로만 사용한다.
+- 엔진 단위 테스트는 아래 경로에 둔다.
+   - `tests/engine/**`
 - 우선 작성 대상:
    - 보안 유틸 (`is-usable-api-key`)
    - 서버 Criteria factory
    - webhook auth 미들웨어
+
+### 7.11 모델 선택기 API 키 안내/실시간 동기화
+
+- `cmh-chat-input`의 provider별 모델 목록에서, 해당 provider의 cloud 모델이 모두 `hasApiKey=false`면
+   `cmh-chat-input__model-picker-models` 영역에 API 키 설정 안내 문구를 표시한다.
+- 모델 선택기 오픈 시(`open-model-picker`) `chatStore.loadModels()`를 호출해 cloud 모델 목록을 실시간 API 동기화 기준으로 갱신한다.
+
+### 7.12 로컬 모델 warmup/제목 생성 표준
+
+- 로컬 모델 warmup은 동시 요청 시 dedupe registry(`model-warmup-registry`)로 단일 in-flight Promise를 공유한다.
+- warmup 진행 중에는 채팅창에 `systemType='loading'` 메시지를 표시하고 완료/실패 시 정리한다.
+- 앱 시작 시 기본 모델은 `gemma-4-E4B-it-UD-Q4_K_XL` 우선 선택, 없으면 `isDefault`, 최종 폴백은 첫 모델 순으로 선택한다.
+- 첫 질문 이후 제목 생성은 "기본 제목(예: 새 채팅/New Chat)" 상태일 때만 실행하고, 생성 결과는 DB/UI에 저장한다.

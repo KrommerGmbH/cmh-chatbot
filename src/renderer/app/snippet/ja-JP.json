@@ -93,6 +93,7 @@
       "generationStopped": "応答の生成が中断されました。",
       "sttModelLoading": "音声認識モデルをダウンロード中... 初回は時間がかかる場合があります。",
       "sttTranscribing": "音声をテキストに変換中...",
+      "localModelLoading": "モデルを読み込み中: {model}...",
       "serverError": "サーバー内部エラー",
       "modelNotFound": "モデルが見つかりません",
       "rateLimited": "リクエスト過多",
@@ -107,6 +108,7 @@
       "noModelSelected": "モデルが選択されていません",
       "noModelSelectedMessage": "メッセージを送信する前にモデルを選択してください。",
       "noApiKey": "API キーが設定されていません",
+      "providerApiKeyMissingHint": "このプロバイダーのクラウドモデルを使うには、Provider 設定で API キーを登録してください。",
       "apiKeyRequiredShort": "APIキー必須",
       "forkedConversation": "会話が分岐されました。"
     },

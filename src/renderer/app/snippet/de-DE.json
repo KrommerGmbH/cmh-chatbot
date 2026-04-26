@@ -95,6 +95,7 @@
       "generationStopped": "Antwortgenerierung wurde gestoppt.",
       "sttModelLoading": "Spracherkennungsmodell wird heruntergeladen... Beim ersten Start kann es etwas dauern.",
       "sttTranscribing": "Sprache wird in Text umgewandelt...",
+      "localModelLoading": "Modell wird geladen: {model}...",
       "serverError": "Interner Serverfehler",
       "modelNotFound": "Modell nicht gefunden",
       "rateLimited": "Zu viele Anfragen",
@@ -109,6 +110,7 @@
       "noModelSelected": "Kein Modell ausgewählt",
       "noModelSelectedMessage": "Bitte wählen Sie zuerst ein Modell aus.",
       "noApiKey": "API-Schlüssel ist nicht konfiguriert",
+      "providerApiKeyMissingHint": "Um die Cloud-Modelle dieses Anbieters zu nutzen, hinterlegen Sie einen API-Schlüssel in den Anbieter-Einstellungen.",
       "apiKeyRequiredShort": "API-Schlüssel erforderlich",
       "forkedConversation": "Konversation wurde abgezweigt."
     },

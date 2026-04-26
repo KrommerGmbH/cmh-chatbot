@@ -50,6 +50,11 @@
           @click="modelSearchQuery = ''"
         >×</button>
       </div>
+
+      <div v-if="shouldShowApiKeyHint" class="cmh-chat-input__provider-api-key-hint">
+        {{ $t('cmh-global.chat.providerApiKeyMissingHint') }}
+      </div>
+
       <button
         v-for="model in filteredModels"
         :key="model.id"
@@ -125,7 +130,7 @@
         </div>
 
         <!-- 모델 선택 -->
-        <div class="cmh-chat-input__select-wrap" @click="showModelDropdown = !showModelDropdown">
+        <div class="cmh-chat-input__select-wrap" @click="onToggleModelDropdown">
           <span class="cmh-chat-input__select-label">{{ selectedModelName }}</span>
           <iconify-icon icon="ph:caret-down" class="cmh-chat-input__ph-icon is--caret" :class="{ 'is--open': showModelDropdown }" />
         </div>

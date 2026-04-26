@@ -93,6 +93,7 @@
       "generationStopped": "Response generation was stopped.",
       "sttModelLoading": "Downloading speech recognition model... This may take a while on first use.",
       "sttTranscribing": "Converting speech to text...",
+      "localModelLoading": "Loading model: {model}...",
       "serverError": "Internal server error",
       "modelNotFound": "Model not found",
       "rateLimited": "Too many requests",
@@ -107,6 +108,7 @@
       "noModelSelected": "No model selected",
       "noModelSelectedMessage": "Please select a model before sending a message.",
       "noApiKey": "API key is not configured",
+      "providerApiKeyMissingHint": "To use this provider's cloud models, add an API key in Provider settings.",
       "apiKeyRequiredShort": "API key required",
       "forkedConversation": "Conversation forked."
     },

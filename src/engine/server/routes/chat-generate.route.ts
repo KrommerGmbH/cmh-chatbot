@@ -479,6 +479,10 @@ export function registerChatAndGenerateRoutes({ ctx, app, providerRepo }: Regist
         sdkModel = provider.languageModel(effectiveModelId)
       }
 
+      if (!effectiveModelId || !effectiveModelId.trim()) {
+        return c.json({ error: 'modelId or rawModelId is required' }, 400)
+      }
+
       const cacheKey = responseCache.buildKey({
         modelId: effectiveModelId,
         messages: body.messages as unknown as Array<{ role: string; content: unknown }>,

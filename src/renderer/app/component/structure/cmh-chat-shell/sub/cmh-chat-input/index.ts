@@ -1,5 +1,6 @@
 import { defineComponent, type PropType } from 'vue'
 import type { AttachedFile, ModelOption } from '../../../../../store/chat.store'
+import { shouldShowProviderApiKeyHint } from './model-picker.utils'
 import './cmh-chat-input.scss'
 import template from './cmh-chat-input.html?raw'
 
@@ -32,6 +33,7 @@ export default defineComponent({
     'select-agent',
     'toggle-stt',
     'toggle-tts',
+    'open-model-picker',
     'update:inputText',
     'file-input-change',
   ],
@@ -48,18 +50,26 @@ export default defineComponent({
   },
 
   computed: {
+    providerModels(): ModelOption[] {
+      return this.modelsByProvider[this.activeProvider] ?? []
+    },
+
     visibleAttachments(): AttachedFile[] {
       if (this.showAllAttachments) return this.pendingAttachments
       return this.pendingAttachments.slice(0, this.maxVisibleFiles)
     },
 
     filteredModels(): ModelOption[] {
-      const models = this.modelsByProvider[this.activeProvider] ?? []
-      if (!this.modelSearchQuery) return models
+      const visibleModels = this.providerModels.filter((m) => m.providerType !== 'cloud-api' || m.hasApiKey)
+      if (!this.modelSearchQuery) return visibleModels
       const q = this.modelSearchQuery.toLowerCase()
-      return models.filter(
+      return visibleModels.filter(
         (m) => m.name.toLowerCase().includes(q) || (m.description ?? '').toLowerCase().includes(q),
       )
+    },
+
+    shouldShowApiKeyHint(): boolean {
+      return shouldShowProviderApiKeyHint(this.providerModels)
     },
   },
 
@@ -125,6 +135,12 @@ export default defineComponent({
       this.$emit('select-model', modelId)
       this.showModelDropdown = false
       this.modelSearchQuery = ''
+    },
+
+    onToggleModelDropdown(): void {
+      const willOpen = !this.showModelDropdown
+      this.showModelDropdown = willOpen
+      if (willOpen) this.$emit('open-model-picker')
     },
 
     onModelSearch(): void {

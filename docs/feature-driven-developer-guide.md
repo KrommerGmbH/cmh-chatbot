@@ -125,15 +125,11 @@ flowchart TD
 
 ### 4.1 OpenAPI + Swagger UI
 
-- Trigger
   - 개발자가 엔드포인트 계약을 확인하고 싶을 때
-- 목적
   - API 스펙 가시화/공유 표준화
-- 핵심 프로세스
-
-```mermaid
-flowchart LR
-  A[/api/openapi.json 요청] --> B[createOpenApiDocument]
+   `tests/engine/security/is-usable-api-key.test.ts`
+   `tests/engine/server/criteria-factory.test.ts`
+   `tests/engine/server/webhook-auth.test.ts`
   B --> C[OpenAPI JSON 반환]
   D[/api/docs 요청] --> E[createSwaggerUiHtml]
   E --> F[Swagger UI 렌더]
@@ -143,7 +139,6 @@ flowchart LR
   - `src/engine/server/routes/openapi.ts`
   - `src/engine/server/routes.ts`
 - 연관 UI/모듈
-  - 브라우저 문서 페이지 (`/api/docs`)
 - 연관 라이브러리
   - Swagger UI CDN (HTML 내 포함)
 

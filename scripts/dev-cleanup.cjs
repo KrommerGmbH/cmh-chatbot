@@ -4,8 +4,12 @@
  * llama-server 중복 실행 방지.
  */
 const { execSync } = require('child_process');
+const { getDevPorts } = require('./dev-ports.cjs');
 
-const ports = [8080, 4000, 5200];
+const { llmPort, enginePort, uiPort } = getDevPorts();
+const ports = [llmPort, enginePort, uiPort];
+
+console.log(`[dev-cleanup] cleaning ports: ${ports.join(', ')}`);
 
 for (const port of ports) {
   try {

@@ -15,6 +15,7 @@ import {
   isModelLoadedOnServer,
   warmupModelOnServer,
 } from '../service/ai-client.service'
+import { createModelWarmupRegistry } from '../service/model-warmup-registry'
 import { loadModelsFromDAL } from '../service/llm-model.service'
 import {
   isImageAttachment,
@@ -32,6 +33,7 @@ import {
 
 import { useNotificationStore } from './notification.store'
 import { useAgentStore } from './agent.store'
+import { isDefaultConversationTitle } from '../service/chat-title-policy'
 
 /** Type-safe i18n shortcut */
 const $t = (key: string, params?: Record<string, unknown>): string =>
@@ -139,6 +141,7 @@ export interface Conversation {
 // ── Store ────────────────────────────────────────────────
 
 export const useChatStore = defineStore('chat', () => {
+  const PREFERRED_DEFAULT_LOCAL_MODEL_ID = 'gemma-4-E4B-it-UD-Q4_K_XL'
   const conversations = ref<Conversation[]>([])
   const currentConversationId = ref<string | null>(null)
   const selectedModelId = ref<string>('')
@@ -170,8 +173,7 @@ export const useChatStore = defineStore('chat', () => {
   const streamDeltaCallbacks: StreamDeltaCb[] = []
   const streamEndCallbacks: StreamEndCb[] = []
 
-  const _warmedModelIds = new Set<string>()
-  const _warmingModelIds = new Set<string>()
+  const _warmupRegistry = createModelWarmupRegistry()
   let _keepAliveTimer: ReturnType<typeof setInterval> | null = null
   let _cloudModelRefreshTimer1: ReturnType<typeof setTimeout> | null = null
   let _cloudModelRefreshTimer2: ReturnType<typeof setTimeout> | null = null
@@ -207,7 +209,20 @@ export const useChatStore = defineStore('chat', () => {
       if (!groups[m.provider]) groups[m.provider] = []
       groups[m.provider].push(m)
     }
-    return groups
+
+    const orderedEntries = Object.entries(groups).sort(([providerA, listA], [providerB, listB]) => {
+      const aIsLocal = listA.some((m) => m.providerType === 'local-gguf')
+      const bIsLocal = listB.some((m) => m.providerType === 'local-gguf')
+      if (aIsLocal !== bIsLocal) return aIsLocal ? -1 : 1
+
+      const aLooksLocal = providerA.toLowerCase().includes('local') || providerA.toLowerCase().includes('llama')
+      const bLooksLocal = providerB.toLowerCase().includes('local') || providerB.toLowerCase().includes('llama')
+      if (aLooksLocal !== bLooksLocal) return aLooksLocal ? -1 : 1
+
+      return providerA.localeCompare(providerB)
+    })
+
+    return Object.fromEntries(orderedEntries)
   })
 
   // ── Model Warmup ───────────────────────────────────
@@ -215,17 +230,10 @@ export const useChatStore = defineStore('chat', () => {
   async function warmupModel(modelEntityId: string, timeoutMs = 35_000): Promise<boolean> {
     const model = modelById.value.get(modelEntityId)
     if (!model?.modelId || model.providerType !== 'local-gguf') return false
-    if (_warmedModelIds.has(model.modelId)) return true
-    if (_warmingModelIds.has(model.modelId)) return false
-
-    _warmingModelIds.add(model.modelId)
-    try {
+    return _warmupRegistry.run(model.modelId, async () => {
       const ok = await warmupModelOnServer(model.modelId, timeoutMs)
-      if (ok) _warmedModelIds.add(model.modelId)
       return ok
-    } finally {
-      _warmingModelIds.delete(model.modelId)
-    }
+    })
   }
 
   function startLocalModelKeepAlive(): void {
@@ -251,7 +259,11 @@ export const useChatStore = defineStore('chat', () => {
       const userCtx = useUserContextStore()
       if (!userCtx.isInitialized) userCtx.initialize()
       const savedModelId = userCtx.settings.selectedModelId
-      if (savedModelId && modelById.value.has(savedModelId)) {
+      const savedModel = savedModelId ? modelById.value.get(savedModelId) : undefined
+      const isSavedModelUsable = !!savedModel
+        && (savedModel.providerType !== 'cloud-api' || savedModel.hasApiKey)
+
+      if (savedModelId && isSavedModelUsable) {
         selectedModelId.value = savedModelId
         warmupModel(selectedModelId.value)
         startLocalModelKeepAlive()
@@ -259,11 +271,21 @@ export const useChatStore = defineStore('chat', () => {
       }
     } catch { /* user-context not ready */ }
 
-    if (!selectedModelId.value || !modelById.value.has(selectedModelId.value)) {
+    const currentModel = selectedModelId.value ? modelById.value.get(selectedModelId.value) : undefined
+    const isCurrentModelUsable = !!currentModel
+      && (currentModel.providerType !== 'cloud-api' || currentModel.hasApiKey)
+
+    if (!isCurrentModelUsable) {
+      const preferredLocal = models.value.find((m) => m.modelId === PREFERRED_DEFAULT_LOCAL_MODEL_ID)
       const defaultModel = models.value.find((m) => m.isDefault)
-      selectedModelId.value = defaultModel?.id ?? models.value[0]?.id ?? ''
+      selectedModelId.value = preferredLocal?.id ?? defaultModel?.id ?? models.value[0]?.id ?? ''
     }
-    if (selectedModelId.value) warmupModel(selectedModelId.value, 90_000)
+    if (selectedModelId.value) {
+      void import('./user-context.store').then(({ useUserContextStore }) => {
+        useUserContextStore().updateSettings({ selectedModelId: selectedModelId.value })
+      }).catch(() => {})
+      warmupModel(selectedModelId.value, 90_000)
+    }
     startLocalModelKeepAlive()
   }
 
@@ -329,8 +351,28 @@ export const useChatStore = defineStore('chat', () => {
     import('./user-context.store').then(({ useUserContextStore }) => {
       useUserContextStore().updateSettings({ selectedModelId: modelId })
     }).catch(() => {})
-    warmupModel(modelId, 90_000)
+    void warmupModelWithIndicator(modelId, 90_000)
     startLocalModelKeepAlive()
+  }
+
+  async function warmupModelWithIndicator(modelEntityId: string, timeoutMs = 90_000): Promise<boolean> {
+    const model = modelById.value.get(modelEntityId)
+    if (!model?.modelId || model.providerType !== 'local-gguf') return warmupModel(modelEntityId, timeoutMs)
+
+    let loadingMsgId = ''
+    if (currentConversation.value) {
+      loadingMsgId = addSystemMessage(
+        ($t('cmh-global.chat.localModelLoading', { model: model.name }) as string)
+          || `${model.name} 모델 로딩 중...`,
+        'loading',
+      )
+    }
+
+    try {
+      return await warmupModel(modelEntityId, timeoutMs)
+    } finally {
+      if (loadingMsgId) removeSystemMessage(loadingMsgId)
+    }
   }
 
   function renameConversation(id: string, newTitle: string): void {
@@ -503,7 +545,6 @@ export const useChatStore = defineStore('chat', () => {
 
     const userMsgCount = conv.messages.filter((m) => m.role === 'user').length
     const isFirstMessage = userMsgCount === 1
-    if (isFirstMessage) conv.title = text.slice(0, 40) + (text.length > 40 ? '...' : '')
 
     // 비전 미지원 + 이미지 → 경고 후 텍스트 폴백
     if (hasImages && modelType !== 'vision' && modelType !== 'multimodal') {
@@ -538,13 +579,13 @@ export const useChatStore = defineStore('chat', () => {
     // 로컬 모델 사전 점검
     let isModelResident = activeModel.providerType !== 'local-gguf'
     if (activeModel.providerType === 'local-gguf') {
-      if (_warmedModelIds.has(targetModelId)) {
+      if (_warmupRegistry.isWarmed(targetModelId)) {
         isModelResident = true
       } else {
         isModelResident = await isModelLoadedOnServer(targetModelId)
       }
       if (!isModelResident) {
-        isModelResident = await warmupModel(activeModel.id, 90_000)
+        isModelResident = await warmupModelWithIndicator(activeModel.id, 90_000)
         if (!isModelResident) {
           useNotificationStore().createNotification({
             variant: 'error',
@@ -782,24 +823,40 @@ export const useChatStore = defineStore('chat', () => {
       }
       _isUserAbortRequested = false
 
-      // AI 대화 제목 생성
-      if (isFirstMessage && assistantMsg.content && activeModel.providerType !== 'local-gguf') {
-        _generateConversationTitle(conv, text, assistantMsg.content)
+      // AI 대화 제목 생성 (기본 제목 상태일 때만)
+      if (isFirstMessage && assistantMsg.content && isDefaultConversationTitle(conv.title)) {
+        _generateConversationTitle(conv, text, assistantMsg.content, {
+          rawModelId: targetModelId,
+          modelEntityId: activeModel.id,
+          providerType: activeModel.providerType,
+        })
       }
     }
   }
 
   // ── Title Generation ───────────────────────────────
 
-  async function _generateConversationTitle(conv: Conversation, userText: string, assistantText: string): Promise<void> {
+  async function _generateConversationTitle(
+    conv: Conversation,
+    userText: string,
+    assistantText: string,
+    modelSnapshot: { rawModelId?: string; modelEntityId?: string; providerType?: string },
+  ): Promise<void> {
     try {
+      const rawModelId = modelSnapshot.rawModelId?.trim()
+      if (!rawModelId) return
       const locale = _getLocaleLabel()
       const title = await generateChat([
         { role: 'system', content: 'Generate a short conversation title (max 30 chars) for the following exchange. Reply ONLY in ' + locale + ' language. Reply with ONLY the title, no quotes, no explanation.' },
         { role: 'user', content: userText.slice(0, 200) },
         { role: 'assistant', content: assistantText.slice(0, 200) },
         { role: 'user', content: 'Title:' },
-      ], selectedModel.value.modelId, { maxTokens: 30, temperature: 0.3 })
+      ], rawModelId, {
+        maxTokens: 30,
+        temperature: 0.3,
+        modelId: modelSnapshot.modelEntityId,
+        providerType: modelSnapshot.providerType,
+      })
 
       const cleaned = title.replace(/^["']|["']$/g, '')
       if (cleaned.length > 0) {

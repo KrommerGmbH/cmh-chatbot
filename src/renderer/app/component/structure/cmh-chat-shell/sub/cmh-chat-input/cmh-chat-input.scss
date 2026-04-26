@@ -219,6 +219,17 @@
   flex: 1; padding: 4px; overflow-y: auto;
 }
 
+.cmh-chat-input__provider-api-key-hint {
+  margin: 4px 0 8px;
+  padding: 8px 10px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba($accent, 0.35);
+  background: rgba($accent, 0.08);
+  color: $text-primary;
+  font-size: var(--cmh-font-size-sm, 13px);
+  font-weight: var(--cmh-font-weight-sm, 400);
+}
+
 // ── 모델 검색 입력 ─────────────────────────────────
 .cmh-chat-input__model-search {
   display: flex; align-items: center; gap: 6px;

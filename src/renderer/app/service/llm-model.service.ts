@@ -38,6 +38,17 @@ const _providerCache = new Map<string, LlmProvider>()
 let _engineApiAvailableCache: boolean | null = null
 let _engineApiCheckedAt = 0
 
+const MODEL_TYPE_IDS: Record<ModelOption['type'], string> = {
+  chat: '00000000-0000-0000-0100-000000000001',
+  embedding: '00000000-0000-0000-0100-000000000002',
+  image: '00000000-0000-0000-0100-000000000003',
+  tts: '00000000-0000-0000-0100-000000000004',
+  stt: '00000000-0000-0000-0100-000000000005',
+  code: '00000000-0000-0000-0100-000000000006',
+  vision: '00000000-0000-0000-0100-000000000007',
+  multimodal: '00000000-0000-0000-0100-000000000008',
+}
+
 // ── 공개 API ─────────────────────────────────────────────
 
 export function getProviderCache(): Map<string, LlmProvider> {
@@ -110,11 +121,8 @@ export async function loadModelsFromDAL(): Promise<ModelOption[]> {
     }
   })
 
-  const withGoogleFallback = await _injectGoogleFallbackModels(mapped)
-  const withGitHubFallback = await _injectGitHubFallbackModels(withGoogleFallback)
-
   try {
-    const providerGroups = withGoogleFallback.reduce<Record<string, number>>((acc, m) => {
+    const providerGroups = mapped.reduce<Record<string, number>>((acc, m) => {
       acc[m.provider] = (acc[m.provider] ?? 0) + 1
       return acc
     }, {})
@@ -122,11 +130,11 @@ export async function loadModelsFromDAL(): Promise<ModelOption[]> {
       .some((name) => name.toLowerCase().includes('google') || name.toLowerCase().includes('gemini'))
 
     const debugPayload = {
-      totalModels: withGitHubFallback.length,
+      totalModels: mapped.length,
       providerGroups,
       providerGroupsEntries: Object.entries(providerGroups),
       hasGoogleProvider,
-      googleModels: withGitHubFallback.filter((m) => m.modelId.toLowerCase().startsWith('gemini')).length,
+      googleModels: mapped.filter((m) => m.modelId.toLowerCase().startsWith('gemini')).length,
     }
 
     // DevTools 객체 미리보기는 표시 순서가 달라 보일 수 있어 JSON 문자열로도 함께 출력
@@ -136,7 +144,7 @@ export async function loadModelsFromDAL(): Promise<ModelOption[]> {
     // noop
   }
 
-  return withGitHubFallback
+  return mapped
 }
 
 async function _ensureBridgeDefaultProviders(existingProviders: LlmProvider[]): Promise<void> {
@@ -175,208 +183,6 @@ async function _ensureBridgeDefaultModels(existingModels: LlmModel[]): Promise<v
   if (inserted > 0) {
     console.info('[llm-model] default models inserted', inserted)
   }
-}
-
-async function _injectGoogleFallbackModels(models: ModelOption[]): Promise<ModelOption[]> {
-  const hasGoogle = models.some((m) => {
-    const p = (m.provider ?? '').toLowerCase()
-    return p.includes('google') || p.includes('gemini') || m.modelId.toLowerCase().startsWith('gemini')
-  })
-  if (hasGoogle) return models
-
-  try {
-    // 1) renderer DAL 캐시 우선 사용 (engine 미기동 시 /api/providers 호출로 500 로그 방지)
-    const cachedGoogle = [..._providerCache.values()].find((p) => {
-      const name = (p.name ?? '').toLowerCase()
-      return p.type === 'cloud-api' && p.isActive && (name.includes('google') || name.includes('gemini'))
-    })
-
-    // 2) 캐시에 없을 때만 엔진 API 시도
-    let googleProvider: { id: string; name?: string; apiKey?: string | null } | null = null
-    if (cachedGoogle?.id) {
-      googleProvider = { id: cachedGoogle.id, name: cachedGoogle.name, apiKey: cachedGoogle.apiKey }
-    } else {
-      const engineUp = await _isEngineApiAvailableForCloudSync()
-      if (!engineUp) return models
-
-      const provRes = await fetch('/api/providers', { cache: 'no-store' })
-      if (!provRes.ok) return models
-      const provJson = await provRes.json() as { providers?: Array<{ id: string; name?: string; type?: string; isActive?: boolean; apiKey?: string | null; hasApiKey?: boolean }> }
-      const found = (provJson.providers ?? []).find((p) => {
-        const name = (p.name ?? '').toLowerCase()
-        return p.type === 'cloud-api' && p.isActive && (name.includes('google') || name.includes('gemini'))
-      })
-      if (!found?.id) return models
-      googleProvider = {
-        id: found.id,
-        name: found.name,
-        apiKey: found.hasApiKey ? 'present-via-api' : found.apiKey,
-      }
-    }
-
-    const googleHasApiKey = isUsableApiKey(googleProvider.apiKey)
-
-    // API 키가 없어도 Google 모델을 selector에 표시한다.
-    // hasApiKey: false 로 마킹하여 UI에서 "API 키 설정 필요" 메시지를 보여줌.
-    const remoteJson = googleHasApiKey
-      ? (() => _isEngineApiAvailableForCloudSync())()
-          .then((engineUp) => {
-            if (!engineUp) {
-              return { models: [] as Array<{ modelId: string; name?: string; capabilities?: string[] }> }
-            }
-            return fetch(`/api/providers/${googleProvider.id}/remote-models`, { cache: 'no-store' })
-              .then(async (remoteRes) => (remoteRes.ok
-                ? await remoteRes.json() as { models?: Array<{ modelId: string; name?: string; capabilities?: string[] }> }
-                : { models: [] }))
-              .catch(() => {
-                _engineApiAvailableCache = false
-                _engineApiCheckedAt = Date.now()
-                return { models: [] as Array<{ modelId: string; name?: string; capabilities?: string[] }> }
-              })
-          })
-      : Promise.resolve({ models: [] as Array<{ modelId: string; name?: string; capabilities?: string[] }> })
-
-    const resolvedRemoteJson = await remoteJson
-
-    const existingModelIds = new Set(models.map((m) => m.modelId))
-    const fallbacks: ModelOption[] = []
-    for (const rm of resolvedRemoteJson.models ?? []) {
-      const mid = (rm.modelId ?? '').trim()
-      if (!mid || existingModelIds.has(mid)) continue
-      const caps = (rm.capabilities ?? []).map((c) => c.toLowerCase())
-      if (caps.length > 0 && !caps.some((c) => c.includes('generatecontent') || c.includes('streamgeneratecontent'))) {
-        continue
-      }
-
-      const lowerMid = mid.toLowerCase()
-      const inferredType: ModelOption['type'] = lowerMid.includes('embedding')
-        ? 'embedding'
-        : (lowerMid.includes('tts') || lowerMid.includes('speech') || lowerMid.includes('audio'))
-          ? 'chat'
-          : 'multimodal'
-
-      fallbacks.push({
-        id: `fallback-google-${mid}`,
-        provider: googleProvider.name ?? 'Google AI (Gemini)',
-        name: rm.name?.trim() || mid,
-        modelId: mid,
-        type: inferredType,
-        filePath: null,
-        description: `${mid} — ${_formatContextLength(1_048_576)}`,
-        providerType: 'cloud-api',
-        hasApiKey: googleHasApiKey,
-        isDefault: false,
-        contextLength: 1_048_576,
-      })
-    }
-
-    // API 키가 없는 상태에서만 안전 기본 모델을 주입한다.
-    // (API 키가 있는데 remote 목록이 비어 있을 경우, 잘못된 기본 ID 주입으로
-    //  "model not found"를 유발할 수 있으므로 주입하지 않는다.)
-    if (fallbacks.length === 0 && !googleHasApiKey) {
-      const conservativeDefaults = [
-        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash' },
-        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro' },
-      ]
-
-      for (const d of conservativeDefaults) {
-        if (existingModelIds.has(d.id)) continue
-        fallbacks.push({
-          id: `fallback-google-${d.id}`,
-          provider: googleProvider.name ?? 'Google AI (Gemini)',
-          name: d.name,
-          modelId: d.id,
-          type: 'multimodal',
-          filePath: null,
-          description: `${d.id} — ${_formatContextLength(1_048_576)}`,
-          providerType: 'cloud-api',
-          hasApiKey: googleHasApiKey,
-          isDefault: false,
-          contextLength: 1_048_576,
-        })
-      }
-    }
-
-    if (fallbacks.length > 0) {
-      console.info('[llm-model] injected google fallback models', fallbacks.length)
-      return [...models, ...fallbacks]
-    }
-  } catch {
-    // noop
-  }
-
-  return models
-}
-
-/** GitHub Copilot Models provider의 기본 모델을 항상 selector에 표시한다. */
-async function _injectGitHubFallbackModels(models: ModelOption[]): Promise<ModelOption[]> {
-  try {
-    const hasGitHubFromModels = models.some((m) => {
-      const p = (m.provider ?? '').toLowerCase()
-      return p.includes('github') || p.includes('copilot')
-    })
-
-    const cachedGitHub = [..._providerCache.values()].find((p) => {
-      const name = (p.name ?? '').toLowerCase()
-      return p.type === 'cloud-api' && p.isActive && (name.includes('github') || name.includes('copilot'))
-    })
-
-    // GitHub provider가 DAL에 없고, 기존 모델 목록에도 GitHub 라벨이 없으면 주입하지 않음
-    if (!cachedGitHub?.id && !hasGitHubFromModels) return models
-
-    const githubProviderLabel = cachedGitHub?.name
-      ?? models.find((m) => {
-        const p = (m.provider ?? '').toLowerCase()
-        return p.includes('github') || p.includes('copilot')
-      })?.provider
-      ?? 'GitHub Copilot (Models)'
-
-    const githubHasApiKey = cachedGitHub
-      ? isUsableApiKey(cachedGitHub.apiKey)
-      : models.some((m) => {
-          const p = (m.provider ?? '').toLowerCase()
-          return (p.includes('github') || p.includes('copilot')) && !!m.hasApiKey
-        })
-
-    const existingModelIds = new Set(models.map((m) => m.modelId))
-
-    const conservativeDefaults: Array<{ id: string; name: string }> = [
-      { id: 'openai/gpt-4o', name: 'GPT-4o (Copilot)' },
-      { id: 'openai/gpt-4.1', name: 'GPT-4.1 (Copilot)' },
-      { id: 'openai/gpt-4.1-mini', name: 'GPT-4.1 Mini (Copilot)' },
-      { id: 'openai/o3-mini', name: 'o3-mini (Copilot)' },
-      { id: 'openai/o4-mini', name: 'o4-mini (Copilot)' },
-      { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet (Copilot)' },
-      { id: 'meta/Llama-3.3-70B-Instruct', name: 'Llama 3.3 70B (Copilot)' },
-    ]
-
-    const fallbacks: ModelOption[] = []
-    for (const d of conservativeDefaults) {
-      if (existingModelIds.has(d.id)) continue
-      fallbacks.push({
-        id: `fallback-github-${d.id}`,
-        provider: githubProviderLabel,
-        name: d.name,
-        modelId: d.id,
-        type: 'multimodal',
-        filePath: null,
-        description: `${d.id} — GitHub Models`,
-        providerType: 'cloud-api',
-        hasApiKey: githubHasApiKey,
-        isDefault: false,
-        contextLength: 128_000,
-      })
-    }
-
-    if (fallbacks.length > 0) {
-      console.info('[llm-model] injected github fallback models', fallbacks.length)
-      return [...models, ...fallbacks]
-    }
-  } catch {
-    // noop
-  }
-
-  return models
 }
 
 // ── 내부 헬퍼 ────────────────────────────────────────────
@@ -519,6 +325,7 @@ async function _syncCloudModelsFromProviders(dalModels: LlmModel[]): Promise<voi
         const created = {
           id: crypto.randomUUID(),
           providerId: provider.id,
+          modelTypeId: MODEL_TYPE_IDS[inferredType],
           name: (r.name?.trim() || r.modelId),
           modelId: r.modelId,
           type: inferredType,
@@ -529,13 +336,19 @@ async function _syncCloudModelsFromProviders(dalModels: LlmModel[]): Promise<voi
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         } as LlmModel
-        await _modelRepo.save(created).catch(() => {})
+        await _modelRepo.save(created).catch((err) => {
+          console.warn('[llm-model] cloud model insert failed', {
+            providerId: provider.id,
+            modelId: r.modelId,
+            error: err,
+          })
+        })
         dalModels.push(created)
       }
 
-      // 원격 목록에 없는 기존 cloud chat 모델은 비활성화 (stale 정리)
+      // 원격 목록에 없는 기존 cloud 생성 모델은 비활성화 (stale 정리)
       for (const m of providerModels) {
-        if (m.type !== 'chat') continue
+        if (m.type === 'tts' || m.type === 'stt' || m.type === 'embedding') continue
         if (!m.isActive) continue
         if (remoteIds.has(m.modelId)) continue
         m.isActive = false
