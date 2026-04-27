@@ -278,3 +278,11 @@ font-size: 1.2rem;
 - warmup 진행 중에는 채팅창에 `systemType='loading'` 메시지를 표시하고 완료/실패 시 정리한다.
 - 앱 시작 시 기본 모델은 `gemma-4-E4B-it-UD-Q4_K_XL` 우선 선택, 없으면 `isDefault`, 최종 폴백은 첫 모델 순으로 선택한다.
 - 첫 질문 이후 제목 생성은 "기본 제목(예: 새 채팅/New Chat)" 상태일 때만 실행하고, 생성 결과는 DB/UI에 저장한다.
+
+### 7.13 교차 플랫폼 llama 런타임 부트스트랩/진단
+
+- `scripts/ensure-llama-runtime.cjs`를 표준 런타임 탐색 경로로 사용한다.
+   - 우선순위: `bin/llama-b8712` → `.runtime/llama.cpp/{platform-arch}` → PATH(`llama-server`)
+   - 필요 시 `CMH_LLAMA_SERVER_URL`로 archive(.zip/.tar.gz) 다운로드 후 `.runtime`에 자동 설치한다.
+- `scripts/dev-llm.cjs`는 직접 바이너리 하드코딩 대신 `ensure-llama-runtime` 결과 경로를 사용한다.
+- 설치/운영 전 상태 검증은 `pnpm doctor`(`scripts/doctor.cjs`)를 표준 경로로 사용한다.

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const DEFAULTS = {
-  llmPort: 8080,
-  enginePort: 4000,
-  uiPort: 5200,
+  llmPort: 18080,
+  enginePort: 14000,
+  uiPort: 15200,
 };
 
 function parsePort(raw, fallback, name) {

@@ -10,9 +10,9 @@ import { resolve } from 'node:path'
 import { existsSync, createReadStream, statSync } from 'node:fs'
 import { edgeTtsPlugin } from './vite-plugin-edge-tts'
 
-const DEV_LLM_PORT = Number.parseInt(process.env.CMH_LLM_PORT ?? '8080', 10)
-const DEV_ENGINE_PORT = Number.parseInt(process.env.CMH_ENGINE_PORT ?? '4000', 10)
-const DEV_UI_PORT = Number.parseInt(process.env.CMH_UI_PORT ?? '5200', 10)
+const DEV_LLM_PORT = Number.parseInt(process.env.CMH_LLM_PORT ?? '18080', 10)
+const DEV_ENGINE_PORT = Number.parseInt(process.env.CMH_ENGINE_PORT ?? '14000', 10)
+const DEV_UI_PORT = Number.parseInt(process.env.CMH_UI_PORT ?? '15200', 10)
 
 /**
  * meteor-component-library CSS 파일이 존재하지 않는 main.css.map을 참조하는 문제 억제.

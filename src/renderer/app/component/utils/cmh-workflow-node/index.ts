@@ -6,7 +6,7 @@
  */
 import { defineComponent, type PropType } from 'vue'
 import { Handle, Position } from '@vue-flow/core'
-import IconifyIcon from '@iconify/vue'
+import { Icon as IconifyIcon } from '@iconify/vue'
 import type { WorkflowNodeData } from '../../../store/workflow.store'
 import template from './cmh-workflow-node.html?raw'
 import './cmh-workflow-node.scss'
